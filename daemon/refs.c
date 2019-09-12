@@ -9,21 +9,21 @@ void set_refs( mapping refs ) { this_player()-> set_refs( refs ); }
 
 mapping get_refs() { return (mapping)this_player()-> get_refs(); }
 
-void set_ref( string ref, mixed val ) { this_player()-> set_ref( ref, val ); }
+void set_ref( string reference, mixed val ) { this_player()-> set_ref( reference, val ); }
 
-mixed get_ref( string ref ) { return (mixed)this_player()-> get_ref( ref ); }
+mixed get_ref( string reference ) { return (mixed)this_player()-> get_ref( reference ); }
 
 mixed resolv_ref( mixed a )
 {
   mixed ret;
-  string ref;
+  string reference;
 
   if( !stringp( a ) ) return a;
-  if( !sscanf( a, "#%s", ref ) ) return a;
+  if( !sscanf( a, "#%s", reference ) ) return a;
 // Nightmare does not support cwf
 // if( ref == "#" ) return (string)this_player()-> query( "cwf" );
-  if( undefinedp( ret = get_ref( ref ) ) ) return a;
-  return ret;
+  if( undefinedp( ret = get_ref( reference ) ) ) return a;
+  return reference;
 }
 
 mixed ref_ob( mixed a )
@@ -42,7 +42,7 @@ mixed ref_ob( mixed a )
 mixed resolv_str( string a )
 {
   mapping v_m;
-  mixed v_o; //object or array of objects 
+  mixed v_o; //object or array of objects
   mixed *v_a, tmp1, tmp2;
   string v_s, sa, sb;
   int v_i, ia, ib;

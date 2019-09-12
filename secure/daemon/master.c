@@ -53,20 +53,20 @@ void new_groups() {
     __Groups = tmp;
 }
 
-static private void load_access(string cfg, mapping ref) {
+static private void load_access(string cfg, mapping reference) {
     string *lines;
     string file, fl, ac;
     int i, maxi;
 
     if(!(file = read_file(cfg)))
-      error("Failed to find config file: "+cfg);
+        error("Failed to find config file: "+cfg);
     maxi = sizeof(lines = explode(file, "\n"));
     for(i=0; i<maxi; i++) {
         if(!lines[i] || lines[i] == "" || lines[i][0] == '#') continue;
         if(sscanf(lines[i], "(%s) %s", fl, ac) != 2)
           error("Error in loading config file "+cfg+" at line "+
             (i+1));
-        ref[fl] = explode(ac, ":");
+        reference[fl] = explode(ac, ":");
     }
 }
 
@@ -311,7 +311,7 @@ object compile_object(string str) {
         if(file_size(tmp+".c") < 0) return 0;
         else return (object)call_other(tmp, "compile_object", where);
     }
-    return (object)call_other(tmp, "compile_object", str);                      
+    return (object)call_other(tmp, "compile_object", str);
 }
 
 static void crash(string err) {
@@ -388,7 +388,7 @@ mixed apply_unguarded(function f) {
     err = catch(val = evaluate(f) );
     __Unguarded = previous_unguarded;
     if(err) error(err);
-    return val; 
+    return val;
 }
 
 string error_handler(mapping mp, int caught) {

@@ -1,0 +1,79 @@
+#/secure/save/users/d/diavolo.c
+__AutoLoad ({})
+__ItemsValue 0
+auto_load 0
+__CurrentWorkingDirectory 0
+__Nicknames ([])
+__Aliases (["n":"go north","bio":"biography","nw":"go northwest","l":"look $*","ne":"go northeast","i":"inventory","w":"go west","exa":"look at $*","sw":"go southwest","u":"go up","e":"go east","d":"go down","se":"go southeast","s":"go south",])
+__Xverbs (["'":"say $*",":":"emote $*",])
+__Invis 0
+__Value 0
+__Mass 500
+__Material 0
+__CapName "Diavolo"
+__VendorType "treasure"
+__Short 0
+__Long 0
+__PreventDrop 0
+__PreventGet 0
+__PreventPut 0
+__Read 0
+deaths 0
+player_data (["general":(["sp":48,"max_hp":220,"hp":220,"max_sp":63,]),])
+magic (["max points":120,"points":120,])
+severed ([])
+healing ([])
+body (["head":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":110,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"right leg":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":73,"weapons":0,"ac":0,"limb_ref":"right foot","armour":({}),]),"right foot":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":55,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left arm":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":73,"weapons":0,"ac":0,"limb_ref":"left hand","armour":({}),]),"left foot":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":55,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left leg":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":73,"weapons":0,"ac":0,"limb_ref":"left foot","armour":({}),]),"torso":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":220,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"right hand":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":55,"wieldable":1,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"right arm":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":73,"weapons":0,"ac":0,"limb_ref":"right hand","armour":({}),]),"left hand":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":55,"wieldable":1,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),])
+limbs ({"left leg","torso","head","right leg","right foot","right hand","left arm","left foot","right arm","left hand",})
+all_my_fingers 6
+heal_rate 2
+str_class "child"
+skills ([])
+wimpy 0
+wimpydir "out"
+env_var (["start":0,"TITLE":"Newbie $N the boy","LINES":"100","ANSI":0,"TERM":"ansi",])
+money ([])
+invis 0
+ok_to_heal 26444
+description 0
+gender "male"
+stats (["wisdom":3,"dexterity":9,"intelligence":7,"constitution":17,"strength":23,"charisma":11,])
+languages (["loyavenku":10,])
+primary_language "loyavenku"
+__PlayerAge 26440
+__PlayerKiller 0
+language_exp 0
+platinum 0
+gold 0
+electrum 0
+silver 0
+copper 0
+player_age 0
+__NoQuit 0
+level 1
+ghost 0
+rolls 1
+verbose_moves 1
+birth 1568243761
+blocked ([])
+news (["general":69,"class":51,"immortal":49,])
+char_name "diavolo"
+real_name "Michael"
+email "none"
+ip "172.17.0.1"
+last_on "Thu Sep 12 19:15:31 2019"
+password "jgdgfnac!ddjbonefilbeancgijlcjedlhgccm`hh"
+race "giant"
+original_site 0
+position "head arch"
+primary_start 0
+__RestrictedChannels ({})
+__WhereBlock 0
+mini_quests 0
+quests 0
+mysites 0
+guild 0
+message 0
+married 0
+current_marriage 0
+divorced 0
