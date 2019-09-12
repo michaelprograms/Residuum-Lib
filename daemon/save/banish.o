@@ -1,4 +1,4 @@
-#daemon/banish.c
+#/daemon/banish.c
 __Names ({})
 __Sites ({})
 __WatchNames ({})
