@@ -9,37 +9,37 @@
 inherit DAEMON;
 
 int cmd_ed(string file) {
-   string tmp;
-   int i;
-   
+    string tmp;
+    int i;
+
     if(!file) {
         notify_fail("Syntax: <ed [filename]>\n");
-	return 0;
+        return 0;
     }
     if(this_player()->query_forced()) {
         write("Someone tried to force you to ed "+file);
         return 1;
     }
-   tmp = (string)this_player()->get_path();
-   file = absolute_path(tmp, file);
+    tmp = (string)this_player()->get_path();
+    file = absolute_path(tmp, file);
     if(file_size(file) == -2) {
-	notify_fail("You cannot edit a directory!\n");
-	return 0;
+        notify_fail("You cannot edit a directory!\n");
+        return 0;
     }
-   if((i=file_size(file)) > -1)
-      message("write", sprintf("%s , %d bytes:", file, i), this_player());
-   if(!ed(file)) write("Failed to edit " + file);
-   return 1;
+    if((i=file_size(file)) > -1)
+        message("write", sprintf("%s , %d bytes:", file, i), this_player());
+    if(ed(file)) write("Failed to edit " + file);
+    return 1;
 }
 
 int help()
 {
-  write( @EndText
+    write( @EndText
 Syntax: ed [filename]
 Effect: edits the file named <filename>
 See doc: /doc/immortals/ed
 See man: ed
 EndText
-  );
-  return 1;
+    );
+    return 1;
 }
