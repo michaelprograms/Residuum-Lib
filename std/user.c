@@ -1,11 +1,11 @@
-//	/std/user.c
-//	from the Nightmare mudlib
-//	the user object
-//	based on the user.c created by Sulam and Buddha @TMI
-//	rewritten by Descartes of Borg september 1992
+//    /std/user.c
+//    from the Nightmare mudlib
+//    the user object
+//    based on the user.c created by Sulam and Buddha @TMI
+//    rewritten by Descartes of Borg september 1992
 //      Pallando (93-05-27) Added multiple character handling.
 //      Pallando (93-06-17) Removed call to living::setup()
-//	Pallando (94-09-20) Changed harassment to new system
+//    Pallando (94-09-20) Changed harassment to new system
 
 
 #include <std.h>
@@ -101,10 +101,10 @@ void get_email(string e) {
 
     write("\n");
     if( sscanf(e, "%s@%s", who, where) != 2 ) {
-    write("Sorry, email must be in the form of user@host");
-    message("prompt", "Please reenter your email address: ", this_player());
-    input_to("get_email");
-    return;
+        write("Sorry, email must be in the form of user@host");
+        message("prompt", "Please reenter your email address: ", this_player());
+        input_to("get_email");
+        return;
     }
     email = e;
 }
@@ -126,43 +126,43 @@ void describe_current_room(int verbose) {
 
     env = environment(this_object());
     if(!env){
-    move_object(ROOM_START);
-    env = environment(this_object());
+        move_object(ROOM_START);
+        env = environment(this_object());
     }
     if(creatorp(this_object())) borg = file_name(env)+"\n";
     else borg = "";
     if((light=effective_light(this_object())) > 6 || light < 1) {
-    if(light > 6) borg += "It is too bright to see.";
-    else if(light > -2) borg += "It is dark.";
-    else if(light > -4) borg += "It is quite dark.";
-    else if(light > -6) borg += "It is very dark.";
-    else borg += "It is completely dark.";
-    message("room_description", borg, this_object());
-    if(stringp(tmp=(string)env->query_smell("default")))
-        message("smell", tmp, this_object());
-    else if(functionp(tmp))
-        message("smell",(string)((*tmp)("default")), this_object());
-    if(stringp(tmp=(mixed)env->query_listen("default")))
-        message("sound", tmp, this_object());
-    else if(functionp(tmp)) message("sound", (string)((*tmp)("default")), this_object());
-    return;
+        if(light > 6) borg += "It is too bright to see.";
+        else if(light > -2) borg += "It is dark.";
+        else if(light > -4) borg += "It is quite dark.";
+        else if(light > -6) borg += "It is very dark.";
+        else borg += "It is completely dark.";
+        message("room_description", borg, this_object());
+        if(stringp(tmp=(string)env->query_smell("default")))
+            message("smell", tmp, this_object());
+        else if(functionp(tmp))
+            message("smell",(string)((*tmp)("default")), this_object());
+        if(stringp(tmp=(mixed)env->query_listen("default")))
+            message("sound", tmp, this_object());
+        else if(functionp(tmp)) message("sound", (string)((*tmp)("default")), this_object());
+        return;
     }
     else if(light > 3) borg += "It is really bright.\n";
     borg += (verbose ? (string)env->query_long(0)+" " :
       (string)env->query_short());
     message("room_description", borg, this_object());
     if(verbose && stringp(tmp=(mixed)env->query_smell("default")))
-    message("smell", tmp, this_object());
+        message("smell", tmp, this_object());
     else if(verbose && functionp(tmp))
-    message("smell",(string)((*tmp)("default")), this_object());
+        message("smell",(string)((*tmp)("default")), this_object());
     if(verbose && stringp(tmp=(mixed)env->query_listen("default")))
-    message("sound", tmp, this_object());
+        message("sound", tmp, this_object());
     else if(verbose && functionp(tmp))
-    message("sound", (string)((*tmp)("default")), this_object());
+        message("sound", (string)((*tmp)("default")), this_object());
     if((tmp=(string)env->describe_living_contents(({this_object()})))!="")
-    message("living_item", tmp, this_object());
+        message("living_item", tmp, this_object());
     if((tmp=(string)env->describe_item_contents(({})))!="")
-    message("inanimate_item", tmp, this_object());
+        message("inanimate_item", tmp, this_object());
 }
 
 void basic_commands() {
@@ -186,40 +186,40 @@ varargs void move_player(mixed dest, string msg) {
     here = file_name(prev);
     if(stringp(dest) && dest[0] != '/') dest = "/"+dest;
     if(move(dest) != MOVE_OK) {
-    message("system","You remain where you are.", this_object());
-    return;
+        message("system","You remain where you are.", this_object());
+        return;
     }
     if(query_property("stealth"))
-    set_property("stealth", (int)query_property("stealth")-1);
+        set_property("stealth", (int)query_property("stealth")-1);
     if(adj = query_property("stealth")) {
-    add_skill_points("stealth", adj);
-    adj += query_stats("dexterity");
-    add_sp(-1);
+        add_skill_points("stealth", adj);
+        adj += query_stats("dexterity");
+        add_sp(-1);
     }
     if(!query_invis() && !hiddenp(this_object())) {
-    inv = all_inventory(prev);
-    for(i=0, bzbd = sizeof(inv); i<bzbd; i++) {
-        if(!living(inv[i]) || inv[i] == this_object()) continue;
-        if(adj) tmp = (adj-(int)inv[i]->query_stats("wisdom"));
-        else tmp = 0;
-        if(tmp > random(101)) continue;
-        if(effective_light(inv[i])-(query_skill("stealth")/17) < 0) continue;
-        if(!msg || msg == "") message("mmout", query_mmout(),inv[i]);
-        else message("mout", query_mout(msg), inv[i]);
-    }
-    inv = all_inventory(environment(this_object()));
-    for(i=0, bzbd = sizeof(inv); i<bzbd; i++) {
-        if(!living(inv[i])) continue;
-        if(inv[i] == this_object()) continue;
-        if(adj) tmp = (adj-(int)inv[i]->query_stats("wisdom"));
-        else tmp = 0;
-        if(tmp > random(101)) continue;
-        if(effective_light(inv[i])-(query_skill("stealth")/17) < 0) continue;
-        if(!msg || msg == "") message("mmin",query_mmin(),inv[i]);
-        else message("min", query_min(), inv[i]);
-    }
-    if(query_followers())
-        move_followers(prev);
+        inv = all_inventory(prev);
+        for(i=0, bzbd = sizeof(inv); i<bzbd; i++) {
+            if(!living(inv[i]) || inv[i] == this_object()) continue;
+            if(adj) tmp = (adj-(int)inv[i]->query_stats("wisdom"));
+            else tmp = 0;
+            if(tmp > random(101)) continue;
+            if(effective_light(inv[i])-(query_skill("stealth")/17) < 0) continue;
+            if(!msg || msg == "") message("mmout", query_mmout(),inv[i]);
+            else message("mout", query_mout(msg), inv[i]);
+        }
+        inv = all_inventory(environment(this_object()));
+        for(i=0, bzbd = sizeof(inv); i<bzbd; i++) {
+            if(!living(inv[i])) continue;
+            if(inv[i] == this_object()) continue;
+            if(adj) tmp = (adj-(int)inv[i]->query_stats("wisdom"));
+            else tmp = 0;
+            if(tmp > random(101)) continue;
+            if(effective_light(inv[i])-(query_skill("stealth")/17) < 0) continue;
+            if(!msg || msg == "") message("mmin",query_mmin(),inv[i]);
+            else message("min", query_min(), inv[i]);
+        }
+        if(query_followers())
+            move_followers(prev);
     }
     add_sp(-1);
     describe_current_room(verbose_moves);
@@ -252,12 +252,11 @@ int remove() {
 int quit(string str) {
     if(__NoQuit && !query_forced()) return notify_fail("Stinking cheater.\n");
     if (str) {
-    notify_fail("Quit what ?\n");
-    return 0;
+        notify_fail("Quit what ?\n");
+        return 0;
     }
     if(query_followers()) clear_followers();
-    message("environment",
-      "Reality suspended.  See you another time!", this_object());
+    message("environment", "Reality suspended.  See you another time!", this_object());
     save_player( query_name() );
     say(query_cap_name() + " is gone from our reality.");
     log_file("enter", query_name()+" (quit): "+ctime(time())+"\n");
@@ -284,7 +283,7 @@ void new_body() {
     set_heal_rate(2);
     borg = (mapping)RACE_D->body(this_object());
     for(i=0, max=sizeof(zippo=keys(borg)); i<max; i++)
-    add_limb(zippo[i], borg[zippo[i]]["limb_ref"],borg[zippo[i]]["max_dam"], 0, 0);
+        add_limb(zippo[i], borg[zippo[i]]["limb_ref"],borg[zippo[i]]["max_dam"], 0, 0);
     set_wielding_limbs((string *)RACE_D->query_wielding_limbs(tmp));
     set_fingers((int)RACE_D->query_fingers(tmp));
     set_max_encumbrance(stats["strength"] * 200);
@@ -312,28 +311,23 @@ void setup() {
     nmsh::setup();
     if(!query_race()) move(ROOM_SETTER);
     else {
-    sight_bonus = (int)RACE_D->query_sight_bonus(query_race());
-    if(!primary_start) primary_start = getenv("start");
-    if(primary_start)
-    {
-        start_temp = explode(primary_start, "/");
-        if(start_temp && sizeof(start_temp) >= 2)
-        {
-        if(start_temp[0] == "d")
-        {
-            start_temp[0] = "domains";
-            primary_start = implode(start_temp, "/");
+        sight_bonus = (int)RACE_D->query_sight_bonus(query_race());
+        if(!primary_start) primary_start = getenv("start");
+        if(primary_start) {
+            start_temp = explode(primary_start, "/");
+            if(start_temp && sizeof(start_temp) >= 2) {
+                if(start_temp[0] == "d") {
+                    start_temp[0] = "domains";
+                    primary_start = implode(start_temp, "/");
+                } else if(start_temp[0] == "wizards") {
+                    start_temp[0] = "realms";
+                    primary_start = implode(start_temp, "/");
+                }
+            }
         }
-        else if(start_temp[0] == "wizards")
-        {
-            start_temp[0] = "realms";
-            primary_start = implode(start_temp, "/");
-        }
-        }
-    }
-    if(!(primary_start && stringp(primary_start) && move(primary_start) == MOVE_OK))
-        move(ROOM_START);
-    setenv("start", primary_start);
+        if(!(primary_start && stringp(primary_start) && move(primary_start) == MOVE_OK))
+            move(ROOM_START);
+        setenv("start", primary_start);
     }
     if(!stringp(tmp = getenv("TERM"))) setenv("TERM", tmp = "unknown");
     term_info = (mapping)TERMINAL_D->query_term_info(tmp);
@@ -359,8 +353,8 @@ void heart_beat() {
     int i;
 
     if(!interactive(this_object())) {
-    set_heart_beat(0);
-    return;
+        set_heart_beat(0);
+        return;
     }
     autosave::heart_beat();
     living::heart_beat();
@@ -370,11 +364,10 @@ void heart_beat() {
     magic_round = 0;
     if(query_age() > ok_to_heal) do_healing(calculate_healing());
     else calculate_healing();
-    if(query_idle(this_object()) >= 3600 &&
-      !creatorp(this_object()) ) {
-    this_object()->move_player(ROOM_IDLE_SHOP);
-    this_object()->force_me("sell all");
-    this_object()->force_me("quit");
+    if(query_idle(this_object()) >= 3600 && !creatorp(this_object()) ) {
+        this_object()->move_player(ROOM_IDLE_SHOP);
+        this_object()->force_me("sell all");
+        this_object()->force_me("quit");
     }
     if(query_invis() && query_sp()<0 && !creatorp(this_player()) ) set_invis(0);
 }
@@ -384,12 +377,10 @@ void net_dead() {
     channels = ({});
     save_player(query_name());
     net_died_here = file_name( environment(this_object()) );
-    message("other_action", sprintf("%s suddenly disappears into a sea of "
-    "irreality.", query_cap_name()), environment(this_object()), ({ this_object() }));
+    message("other_action", sprintf("%s suddenly disappears into a sea of irreality.", query_cap_name()), environment(this_object()), ({ this_object() }));
     this_object()->move_player(ROOM_FREEZER);
     if(query_snoop(this_object()))
-    tell_object(query_snoop(this_object()), capitalize(query_name())+
-      " has gone net-dead.");
+        tell_object(query_snoop(this_object()), capitalize(query_name())+" has gone net-dead.");
     set_heart_beat(0);
 }
 
@@ -397,9 +388,9 @@ void restart_heart() {
     string dead_ed;
 
     message("write", (creatorp(this_object()) &&
-    file_size(dead_ed = user_path(query_name())+"dead.edit") > -1 ?
-    "\nYour edit file was saved as: "+dead_ed+"\n" :
-    "Reconnected."), this_object());
+        file_size(dead_ed = user_path(query_name())+"dead.edit") > -1 ?
+        "\nYour edit file was saved as: "+dead_ed+"\n" :
+        "Reconnected."), this_object());
     set_heart_beat(1);
     if(net_died_here) this_object()->move_player(net_died_here);
     else this_object()->move_player(ROOM_START);
@@ -420,8 +411,8 @@ nomask void die() {
     message("environment", "%^RED%^"+DEATH_MSGS[random(sizeof(DEATH_MSGS))], users(),
       ({ this_object() }) );
     if(creatorp(this_object())) {
-    message("death", "You are immortal and cannot die.", this_object());
-    return;
+        message("death", "You are immortal and cannot die.", this_object());
+        return;
     }
     ob = this_object();
     died_here = environment(ob);
@@ -435,12 +426,12 @@ nomask void die() {
       environment());
     //  tell_room(environment(this_object()), query_cap_name()+" dies a horrible death.\n", ob);
     if((int)this_object()->query_level() > 1) {
-    this_object()->add_exp(-((int)this_object()->query_exp()/4));
-    this_object()->reduce_stats();
-    reduce_skills();
-    while((int)ADVANCE_D->get_exp(query_level()) > query_exp())
-        set_level(query_level()-1);
-    setenv("TITLE", (string)ADVANCE_D->get_new_title(this_object()));
+        this_object()->add_exp(-((int)this_object()->query_exp()/4));
+        this_object()->reduce_stats();
+        reduce_skills();
+        while((int)ADVANCE_D->get_exp(query_level()) > query_exp())
+            set_level(query_level()-1);
+        setenv("TITLE", (string)ADVANCE_D->get_new_title(this_object()));
     }
     corpse = new(OB_CORPSE);
     corpse->set_name(query_cap_name());
@@ -449,16 +440,16 @@ nomask void die() {
     money_ob = new("/std/obj/coins");
     currs = query_currencies();
     for(i=0, tmp= sizeof(currs); i<tmp; i++) {
-    money_ob->set_money(currs[i], query_money(currs[i]));
-    add_money(currs[i], -query_money(currs[i]));
+        money_ob->set_money(currs[i], query_money(currs[i]));
+        add_money(currs[i], -query_money(currs[i]));
     }
     money_ob->move(corpse);
     i = sizeof(stuff = all_inventory(this_object()));
     while(i--) {
-    if((int)stuff[i]->is_germ()) stuff[i]->remove();
-    else if((mixed *)stuff[i]->query_auto_load()) continue;
-    else if((int)stuff[i]->allow_drop(this_object()))
-        stuff[i]->move(corpse);
+        if((int)stuff[i]->is_germ()) stuff[i]->remove();
+        else if((mixed *)stuff[i]->query_auto_load()) continue;
+        else if((int)stuff[i]->allow_drop(this_object()))
+            stuff[i]->move(corpse);
     }
     this_object()->move("/domains/Praxis/death/death_room");
     cease_all_attacks();
@@ -498,16 +489,14 @@ void set_email(string e) {
 int set_snoop() {
     if(!((int)master()->valid_apply(({ query_name()})))) return 0;
     if(snoop) {
-    message("my_action", "You are now secure from being snooped.",
-      this_object());
-    snoop = 0;
-    return 1;
+        message("my_action", "You are now secure from being snooped.", this_object());
+        snoop = 0;
+        return 1;
     }
     else {
-    message("my_action", "You can now be snooped by anyone.",
-      this_object());
-    snoop = 1;
-    return 1;
+        message("my_action", "You can now be snooped by anyone.", this_object());
+        snoop = 1;
+        return 1;
     }
 }
 
@@ -518,27 +507,22 @@ void write_messages() {
     mapping mail_stat;
     int i;
 
-    message("system", sprintf("\n        >>> Terminal currently set to %s <<<",
-    getenv("TERM")), this_object());
+    message("system", sprintf("\n        >>> Terminal currently set to %s <<<", getenv("TERM")), this_object());
     mail_stat = (mapping)FOLDERS_D->mail_status(query_name());
     if(mail_stat["unread"]) {
-    message("login", sprintf("\n        >>> %d of your %d %s are "
-        "unread! <<<", mail_stat["unread"], mail_stat["total"],
-        (mail_stat["total"]>1 ? "letters" : "letter")), this_object());
+        message("login", sprintf("\n        >>> %d of your %d %s are unread! <<<",
+            mail_stat["unread"], mail_stat["total"], (mail_stat["total"]>1 ? "letters" : "letter")), this_object());
     }
-    if(query_invis()) message("login", "\n        You are currently "
-      "invisible.", this_object());
+    if(query_invis()) message("login", "\n        You are currently invisible.", this_object());
     if(creatorp(this_object())) {
-    if(file_exists("/log/errors/"+query_name()))
-        message("login", "\n        >>> You have errors in /log/errors/"+
-          query_name()+" <<<", this_object());
-    if(file_exists("/log/reports/"+query_name()))
-        message("login", "\n        >>> You have reports in "
-          "/log/reports/"+query_name()+" <<<", this_object());
+        if(file_exists("/log/errors/"+query_name()))
+            message("login", "\n        >>> You have errors in /log/errors/"+query_name()+" <<<", this_object());
+        if(file_exists("/log/reports/"+query_name()))
+            message("login", "\n        >>> You have reports in /log/reports/"+query_name()+" <<<", this_object());
     }
     if( !message ) return;
     for( i=0; i<sizeof(message); i++ )
-    tell_object(this_object(), message[i]);
+        tell_object(this_object(), message[i]);
     message = ({ });
 }
 
@@ -551,24 +535,24 @@ string query_title() {
     str = getenv( "TITLE" );
     if( !str ) str = query_cap_name();
     else if( !sscanf(str, "%s$N%s", foo,fii) )
-    str = query_cap_name() + " " + str;
+        str = query_cap_name() + " " + str;
     else
-    str = substr( str, "$N", query_cap_name() );
+        str = substr( str, "$N", query_cap_name() );
     return str;
 }
 
 string query_short() {
     if (interactive(this_object()))
-    return query_title();
+        return query_title();
     else
-    return (query_title() + " (link-dead)");
+        return (query_title() + " (link-dead)");
 }
 
 mixed *local_commands() {
     if(!((int)master()->valid_apply(({ query_name()})))) {
-    message("my_action", "You aren't authorized to check this information.",
-      this_object());
-    return ({});
+        message("my_action", "You aren't authorized to check this information.",
+          this_object());
+        return ({});
     }
     return commands();
 }
@@ -580,8 +564,8 @@ nomask int query_level() { return level; }
 void set_position(string pos) {
     if(!creatorp(this_object()) && !((int)master()->valid_apply(({ query_name()})))) return;
     if(member_array(position, MORTAL_POSITIONS) != -1)
-    if(position == "high mortal" && pos != "high mortal")
-    init_path();
+        if(position == "high mortal" && pos != "high mortal")
+            init_path();
     position = pos;
     return;
 }
@@ -591,26 +575,22 @@ void set_level(int lev) {
     PLAYER_D->add_player_info();
     log_file("advance", this_object()->query_name()+" advanced to level "+lev+": "+ctime(time())+"\n");
     if(position == "high mortal" && level < 20) {
-    position = "player";
-    search_path -= ({ DIR_HM_CMDS });
-    set_env("start", ROOM_START);
-    set_env("TITLE", "Mortal $N the fallen high mortal");
+        position = "player";
+        search_path -= ({ DIR_HM_CMDS });
+        set_env("start", ROOM_START);
+        set_env("TITLE", "Mortal $N the fallen high mortal");
     }
     return;
 }
 
 
 int set_earmuffs() {
-    if( earmuffs )
-    {
-    earmuffs = 0;
-    message("my_action", "Your earmuffs are now off.",
-      this_object());
-    }
-    else
-    {
-    message("my_action", "Your earmuffs are now on.", this_object());
-    earmuffs = 1;
+    if( earmuffs ) {
+        earmuffs = 0;
+        message("my_action", "Your earmuffs are now off.", this_object());
+    } else {
+        message("my_action", "Your earmuffs are now on.", this_object());
+        earmuffs = 1;
     }
     return earmuffs;
 }
@@ -624,21 +604,21 @@ void receive_message(string msg_class, string msg) {
     if(query_log_harass())
         log_file(DIR_LOGS "/harass/"+query_name(), strip_colours(msg)+"\n");
     if(query_locked() && msg_class != "prompt") {
-    if(!__MessageCue) __MessageCue = ({});
-    __MessageCue += ({ ({ msg_class, msg }) });
-    return;
+        if(!__MessageCue) __MessageCue = ({});
+        __MessageCue += ({ ({ msg_class, msg }) });
+        return;
     }
     if(__Client) {
-    receive("<"+msg_class+">"+msg+"\n");
-    return;
+        receive("<"+msg_class+">"+msg+"\n");
+        return;
     }
     if(!stringp(str=getenv("SCREEN"))) str = "75";
     x = to_int(str);
     if(msg_class[0] == 'N') msg_class = msg_class[1..sizeof(msg_class)-1];
     else if(msg_class != "prompt") msg = wrap(msg, x);  // prompt fix -Val
     if(msg_class == "system" || msg_class == "help" || msg_class == "more"){
-    receive(msg);
-    return;
+        receive(msg);
+        return;
     }
     if(query_blocked(msg_class) &&
       member_array(msg_class, __IgnoreMsgClass) == -1) return;
@@ -648,21 +628,21 @@ void receive_message(string msg_class, string msg) {
     case "smell": msg = "%^ORANGE%^"+msg; break;
     case "sound": msg = "%^CYAN%^"+msg; break;
     case "tell":
-    if(sscanf(msg, "%s:%s", pre, post) == 2)
-        msg = "%^BOLD%^RED%^"+pre+":%^RESET%^"+post;
-    break;
+        if(sscanf(msg, "%s:%s", pre, post) == 2)
+            msg = "%^BOLD%^RED%^"+pre+":%^RESET%^"+post;
+        break;
     case "shout":
-    if(sscanf(msg, "%s:%s", pre, post) == 2)
-        msg = "%^BOLD%^BLUE%^"+pre+":%^RESET%^"+post;
-    break;
+        if(sscanf(msg, "%s:%s", pre, post) == 2)
+            msg = "%^BOLD%^BLUE%^"+pre+":%^RESET%^"+post;
+        break;
     case "mmin": case "min": case "mmout": case "mout":
-    msg = "%^BOLD%^GREEN%^"+msg; break;
+        msg = "%^BOLD%^GREEN%^"+msg; break;
     case "living_item": msg = "%^BOLD%^RED%^"+msg; break;
     case "inanimate_item": msg = "%^BOLD%^MAGENTA%^"+msg; break;
     }
     if(!term_info) reset_terminal();
     for(i=0, max=sizeof(words=explode(msg, "%^")); i<max; i++)
-    if(term_info[words[i]]) words[i] = term_info[words[i]];
+        if(term_info[words[i]]) words[i] = term_info[words[i]];
     receive(implode(words, "")+term_info["RESET"]);
 }
 
@@ -687,8 +667,7 @@ int query_rolls() { return rolls; }
 void set_blocked(string str) {
     if(!blocked) blocked = ([]);
     blocked[str] = !blocked[str];
-    if(blocked[str]) message("info", "You are now blocking "+str+".",
-      this_object());
+    if(blocked[str]) message("info", "You are now blocking "+str+".", this_object());
     else message("info", "You are no longer blocking "+str+".",this_object());
 }
 
@@ -794,12 +773,12 @@ void hide(int x) {
 
     i = sizeof(inv = all_inventory(this_object()));
     if(x) {
-    set_hide(x);
-    while(i--) inv[i]->hide(x);
+        set_hide(x);
+        while(i--) inv[i]->hide(x);
     }
     else {
-    while(i--) inv[i]->hide(x);
-    set_hide(x);
+        while(i--) inv[i]->hide(x);
+        set_hide(x);
     }
 }
 
@@ -834,9 +813,9 @@ void reset_terminal() {
 
 void set_name(string str) {
     if(!((int)master()->valid_apply(({ str })))){
-//debug_message("tried to set_name(\""+str+"\") in user, got invalid apply");
- return;
-}
+        //debug_message("tried to set_name(\""+str+"\") in user, got invalid apply");
+        return;
+    }
     char_name = str;
     ::set_name(str);
 }
@@ -858,7 +837,7 @@ nomask string *query_channels() { return channels - __RestrictedChannels; }
 
 static private register_channels() {
     if(creatorp(this_object()))
-    channels = ({ "cleric","fighter","kataan","mage","monk","rogue"});
+        channels = ({ "cleric","fighter","kataan","mage","monk","rogue"});
     else channels = (query_class() ? ({ query_class() }) : ({}));
     if(query_guild()) channels += ({ query_guild() });
     if(creatorp(this_object()) || high_mortalp(this_object())) channels += ({ "hm", "newbie" });
@@ -868,7 +847,7 @@ static private register_channels() {
     if(archp(this_object())) channels += ({ "admin" });
     if(creatorp(this_object()) || ambassadorp(this_object())) channels += ({ "gossip" });
     if(creatorp(this_object()) || leaderp(this_object()))
-    channels += ({ "council" });
+        channels += ({ "council" });
     if(!__RestrictedChannels) __RestrictedChannels = ({});
     CHAT_D->add_user(channels - __RestrictedChannels);
 }
@@ -895,14 +874,14 @@ void set_id(string *bogus) {
 
     if(__UserId) return;
     if(!query_CapName()) {
-    __UserId = ({ query_name() });
-    return;
+        __UserId = ({ query_name() });
+        return;
     }
     __UserId = ({ query_name(), lower_case(query_CapName()) });
     if((i=sizeof(bogus = explode(lower_case(query_CapName()), " "))) == 1)
-    return;
+        return;
     while(i--)
-    if(!user_exists(bogus[i])) __UserId += ({ bogus[i] });
+        if(!user_exists(bogus[i])) __UserId += ({ bogus[i] });
 }
 
 string *query_id() { return __UserId; }
@@ -913,8 +892,7 @@ int id(string str) {
 }
 
 void set_cap_name(string str) {
-    if(query_name() != convert_name(str) &&
-      base_name(previous_object()) != OB_LOGIN) return;
+    if(query_name() != convert_name(str) && base_name(previous_object()) != OB_LOGIN) return;
     living::set_cap_name(capitalize(str));
 }
 
@@ -931,7 +909,7 @@ void empty_cue() {
 
     if(previous_object() != this_object()) return;
     for(i=0, maxi = sizeof(__MessageCue); i < maxi; i++)
-    message(__MessageCue[i][0], __MessageCue[i][1], this_object());
+        message(__MessageCue[i][0], __MessageCue[i][1], this_object());
     __MessageCue = 0;
 }
 
@@ -940,15 +918,11 @@ void set_log_harass(int x) {
 
     if(this_player() != this_object()) return;
     if( __LogHarass == x ) return;
-    if( x )
-    {
-    txt = "**************** Start of Log *****************\n"+
-        "Time: " + ctime( time() ) + "\n";
-    if( environment( this_object() ) ) txt += "Place: " +
-        file_name( environment( this_object() ) ) + "\n";
+    if( x ) {
+        txt = "**************** Start of Log *****************\n"+"Time: " + ctime( time() ) + "\n";
+        if( environment( this_object() ) ) txt += "Place: " +file_name( environment( this_object() ) ) + "\n";
     } else {
-    txt = "**************** End of Log *****************\n"+
-        "Time: " + ctime( time() ) + "\n";
+        txt = "**************** End of Log *****************\n"+"Time: " + ctime( time() ) + "\n";
     }
     log_file(DIR_LOGS "/harass/" + query_name(), txt);
     __LogHarass = x;
@@ -991,13 +965,13 @@ string getenv(string key) {
 }
 
 string query_name() {
-string tmp;
+    string tmp;
 
-//tmp =  living::query_name();
-tmp = __TrueName;
-////debug_message("I am "+identify(this_object())+", and my name is: "+tmp);
-//debug_message("My name is: "+tmp);
-return tmp;
+    //tmp =  living::query_name();
+    tmp = __TrueName;
+    ////debug_message("I am "+identify(this_object())+", and my name is: "+tmp);
+    //debug_message("My name is: "+tmp);
+    return tmp;
 }
 
 varargs int query_invis(object ob) { return living::query_invis(ob); }
