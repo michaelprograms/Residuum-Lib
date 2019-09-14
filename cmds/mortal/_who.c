@@ -3,21 +3,21 @@
 //      lists users() in an interesting format and sorting order
 //      created by Descartes of Borg 03 july 1993
 //	redesigned by Kalinash 12 Jan 94
- 
+
 #include <std.h>
 #include <daemons.h>
- 
+
 #define DEFAULT_SORT "l";
- 
-inherit DAEMON;
- 
+
+inherit CMD_UTILITY;
+
 string list_users(string *races, string order);
- 
+
 int cmd_who(string str) {
     string *args, *races;
     string order;
     int i;
- 
+
     races = ({});
     order = DEFAULT_SORT;
     if(str) {
@@ -30,7 +30,7 @@ int cmd_who(string str) {
      this_player()->more(explode(list_users(races, order), "\n"));
     return 1;
 }
- 
+
 string list_users(string *races, string order) {
    object *who, *hms, *ims, *nbs, *nrs, *abs;
      string tmp, mark, borg;
@@ -50,7 +50,7 @@ string list_users(string *races, string order) {
 	  if(ambassadorp(who[x]))
 	    { if(!abs) abs = ({ who[x] }); else abs += ({ who[x] }); } else
 	    { if(!nbs) nbs = ({ who[x] }); else nbs += ({ who[x] }); }
-	else 
+	else
 	  if(!nrs) nrs = ({ who[x] }); else nrs += ({ who[x] });
     }
     switch(order) {
@@ -119,7 +119,8 @@ string list_users(string *races, string order) {
             break;
     }
     max = sizeof(who);
-    borg = "%^RED%^%^BOLD%^          Our Reality Which Is Nightmare\n";
+    borg = format_header_bar("WHO") + "\n";
+    borg += "%^RED%^%^BOLD%^          Our Reality Which Is Nightmare\n";
     if(sizeof(races) && max == 1)
         borg += "%^RED%^There is only one such person experiencing our Nightmare!\n";
     else
@@ -276,13 +277,14 @@ string list_users(string *races, string order) {
     else borg += "%^BLUE%^"+tmp;
     borg += "\n";
     }
+    borg += format_footer_bar() + "\n";
     return borg;
 }
- 
+
 int which_users(object who, string *races) {
     string my_race;
     int i;
- 
+
     if((int)who->query_invis(this_player())) return 0;
     if(!who->query_title()) return 0;
     if(who->query_invis() && creatorp(who) && !archp(this_player()))
@@ -292,10 +294,10 @@ int which_users(object who, string *races) {
      while(i--) if(races[i]== my_race) return 1;
     return 0;
 }
- 
+
 int sort_by_birth(object alpha, object beta) {
     int a, b;
- 
+
     a = (int)alpha->query_birthday();
     b = (int)beta->query_birthday();
     if(a == b) return strcmp((string)alpha->query_name(),
@@ -303,14 +305,14 @@ int sort_by_birth(object alpha, object beta) {
     else if(a > b) return 1;
     else return -1;
 }
- 
+
 int sort_by_name(object alpha, object beta) {
     return strcmp((string)alpha->query_name(), (string)beta->query_name());
 }
- 
+
 int sort_by_playing_time(object alpha, object beta) {
     int a, b;
- 
+
     a = (int)alpha->query_age();
     b = (int)beta->query_age();
     if(a==b) return strcmp((string)alpha->query_name(),
@@ -318,10 +320,10 @@ int sort_by_playing_time(object alpha, object beta) {
     else if(a > b) return -1;
     else return 1;
 }
- 
+
 int sort_by_login_time(object alpha, object beta) {
     int a, b;
- 
+
     a = (int)alpha->query_login_time();
     b = (int)beta->query_login_time();
     if(a==b) return strcmp((string)alpha->query_name(),
@@ -329,10 +331,10 @@ int sort_by_login_time(object alpha, object beta) {
     else if(a>b) return 1;
     else return -1;
 }
- 
+
 int sort_by_level(object alpha, object beta) {
     int a, b;
- 
+
     a = (int)alpha->query_level();
     b = (int)beta->query_level();
     if(a > b) return -1;
@@ -344,37 +346,37 @@ int sort_by_level(object alpha, object beta) {
     if(a) return 1;
     return -1;
 }
- 
+
 int sort_by_kills(object alpha, object beta) {
     int a, b;
- 
+
     if((a=sizeof((string *)alpha->query_kills())) > (b=sizeof((string
 *)beta->query_kills())))
       return -1;
     else if(a < b) return 1;
     else return strcmp((string)alpha->query_name(), (string)beta->query_name());
 }
- 
+
 int sort_by_deaths(object alpha, object beta) {
     int a, b;
- 
+
     a = sizeof((mixed *)alpha->query_deaths());
     b = sizeof((mixed *)beta->query_deaths());
     if(a>b) return -1;
     else if(a<b) return 1;
     else return strcmp((string)alpha->query_name(), (string)beta->query_name());
 }
- 
+
 int sort_by_quests(object alpha, object beta) {
     int a, b;
- 
+
    if((a=(int)alpha->query_quest_points()) >
  (b=(int)beta->query_quest_points()))
       return -1;
     else if(a < b) return 1;
     else return strcmp((string)alpha->query_name(), (string)beta->query_name());
 }
- 
+
 void help() {
     write(
       "Syntax: <who [-][abdklpqt] [race1 race2 ... raceN]>\n\n"+

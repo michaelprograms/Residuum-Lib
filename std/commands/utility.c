@@ -5,23 +5,24 @@ inherit DAEMON;
 /* ---------------------------------------------------------------------- */
 
 varargs string format_header_bar(string title, string optional) {
-    string bar = "%^BLUE%^-=-=-";
+    string bar = "%^RESET%^CYAN%^=====";
     if(title){
-        bar += "| %^BOLD%^" + title;
+        bar += "%^RESET%^| %^RESET%^BOLD%^" + title;
         if(optional) bar += ":%^RESET%^ "+optional;
+        else bar += "%^RESET%^";
         if(strlen(strip_colours(bar))%2) bar += " ";
-        bar += "%^RESET%^ %^BLUE%^|-";
+        bar += " |%^CYAN%^=";
     }
-    while(strlen(strip_colours(bar)) < 74) bar += "=-";
+    while(strlen(strip_colours(bar)) < 76) bar += "=";
     bar += "%^RESET%^";
     return bar;
 }
 
 string format_divider_bar() {
-    return "%^RESET%^BLUE%^---------------------------------------------------------------------------%^RESET%^";
+    return "%^RESET%^BLUE%^----------------------------------------------------------------------------%^RESET%^";
 }
 string format_footer_bar() {
-    return "%^RESET%^BLUE%^-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-%^RESET%^";
+    return "%^RESET%^CYAN%^============================================================================%^RESET%^";
 }
 
 /* ---------------------------------------------------------------------- */

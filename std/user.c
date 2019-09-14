@@ -616,10 +616,10 @@ void receive_message(string msg_class, string msg) {
     x = to_int(str);
     if(msg_class[0] == 'N') msg_class = msg_class[1..sizeof(msg_class)-1];
     else if(msg_class != "prompt") msg = wrap(msg, x);  // prompt fix -Val
-    if(msg_class == "system" || msg_class == "help" || msg_class == "more"){
-        receive(msg);
-        return;
-    }
+    // if(msg_class == "system" || msg_class == "help" || msg_class == "more"){
+    //     receive(msg);
+    //     return;
+    // }
     if(query_blocked(msg_class) && member_array(msg_class, __IgnoreMsgClass) == -1) return;
     switch(msg_class) {
     case "room_exits": msg = "%^GREEN%^"+msg; break;
@@ -642,7 +642,8 @@ void receive_message(string msg_class, string msg) {
     if(!term_info) reset_terminal();
     for(i=0, max=sizeof(words=explode(msg, "%^")); i<max; i++)
         if(term_info[words[i]]) words[i] = term_info[words[i]];
-    receive(implode(words, "")+"\n"+term_info["RESET"]);
+    receive(implode(words, "")+term_info["RESET"]+"\n");
+    // receive(wrap(msg+"%^RESET%^", x)+"\n");
 }
 
 void catch_tell(string str) {
