@@ -612,7 +612,7 @@ void receive_message(string msg_class, string msg) {
         receive("<"+msg_class+">"+msg+"\n");
         return;
     }
-    if(!stringp(str=getenv("SCREEN"))) str = "75";
+    if(!stringp(str=getenv("SCREEN"))) str = "76";
     x = to_int(str);
     if(msg_class[0] == 'N') msg_class = msg_class[1..sizeof(msg_class)-1];
     else if(msg_class != "prompt") msg = wrap(msg, x);  // prompt fix -Val
@@ -620,8 +620,7 @@ void receive_message(string msg_class, string msg) {
         receive(msg);
         return;
     }
-    if(query_blocked(msg_class) &&
-      member_array(msg_class, __IgnoreMsgClass) == -1) return;
+    if(query_blocked(msg_class) && member_array(msg_class, __IgnoreMsgClass) == -1) return;
     switch(msg_class) {
     case "room_exits": msg = "%^GREEN%^"+msg; break;
     case "snoop": msg = "%^CYAN%^"+msg; break;
@@ -643,7 +642,7 @@ void receive_message(string msg_class, string msg) {
     if(!term_info) reset_terminal();
     for(i=0, max=sizeof(words=explode(msg, "%^")); i<max; i++)
         if(term_info[words[i]]) words[i] = term_info[words[i]];
-    receive(implode(words, "")+term_info["RESET"]);
+    receive(implode(words, "")+"\n"+term_info["RESET"]);
 }
 
 void catch_tell(string str) {

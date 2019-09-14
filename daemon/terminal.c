@@ -65,13 +65,13 @@ int query_term_support(string str) {
     return (term_info[str] ? 1 : 0);
 }
 
-string no_colours(string str) {
+string no_colours(string str) { /* called from strip_colours */
     string *bits;
     int i;
 
     if(!str) return "";
     i = sizeof(bits = explode(str, "%^"));
     while(i--)
-      if(term_info["unknown"][bits[i]]) bits[i] = "";
+        if(term_info["unknown"][bits[i]]) bits[i] = "";
     return implode(bits, "");
 }

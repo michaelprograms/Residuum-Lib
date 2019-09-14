@@ -4,6 +4,8 @@
  *    created by Descartes of Borg 940506
  */
 
+#include <daemons.h>
+
 varargs string center(string str, int x) {
     int y;
 
@@ -22,5 +24,17 @@ varargs string arrange_string(string str, int x) {
 }
 
 varargs string wrap(string str, int x) {
-    return sprintf(sprintf("%%-=%ds\n", (x ? x : 75)), str);
+    if(!str || !stringp(str)) return "";
+    if(strlen(str) > 8190) str=str[0..8190];
+    return terminal_colour(str, TERMINAL_D->query_term_info(previous_object()->getenv("TERM")), (x?x:76));//n"\n";
+}
+varargs string wrap2(string str, int x) {
+    return sprintf(sprintf("%%-=%ds\n", (x ? x : 76)), str);
+}
+
+string replace_strings(string *words, mapping info)
+{
+    int i=sizeof(words);
+    if(mapp(info)) while(i--) if(info[words[i]]) words[i]=info[words[i]];
+    return implode(words,"");
 }
