@@ -11,6 +11,9 @@
 #define MAX_TRACKS           10
 #define MAX_SCENTS           10
 #define TRACK_FADE_TIME      120
+#define NUMBER ({"two","three","four","five","six","seven","eight","nine","ten","many",})
+#define TMPLONG ({"north","northeast","east","southeast","south","southwest","west","northwest","up","down","in","out","enter","exit",})
+#define TMPSHORT ({"n","ne","e","se","s","sw","w","nw","u","d","in","out","enter","exit",})
 
 static private mapping __Exits, __Enters;
 static private mapping __Tracks, __TrackFaded, __Scents, __ScentFaded;
@@ -124,7 +127,7 @@ varargs void add_enter(string dir, string dest, function pre, function post) {
     reinitiate();
 }
 
-void remove_enter(string dir) { 
+void remove_enter(string dir) {
     if(__Enters[dir]) map_delete(__Enters, dir);
     reinitiate();
 }
@@ -194,12 +197,12 @@ void add_scent(object ob, string str) {
     __Scents[nom] += (int)ob->query_scent();
 }
 
-int query_scent(string str) { 
+int query_scent(string str) {
     if(!__Scents[str]) return 0;
     else __Scents[str] -= (time() - __ScentFaded[str]);
     __ScentFaded[str] = time();
     if(__Scents[str] < 1) map_delete(__Scents, str);
-    return __Scents[str]; 
+    return __Scents[str];
 }
 
 mapping query_scents() {
@@ -210,4 +213,57 @@ mapping query_scents() {
     tmp = allocate_mapping( i = sizeof( cles = keys(__Scents)));
     while(i--) tmp[cles[i]] = query_scent(cles[i]);
     return tmp;
+}
+
+string *query_obvious_exits() {
+    string *exits,*sorties;
+    int i;
+
+    if (!sizeof(__Exits)) return ({});
+    else i = sizeof(sorties = keys(__Exits));
+    exits = ({});
+    while(i--)
+        /*if(!invis_exit(sorties[i]))*/ exits+=({sorties[i]});
+    return (exits);
+}
+string query_short_exits() {
+    int i,x,max;
+    string s;
+    string *lx,*sx;
+
+    // if (skip_obvious) return "";
+    s="";
+    sx=allocate(max=sizeof(lx=query_obvious_exits()));
+    for(x=0;x<max;x++) {
+        if ((i=member_array(lx[x],TMPLONG))!=-1)
+            sx[x]=TMPSHORT[i];
+        else sx[x]=lx[x];
+    }
+    if (!sizeof(sx)) return "[no exits]";
+    if (max==1) return "[1: "+sx[0]+"]";
+    s=("["+max+": ");
+    for(x=0;x<max;x++) {
+        if(x) s+=", ";
+        s+=sx[x];
+    }
+    return s+"]";
+}
+string query_long_exits() {
+    int i,max;
+    string str;
+    string *sorties;
+
+    // if (skip_obvious) return "";
+    if (!(i=sizeof(sorties=query_obvious_exits()))) return "There are no obvious exits.";
+    if (i==1) return "The only obvious exit is "+sorties[0]+".";
+    if ((max=i) > sizeof(NUMBER) + 1) max=sizeof(NUMBER)+1;
+    str=("There are "+NUMBER[max-2]+" obvious exits:  ");
+    for(max=i,i=0;i<max;i++) {
+        if (i==max-1) str+="and ";
+        str+=sorties[i];
+        if (i==max-1) str+=".";
+        else if(max>2) str+=", ";
+        else str+=" ";
+    }
+    return str;
 }

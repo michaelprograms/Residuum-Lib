@@ -159,6 +159,8 @@ void describe_current_room(int verbose) {
         message("sound", tmp, this_object());
     else if(verbose && functionp(tmp))
         message("sound", (string)((*tmp)("default")), this_object());
+    if((tmp=(string)env->query_long_exits()) && tmp != "")
+        message("room_exits",tmp+"\n",this_object());
     if((tmp=(string)env->describe_living_contents(({this_object()})))!="")
         message("living_item", tmp, this_object());
     if((tmp=(string)env->describe_item_contents(({})))!="")
