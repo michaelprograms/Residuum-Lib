@@ -16,9 +16,9 @@ int cmd_update(string str) {
     object obb, ob2;
     string file, res;
     int n, master_flag;
-  
+
     if(ambassadorp(previous_object())) return 0;
-    if(!str) {
+    if(!str || str == "here" || (str == file_name(environment(previous_object()))) ) {
         if(!environment(this_player())) {
             write("No environment!");
             return 1;
@@ -27,23 +27,22 @@ int cmd_update(string str) {
         file = file_name(obb);
         message("Nsystem", "Update environment ("+file+"): ", this_player());
         ob = all_inventory(obb);
-        for (n = 0; n < sizeof(ob); n++)
-        {
+        for (n = 0; n < sizeof(ob); n++) {
             if (ob[n]->is_player()) ob[n]->move(ROOM_VOID);
         }
         destruct(obb);
-        if(this_player()->move(file) != MOVE_OK) 
-          message("system", "Error in loading file.", this_player());
-        for (n = 0; n < sizeof(ob); n++)
-        {
-	    if( ob[n] ) /* something may have happened during the update */
-		ob[n]->move(environment(this_player()));
+        if(this_player()->move(file) != MOVE_OK)
+            message("system", "Error in loading file.", this_player());
+        for (n = 0; n < sizeof(ob); n++) {
+        if( ob[n] ) /* something may have happened during the update */
+        ob[n]->move(environment(this_player()));
         }
         message("system", "Ok.", this_player());
+        this_player()->force_me("look");
         return 1;
     }
     str = absolute_path((string)this_player()->get_path(), str);
-/* Have to do special things for the master object */
+    /* Have to do special things for the master object */
     if((ob2 = find_object(str)) == master()) master_flag = 1;
     if(ob2) {
         res = catch(ob2->remove());
@@ -55,8 +54,7 @@ int cmd_update(string str) {
     }
     if(!find_object(str)) {
         file_size(str);
-        message("system", str+": "+((res=catch(call_other(str,"???"))) ?
-          res : "updated and loaded."), this_player());
+        message("system", str+": "+((res=catch(call_other(str,"???"))) ? res : "updated and loaded."), this_player());
     }
     else {
         notify_fail(str+": couldn't destruct\n");
