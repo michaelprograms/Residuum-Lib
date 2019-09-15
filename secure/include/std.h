@@ -8,6 +8,7 @@
 #define DAEMON      "/secure/std/daemon"
 #define BODY        "/std/living/body"
 #define SKILLS      "/std/living/skills"
+#define STATS       "/std/living/stats"
 #define CMD_UTILITY "/std/commands/utility"
 #define PIER        "/std/pier"
 #define VAULT       "/std/vault"

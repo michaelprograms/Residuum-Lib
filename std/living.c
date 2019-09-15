@@ -12,7 +12,6 @@
 #include <living.h>
 
 #define TIME_TO_HEAL 10
-#define HEALING_FORMULA (stats["strength"]+stats["constitution"]+stats["dexterity"]+stats["charisma"])*6
 
 int invis, ok_to_heal;
 static int forced, sight_bonus, spiritual, physical;
@@ -20,8 +19,6 @@ string description;
 static string party;
 static string *search_path;
 private string gender;
-mapping stats;
-static mapping stat_bonus;
 mapping languages;
 static mapping language_bonus;
 string primary_language;
@@ -43,8 +40,6 @@ int query_physical();
 int query_outlaw();
 int query_spiritual();
 int query_alignment();
-int query_stats(string str);
-int query_base_stats(string stat);
 int query_poisoning();
 void add_poisoning(int x);
 string query_gender();
@@ -60,13 +55,27 @@ string query_party();
 string query_long(string unused);
 static void init_path();
 
+/*--- Stats Prototypes -------------------------------------------------------*/
+void init_stats();
+string *query_all_stats();
+int query_base_stats(string stat);
+int query_stats(string stat);
+void set_stats(string stat, int amount);
+void add_stat_bonus(string stat, int amount);
+void reduce_stats();
+/*--- Skills -----------------------------------------------------------------*/
+string query_class();
+/*--- MONSTER/USER Prototypes ------------------------------------------------*/
+int query_level();
+/*----------------------------------------------------------------------------*/
+
 void create() {
     combat::create();
     __PlayerAge = 0;
     __LastAged = time();
 }
 
-void heart_beat() { 
+void heart_beat() {
     int x;
 
     if(x = time() - __LastAged) {
@@ -101,14 +110,11 @@ static void init_path() {
     }
 }
 
-static void init_stats() { stats = ([]); }
-
 nomask static int cmd_hook(string cmd) {
     string file, verb;
 
     if(__Locked) {
-        message("prompt", sprintf("\n(%s) Password: ", mud_name()),
-          this_object());
+        message("prompt", sprintf("\n(%s) Password: ", mud_name()), this_object());
         return 1;
     }
     if( (verb = query_verb()) != "quit" && query_paralyzed()) {
@@ -117,7 +123,7 @@ nomask static int cmd_hook(string cmd) {
         return 1;
     }
     if(!(file = (string)CMD_D->find_cmd(verb, search_path))) {
-        if(!((int)SOUL_D->do_cmd(verb, cmd))) { 
+        if(!((int)SOUL_D->do_cmd(verb, cmd))) {
             if((int)CHAT_D->do_chat(verb, cmd)) return 1;
             else {
                 if(query_client()) receive("<error>");
@@ -137,22 +143,11 @@ int force_me(string cmd) {
     string tmp;
     int res;
 
-    if(creatorp(this_object()) && !((int)master()->valid_apply(({query_name()}))))
-      return 0;
+    if(creatorp(this_object()) && !((int)master()->valid_apply(({query_name()})))) return 0;
     forced = 1;
     res = command(cmd);
     forced = 0;
     return res;
-}
-
-void reduce_stats() {
-    string *ind;
-    int i;
-
-    if(!stats) return;
-    ind = keys(stats);
-    for(i=0; i<sizeof(ind); i++)
-	if(random(101)>50) set_stats(ind[i], query_base_stats(ind[i])-1);
 }
 
 void do_healing(int x) {
@@ -168,7 +163,7 @@ void do_healing(int x) {
         else if(tmp < -1) tmp = -1;
         add_mp(tmp);
     }
-        if(query_invis()) add_sp(-random(5));
+    if(query_invis()) add_sp(-random(5));
     heal(query_heal_rate());
     if(this_object()->is_player() && !creatorp(this_object()) && query_invis())
 	heal(-(random(3)));
@@ -189,31 +184,31 @@ int calculate_healing() {
     string msg;
 
     if(query_intox()) {
-	healing["intox"] --;
-	if(healing["intox"] < 0) healing["intox"] = 0;
-	if(!healing["intox"]) {
-	    write("Suddenly you get a bad headache.");
-	    add_hp(-random(6));
-	}
-	else if(3> random(101)) {
-	    borg = random(4);
-	    switch(borg) {
-		case 0: msg = "stumble"; break;
-		case 1: msg = "hiccup"; break;
-		case 2: msg = "look"; break;
-		case 3: msg = "burp"; break;
-	    }
-	    write("You "+msg+(msg=="look" ? " drunk." : "."));
-	    say(query_cap_name()+" "+msg+"s "+(msg == "look" ? " drunk." : "."));
-	}
+        healing["intox"] --;
+        if(healing["intox"] < 0) healing["intox"] = 0;
+        if(!healing["intox"]) {
+            write("Suddenly you get a bad headache.");
+            add_hp(-random(6));
+        }
+        else if(3> random(101)) {
+            borg = random(4);
+            switch(borg) {
+            case 0: msg = "stumble"; break;
+            case 1: msg = "hiccup"; break;
+            case 2: msg = "look"; break;
+            case 3: msg = "burp"; break;
+            }
+            write("You "+msg+(msg=="look" ? " drunk." : "."));
+            say(query_cap_name()+" "+msg+"s "+(msg == "look" ? " drunk." : "."));
+        }
     }
     if(query_stuffed()) {
-	healing["stuffed"]--;
-	if(healing["stuffed"] < 0) healing["stuffed"] = 0;
+        healing["stuffed"]--;
+        if(healing["stuffed"] < 0) healing["stuffed"] = 0;
     }
     if(query_quenched()) {
-	healing["quenched"]--;
-	if(healing["quenched"] < 0) healing["quenched"] = 0;
+        healing["quenched"]--;
+        if(healing["quenched"] < 0) healing["quenched"] = 0;
     }
     if(query_poisoning() && !this_object()->is_player()) add_poisoning(-1);
     return query_intox()+query_stuffed()+query_quenched();
@@ -229,22 +224,25 @@ void add_poisoning(int x) {
     if(healing["poisoning"] < 0) healing["poisoning"] = 0;
 }
 
-void set_stats(string str, int x) {
-    if(stats[str] && stats[str] != x) {
-        log_file("stats", query_name()+" went from "+stats[str]+" to "+x+
-        " in "+str+" ("+ctime(time())+")\n");
-        log_file("stats", "PRIV: "+query_privs(previous_object())+" ("+
-        file_name(previous_object())+")\n");
+void update_vitals() {
+    string c = query_class();
+    int hpAdj = 0;
+    int spAdj = 0;
+    int mpAdj = 0;
+
+    int maxHP = 50 + query_level() * (10 + hpAdj) + this_object()->query_stats("constitution") * (10 + hpAdj);
+    int maxSP = 5  + query_level() * ( 2 + spAdj) + this_object()->query_stats("dexterity")    * ( 6 + spAdj);
+    int maxMP = 50 + query_level() * (10 + mpAdj) + this_object()->query_stats("intelligence") * (10 + mpAdj) +this_object()-> query_stats("wisdom") * ( 5 + mpAdj);
+
+    set_max_hp(maxHP);
+    set_max_sp(maxSP);
+    set_max_mp(maxMP);
+
+     if (!userp(this_object())) {
+         if(query_hp() < 25000) set_hp(query_max_hp());
+        set_sp(query_max_sp());
+        set_mp(query_max_mp());
     }
-    stats[str] = x;
-    if(str == "constitution") {
-	player_data["general"]["max_hp"] = 50 + 10*stats["constitution"];
-	augment_body(x);
-    }
-    if(str == "intelligence") magic["max points"] = 50+10*x;
-    if(str == "strength")  
-        set_max_encumbrance(x*200);
-    if(str == "dexterity") set_max_sp(x*7);
 }
 
 
@@ -274,12 +272,13 @@ void fix_exp(int x, object tmp) {
         log_file("exp",
 	  query_name()+" received "+x+" exp in party: "+party+" from "+
 	      (string)tmp->query_short()+"\n");
-        log_file("exp", 
+        log_file("exp",
 	  "(PRIV: "+query_privs(tmp)+" "+file_name(tmp)+"): "+ctime(time())+"\n");
     }
     if(creatorp(this_object()) || !this_object()->is_player()) return;
 }
 
+/*----------------------------------------------------------------------------*/
 void add_alignment(int x) {
     if(x>40) x = 40;
     else if(x<-40) x = -40;
@@ -287,48 +286,42 @@ void add_alignment(int x) {
     if(query_alignment() > 1500) player_data["general"]["alignment"] = 1500;
     if(query_alignment()< -1500) player_data["general"]["alignment"] = -1500;
 }
-
 void adj_alignment(int x) {
     add_alignment(x/200-x/50);
 }
-
+/*----------------------------------------------------------------------------*/
+int query_max_consume() {
+    return (query_stats("strength") + query_stats("charisma") + query_stats("constitution")*2 + query_stats("dexterity"))*6;
+}
 int add_intox(int x) {
     if(x>0) x = x*3 + x/2;
-    if(x+healing["intox"] > HEALING_FORMULA) return 0;
+    if(x+healing["intox"] > query_max_consume()) return 0;
     else healing["intox"] += x;
     if(healing["intox"] < 0) healing["intox"] = 0;
     return 1;
 }
-
 int add_stuffed(int x) {
     if(x>0) x = x*3;
-    if(x+healing["stuffed"] > HEALING_FORMULA) return 0;
+    if(x+healing["stuffed"] > query_max_consume()) return 0;
     else healing["stuffed"] += x;
     if(healing["stuffed"] < 0) healing["stuffed"] = 0;
     return 1;
 }
-
 int add_quenched(int x) {
     if(x>0) x = x*3;
-    if(x+healing["quenched"] > HEALING_FORMULA) return 0;
+    if(x+healing["quenched"] > query_max_consume()) return 0;
     else healing["quenched"] += x;
     if(healing["quenched"] < 0) healing["quenched"] = 0;
     return 1;
 }
-
-void add_stat_bonus(string stat, int amount) {
-    if(!stat_bonus) stat_bonus = ([]);
-    if(stat_bonus[stat]) stat_bonus[stat] += amount;
-    else stat_bonus[stat] = amount;
-    if(!stat_bonus[stat]) map_delete(stat_bonus, stat);
-}
+/*----------------------------------------------------------------------------*/
 
 string query_long(string unused) {
     object *inv;
     string *tmp;
     string pre, stuff, extra, reg, short;
     int i, x;
-    
+
     if(this_object()->query_ghost()) return "An ethereal presence.\n";
     reg = "";
     pre = "You look over the "+query_gender()+" "+(string)this_object()->query_race()+".\n";
@@ -376,20 +369,6 @@ string query_long(string unused) {
     reg = pre + reg;
     return reg;
 }
-
-int query_stats(string stat) {
-    int x;
-
-    if(stat_bonus) x= stat_bonus[stat];
-    else x = 0;
-    return stats[stat] + x;
-}
-
-int query_base_stats(string stat) {
-    if(!stats || !stats[stat]) return 0;
-    else return stats[stat];
-}
-
 
 nomask int query_forced() { return forced; }
 
@@ -445,7 +424,6 @@ string query_al_title() {
 int query_sight_bonus() { return sight_bonus; }
 
 int query_age() { return __PlayerAge; }
-string *query_all_stats() { return keys(stats); }
 
 void set_description(string str) { description = str; }
 
@@ -494,11 +472,11 @@ int query_temp_lang_bonus(string lang)
   return language_bonus[lang];
 }
 
-int query_real_lang_prof(string lang) 
-{ 
+int query_real_lang_prof(string lang)
+{
   if(!languages)
     return 0;
-  if(!languages[lang]) 
+  if(!languages[lang])
     return 0;
   return languages[lang];
 }
@@ -534,28 +512,19 @@ int add_temp_lang_bonus(string lang, int i)
   return query_lang_prof(lang);
 }
 
-string *query_all_languages()
-{
+string *query_all_languages() {
   string *ret;
-  if(!languages)
-    ret =  ({});
-  else
-    ret = keys(languages);
-  if(!language_bonus)
-    return ret;
+  if(!languages) ret =  ({});
+  else ret = keys(languages);
+  if(!language_bonus) return ret;
   ret += keys(language_bonus);
   return distinct_array(ret);
 }
-
-int remove_language(string lang)
-{
-  if(!languages || !languages[lang])
-    return 0;
+int remove_language(string lang) {
+  if(!languages || !languages[lang]) return 0;
   map_delete(languages, lang);
   return 1;
 }
-
-
 // each mapping element is an array of two ints
 // The first is the number of language points amassed.  When this reaches
 // (lang_prof + 1) ^ 4, the language prof advances and the language points
@@ -563,60 +532,44 @@ int remove_language(string lang)
 // have been spent.  When exp is spent, it is converted to lang_pts based
 // on intelligence.  it takes (40 - int) exp pts to make one lang_pt
 // -Valodin
+void learn_language(string lang, int exp) {
+    int tot_exp, tmp, goal, lang_pts, intel_fac;
 
-void learn_language(string lang, int exp)
-{
-  int tot_exp, tmp, goal, lang_pts, intel_fac;
+    if(!language_exp) language_exp = ([]);
+    if(!language_exp[lang]) language_exp[lang] = ({ 0, 0});
+    tot_exp = exp + language_exp[lang][1];
+    intel_fac = 40 - query_stats("intelligence");
+    if(intel_fac < 1) intel_fac = 1;
+    lang_pts = tot_exp / intel_fac;
+    tot_exp = tot_exp % intel_fac;
+    language_exp[lang][0] += lang_pts;
+    language_exp[lang][1] = tot_exp;
 
-  if(!language_exp)
-    language_exp = ([]);
-  if(!language_exp[lang])
-    language_exp[lang] = ({ 0, 0});
-  tot_exp = exp + language_exp[lang][1];
-  intel_fac = 40 - query_stats("intelligence");
-  if(intel_fac < 1)
-    intel_fac = 1;
-  lang_pts = tot_exp / intel_fac;
-  tot_exp = tot_exp % intel_fac;
-  language_exp[lang][0] += lang_pts;
-  language_exp[lang][1] = tot_exp;
-  
-  tmp = query_lang_prof(lang) + 1;
-  if(tmp > 10)
-    tmp = 10;
+    tmp = query_lang_prof(lang) + 1;
+    if(tmp > 10) tmp = 10;
 
-  while((goal = tmp * tmp * tmp * tmp) <= language_exp[lang][0])
-  {
-    set_lang_prof(lang, tmp);
-    language_exp[lang][0] -= goal;
-    tmp++;
-    if(tmp > 10)
-      tmp = 10;
-  }
+    while((goal = tmp * tmp * tmp * tmp) <= language_exp[lang][0]) {
+        set_lang_prof(lang, tmp);
+        language_exp[lang][0] -= goal;
+        tmp++;
+        if(tmp > 10) tmp = 10;
+    }
 }
-
-int *query_lang_exp(string lang)
-{
-  if(!language_exp)
-    return ({ 0, 0 });
-  if(!language_exp[lang])
-    return ({ 0, 0});
-  return language_exp[lang];
+int *query_lang_exp(string lang) {
+    if(!language_exp) return ({ 0, 0 });
+    if(!language_exp[lang]) return ({ 0, 0});
+    return language_exp[lang];
 }
-
-void set_gender(string str) { 
+/*----------------------------------------------------------------------------*/
+void set_gender(string str) {
     if(str != "male" && str != "female" && str != "neuter") return;
     gender = str;
 }
-
 string query_gender() { return (gender ? gender : "neuter"); }
-
 string query_subjective() { return nominative(gender); }
-
 string query_possessive() { return possessive(gender); }
-
 string query_objective() { return objective(gender); }
-
+/*----------------------------------------------------------------------------*/
 static int cmd_lock(string str) {
     if(str != "terminal") return 0;
     __BeforeLocked = ({ environment(this_player()),
@@ -628,7 +581,6 @@ static int cmd_lock(string str) {
     input_to("unlock", I_NOECHO | I_NOESC);
     return 1;
 }
-
 static void unlock(string str) {
     if((string)this_object()->query_password() !=
       crypt(str, (string)this_object()->query_password())) {
@@ -644,8 +596,8 @@ static void unlock(string str) {
     __BeforeLocked = ({});
     return;
 }
-
 int query_locked() { return __Locked; }
+/*----------------------------------------------------------------------------*/
 
 void set_outlaw(int x) {
     if(!userp(this_object())) return;
@@ -654,8 +606,6 @@ void set_outlaw(int x) {
       query_privs(previous_object(0))));
     __PlayerKiller = x;
 }
-
 int query_outlaw() { return __PlayerKiller; }
-
+/*----------------------------------------------------------------------------*/
 string query_client() { return 0; }
-

@@ -20,6 +20,7 @@
 
 inherit BODY;
 inherit SKILLS;
+inherit STATS;
 
 static int paralyzed, magic_round;
 static int hunting;
@@ -88,7 +89,7 @@ private int clean_up_attackers() {
         ) continue;
         if(member_array(full_tmp[i], (attackers_tmp+hunters_tmp)) != -1)
           continue;
-        if(environment(full_tmp[i]) != environment(this_object()))  
+        if(environment(full_tmp[i]) != environment(this_object()))
             hunters_tmp += ({ full_tmp[i] });
         else attackers_tmp += ({ full_tmp[i] });
     }
@@ -106,7 +107,7 @@ private int clean_up_attackers() {
 int kill_ob(object victim, int which) {
     object *borg_people;
     int i;
-  
+
     borg_people = (object *)victim->query_attackers();
     if(!borg_people) borg_people = ({});
     if(member_array(this_object(), borg_people) == -1)
@@ -261,7 +262,7 @@ void execute_attack() {
                 add_skill_points((string)current->query_type(),
                   x/ATTACK_TYPE_SKILL_MOD);
                 this_object()->add_exp(x/ATTACK_DAMAGE_EXP_MOD);
-                if(num_attacks > 1) 
+                if(num_attacks > 1)
                   add_skill_points("double wielding",x/ATTACK_DOUBLE_SKILL_MOD);
             }
         }
@@ -431,7 +432,7 @@ void send_messages(int magic, object current, string what, int x) {
         verb = ({ "tap", "tickle", "sting", "hurt", "strike", "strike",
           "send", "knock", "slam", "blast", "destroy", "destroy"
         });
-        adverb = ({ "innocently", "lightly", 0, "mildly", "badly", 0, 
+        adverb = ({ "innocently", "lightly", 0, "mildly", "badly", 0,
           "a bone crushing blow", 0, "mercilessly", "powerfully", 0, "utterly"
         });
       }
@@ -446,7 +447,7 @@ void send_messages(int magic, object current, string what, int x) {
       me = sprintf("You %s %s%sin the %s with your %s.", verb[i], your_name,
         (adverb[i] ? " "+adverb[i]+" " : " "), what, used);
       you = sprintf("%s %ss you%sin the %s with %s %s.", my_name, verb[i],
-        (adverb[i] ? " "+adverb[i]+" " : " "), what, 
+        (adverb[i] ? " "+adverb[i]+" " : " "), what,
         (string)this_object()->query_possessive(), used);
       others = sprintf("%s %ss %s%sin the %s with %s %s.", my_name, verb[i],
         your_name, (adverb[i] ? " "+adverb[i]+" " : " "), what,
@@ -506,7 +507,7 @@ void miss(int magic, string type, string target_thing) {
       you+" dodges your inept attack."
     });
     message("my_combat", missed[random(sizeof(missed))], this_object());
-    message("other_combat", sprintf("%s misses %s attack on %s.", 
+    message("other_combat", sprintf("%s misses %s attack on %s.",
       me, (string)this_object()->query_possessive(), you),
       environment(this_object()), ({ this_object(), attackers[0] }));
     message("my_combat", sprintf("%s missed you.", me), attackers[0]);
@@ -530,7 +531,7 @@ string query_paralyze_message() { return paralyze_message; }
 
 int query_paralyzed() { return paralyzed; }
 
-void remove_paralyzed() { 
+void remove_paralyzed() {
     if(!this_object()) return;
     remove_call_out("remove_paralyzed");
     paralyzed = 0;
@@ -564,7 +565,7 @@ int query_current_protection(string target_thing) {
 void set_magic_round() { magic_round = 1; }
 
 int query_magic_round() { return magic_round; }
- 
+
 int ok_to_kill(object targ) {
     if((int)targ->is_invincible()) return 0;
     if(query_ghost() || (int)targ->query_ghost()) return 0;
