@@ -622,6 +622,11 @@ void receive_message(string msg_class, string msg) {
     //     receive(msg);
     //     return;
     // }
+    if(msg_class == "prompt") {
+        if(msg == 0) msg="";
+        receive(wrap(msg+"%^RESET%^", x));
+        return;
+    }
     if(query_blocked(msg_class) && member_array(msg_class, __IgnoreMsgClass) == -1) return;
     switch(msg_class) {
     case "room_exits": msg = "%^GREEN%^"+msg; break;
