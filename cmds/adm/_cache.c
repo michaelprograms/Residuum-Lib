@@ -2,16 +2,13 @@
 
 inherit DAEMON;
 
-int
-cmd_cache(string arg)
-{
-  if(!archp(previous_object())) return 0;
-	cache_stats();
-	return 1;
+int cmd_cache(string arg) {
+    if(!archp(previous_object())) return 0;
+    write(cache_stats());
+    return 1;
 }
 
-int help()
-{
+int help() {
   write( @EndText
 Syntax: cache
 Effect: Gets the cache stats from the driver, including the hit rate
