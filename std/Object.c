@@ -85,7 +85,10 @@ int allow_get(object ob) {
     mixed val;
 
     if(!(val = query_prevent_get()) && !query_property("keep")) return 1;
-    else if(stringp(val)) {
+    else if(intp(val)) {
+        message("my_action", "You cannot get that!", ob);
+        return 0;
+    } else if(stringp(val)) {
         message("my_action", val, ob);
         return 0;
       }
@@ -108,7 +111,10 @@ int allow_drop(object ob) {
     mixed val;
 
     if(!(val = query_prevent_drop())) return 1;
-    else if(stringp(val)) {
+    else if(intp(val)) {
+        message("my_action", "You cannot drop that!", ob);
+        return 0;
+    } else if(stringp(val)) {
         message("my_action", val, ob);
         return 0;
       }
@@ -122,7 +128,10 @@ int allow_put(object ob) {
     mixed val;
 
     if(!(val = query_prevent_put())) return 1;
-    else if(stringp(val)) {
+    else if(intp(val)) {
+        message("my_action", "You cannot put that!", ob);
+        return 0;
+    } else if(stringp(val)) {
         message("my_action", val, ob);
         return 0;
     }
@@ -138,7 +147,7 @@ int id(string str) {
     return (member_array(lower_case(str), query_id()) != -1);
 }
 
-string *parse_command_id_list() { 
+string *parse_command_id_list() {
     return query_id();
 }
 
@@ -162,12 +171,12 @@ int ReadObject(string str) {
         return (int)((*val)(str));
       }
     message("info", val, this_player());
-    message("other_action", sprintf("%s reads the %s", 
+    message("other_action", sprintf("%s reads the %s",
       (string)this_player()->query_cap_name(), query_name()),
       environment(this_player()), ({ this_player() }));
     return 1;
   }
-    
+
 void set_id(string *arr) {
     if(!pointerp(arr)) error("Bad argument 1 to set_id().\n");
     __Id = arr;
@@ -182,12 +191,12 @@ void set_adjectives(string *arr) {
 
 string *query_adjectives() { return __Adjectives; }
 
-void set_name(string str) { 
+void set_name(string str) {
     if(!stringp(str)) error("Bad argument 1 to set_name().\n");
     __TrueName = lower_case(str);
     if(!__CapName) __CapName = capitalize(str);
     if(!__Creator)
-      __Creator = (previous_object() ? file_name(previous_object()) : 
+      __Creator = (previous_object() ? file_name(previous_object()) :
         "Unknown");
   }
 
@@ -220,7 +229,7 @@ string query_short() {
   }
 
 void set_long(mixed val) {
-    if(!stringp(val) && !functionp(val)) 
+    if(!stringp(val) && !functionp(val))
       error("Bad argument 1 to set_long().\n");
     __Long = val;
   }
@@ -233,8 +242,8 @@ varargs string query_long(string str) {
     else error("Illegal function pointer.\n");
   }
 
-varargs void set_read(mixed val, mixed unused) {  
-    if(!stringp(val) && !functionp(val)) 
+varargs void set_read(mixed val, mixed unused) {
+    if(!stringp(val) && !functionp(val))
       error("Bad argument 1 to set_read().\n");
     else __Read = val;
 }
@@ -319,56 +328,49 @@ void set_material(string str) {
 
 string query_material() { return __Material; }
 
-void set_vendor_type(string str) { 
+void set_vendor_type(string str) {
     if(!stringp(str)) error("Bad argument 1 to set_vendor_type().\n");
     else __VendorType = str;
 }
-
 string query_vendor_type() { return __VendorType; }
 
+/*----------------------------------------------------------------------------*/
 void set_prevent_get(mixed val) {
-    if(!stringp(val) && !functionp(val)) 
-      error("Bad argument 1 to set_prevent_get().\n");
+    if(!stringp(val) && !functionp(val) && !intp(val))
+        error("Bad argument 1 to set_prevent_get().\n");
     __PreventGet = val;
-  }
-
+}
 mixed query_prevent_get() { return __PreventGet; }
 
 void set_prevent_drop(mixed val) {
-    if(!stringp(val) && !functionp(val)) 
-      error("Bad argument 1 to set_prevent_drop().\n");
+    if(!stringp(val) && !functionp(val) && !intp(val))
+        error("Bad argument 1 to set_prevent_drop().\n");
     __PreventDrop = val;
-  }
-
+}
 mixed query_prevent_drop() { return __PreventDrop; }
 
 void set_prevent_put(mixed val) {
-    if(!stringp(val) && !functionp(val))
-      error("Bad argument 1 to set_prevent_put().\n");
+    if(!stringp(val) && !functionp(val) && !intp(val))
+        error("Bad argument 1 to set_prevent_put().\n");
     __PreventPut = val;
 }
-
 mixed query_prevent_put() { return __PreventPut; }
+/*----------------------------------------------------------------------------*/
 
 void set_properties(mapping borg) { __Properties += borg; }
-
 mapping query_properties() { return __Properties; }
-
 void set_property(string prop, mixed val) {
     __Properties[prop] = val;
-  }
-
+}
 mixed query_property(string prop) { return __Properties[prop]; }
-
 void add_property(string prop, mixed val) {
     if(__Properties[prop]) __Properties[prop] += val;
     else __Properties[prop] = val;
-  }
-
+}
 void remove_property(string prop) {
     if(undefinedp(__Properties[prop])) return;
     else map_delete(__Properties, prop);
-  }
+}
 
 /* ******************************************************************* */
 /*          CUT HERE IF NO OLD FUNCTION CALLS EXIST                    */
@@ -403,7 +405,7 @@ int get() { return allow_get(this_player()); }
 
 int drop() { return !allow_drop(this_player()); }
 
-string special_long(string str) { 
+string special_long(string str) {
     return (query_night() ? query_property("night long") : query_property("day long"));
 }
 
