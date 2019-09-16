@@ -15,7 +15,7 @@ static private int __Encumbrance, __MaxEncumbrance;
 varargs int receive_objects(object ob) {
     if(!ob) ob = previous_object();
     if((int)ob->query_mass() + query_encumbrance() > query_max_encumbrance())
-      return 0;
+        return 0;
     return 1;
 }
 
@@ -46,7 +46,7 @@ string describe_living_contents(object *exclude) {
     i = sizeof(shorts = keys(list));
     ret = "";
     while(i--) {
-        if((x=sizeof(list[shorts[i]])) < 2) 
+        if((x=sizeof(list[shorts[i]])) < 2)
           ret = sprintf("%s%s\n", ret, capitalize(shorts[i]));
         else ret = sprintf("%s%s\n", ret,
           capitalize(consolidate(x, shorts[i])));
@@ -73,19 +73,17 @@ string describe_item_contents(object *exclude) {
     if(!(i = sizeof(shorts = keys(list)))) return "";
     if((x=sizeof(list[shorts[--i]])) == 1) ret = capitalize(shorts[i]);
     else ret = capitalize(consolidate(x, shorts[i]));
-    if(!i) return sprintf("%s %s here.", ret, (x<2 ? "is" : "are"));
-    else if(i==1)
-      return sprintf("%s and %s are here.", ret,
-        consolidate(sizeof(list[shorts[0]]), shorts[0]));
+    if(!i) return sprintf("%s %s here.", ret+"%^BOLD%^MAGENTA%^", (x<2 ? "is" : "are"));
+    else if(i == 1)
+      return sprintf("%s and %s are here.", ret+"%^BOLD%^%^MAGENTA%^", consolidate(sizeof(list[shorts[0]]), shorts[0])+"%^BOLD%^%^MAGENTA%^");
     else {
         while(i--) {
             if(!i) ret = sprintf("%s, and ", ret);
             else ret = sprintf("%s, ", ret);
-            ret = sprintf("%s%s", ret, consolidate(sizeof(list[shorts[i]]),
-              shorts[i]));
+            ret = sprintf("%s%s", ret, consolidate(sizeof(list[shorts[i]]), shorts[i]));
         }
     }
-    return sprintf("%s are here.", ret);
+    return sprintf("%s are here.", ret+"%^BOLD%^%^MAGENTA%^");
 }
 
 void add_encumbrance(int x) {
@@ -95,7 +93,7 @@ void add_encumbrance(int x) {
 
 int query_encumbrance() { return __Encumbrance; }
 
-void set_max_encumbrance(int x) { __MaxEncumbrance = x; } 
+void set_max_encumbrance(int x) { __MaxEncumbrance = x; }
 
 int query_max_encumbrance() { return __MaxEncumbrance; }
 
@@ -103,7 +101,7 @@ float query_encumbered() {
     return percent(query_encumbrance(), query_max_encumbrance());
 }
 
-object *query_living_contents() { 
+object *query_living_contents() {
     return filter_array(all_inventory(this_object()), "filter_living",
       this_object());
 }
