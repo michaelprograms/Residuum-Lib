@@ -42,7 +42,7 @@ void set_short(string str) { container::set_short(str); }
 
 void set_long(string str) { container::set_long(str); }
 
-string query_short() { 
+string query_short() {
     return container::query_short();
 }
 
@@ -72,7 +72,7 @@ string query_extra_long() {
 }
 
 int query_reset_number() { return __ResetNumber; }
- 
+
 int move(mixed dest) { return MOVE_NOT_ALLOWED; }
 
 string *query_id() { return items::query_id(); }
@@ -92,3 +92,9 @@ string query_day_long() { return __DayLong; }
 void set_night_long(string str) { __NightLong = str; }
 
 string query_night_long() { return __NightLong; }
+
+void set_safe_room() {
+    set_property("no attack", 1);
+    set_property("no steal", 1);
+    set_property("no magic", 1);
+}
