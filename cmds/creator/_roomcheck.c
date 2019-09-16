@@ -15,25 +15,25 @@ string long;
 string *destinations;
 mapping item;
 
-status
+int
 check_room(object ob) {
    int i;
-   status error;
+   int error;
    string message;
    string *items;
    string desc;
    string func;
-   
+
    error = 0;
-   
+
    if (member_array("std/room.c", deep_inherit_list(ob)) == -1)
       if (path != "/std/room") {
 	 write("Warning: " + path + " is not a subclass of /std/room.\n");
 	 error = 1; }
-   
+
    if (!stringp(geteuid(ob)))
       write("Warning: geteuid() did not return a string.\n");
-   
+
    short = (string)ob->query_short();
    if (!stringp(short)) {
       write("Warning: query_short() did not return a string.\n");
@@ -64,9 +64,9 @@ check_room(object ob) {
 	 } else
 	    night_long = long;
       }
-   
+
    item = ([ ]);
-   
+
    items = (string *)ob->query_id();
    if (pointerp(items))
       for( i=0 ; i<sizeof(items) ; i++) {
@@ -87,7 +87,7 @@ check_room(object ob) {
 	       item[items[i]]["description"] = desc;
 	 }
       }
-   
+
    destinations = (string *)ob->query_destinations();
    if (pointerp(destinations))
       for (i = 0; i < sizeof(destinations); i++) {
@@ -104,7 +104,7 @@ check_room(object ob) {
 	    }
 	 }
       }
-   
+
    return !error;
 }
 
@@ -113,7 +113,7 @@ void
 {
    int i;
    string *items;
-   
+
    write("User IDs: " + getuid(ob) + "/" + geteuid(ob));
    write("Short: " + short);
    if (stringp(night_long)) {
@@ -121,7 +121,7 @@ void
       write("Day Long: " + day_long + "\n");
    } else
       write("Long: " + long + "\n");
-   
+
    items = keys(item);
    write(sizeof(items) + " Item(s):");
    for (i = 0; i < sizeof(items); i++)
@@ -133,7 +133,7 @@ int
    cmd_roomcheck(string room)
 {
    object ob;
-   
+
    if (stringp(room)) {
       catch(ob = load_object(room));
       if (!objectp(ob)) {
@@ -143,14 +143,14 @@ int
       }
    } else
       ob = environment(this_player());
-   
+
    path = base_name(ob);
-   
+
    write("Room Check for: " + path);
-   
+
    if (check_room(ob))
       print_room(ob);
-   
+
    return 1;
 }
 
