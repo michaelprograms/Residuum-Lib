@@ -63,8 +63,9 @@ int query_magic_protection(string limb);
 int query_magic_round();
 string query_paralyze_message();
 
-//  This function is used to initialize various variables
+// -------------------------------------------------------------------------
 
+//  This function is used to initialize various variables
 void init_attack() {
     init_complex_body();
     hunters = ({});
@@ -72,9 +73,10 @@ void init_attack() {
     wimpydir = "out";
 }
 
+// -------------------------------------------------------------------------
+
 //  Remove dead or non-existing objects out of the list of attackers
 // Return true if there are still attackers around
-
 private int clean_up_attackers() {
     object *hunters_tmp, *attackers_tmp, *full_tmp;
     int i, tmp;
@@ -98,6 +100,45 @@ private int clean_up_attackers() {
     any_attack = sizeof(attackers);
     hunting = sizeof(hunters);
     return any_attack;
+}
+void stop_hunting() {
+    hunting = 0;
+    hunters = ({});
+}
+object *query_hunted() { return hunters; }
+void cease_all_attacks() {
+    attackers = ({});
+    any_attack = 0;
+}
+object query_current_attacker() {
+    if(!sizeof(attackers)) return 0;
+    else return attackers[0];
+}
+void set_attackers(object *what) {
+    attackers = what;
+    any_attack = 1;
+}
+object *query_attackers() {
+    if(!attackers) return ({});
+    if(!sizeof(attackers)) return ({});
+    return attackers;
+}
+
+// -------------------------------------------------------------------------
+
+int ok_to_kill(object targ) {
+    if((int)targ->is_invincible()) return 0;
+    if(query_ghost() || (int)targ->query_ghost()) return 0;
+    if(creatorp(this_object()) || !userp(this_object()) || !userp(targ))
+      return 1;
+    if(!query_outlaw() && !((int)targ->query_outlaw()))
+      this_object()->set_outlaw(1);
+    //These lines commented at forlocks request, due to the jail being buggy.
+    //if(!((int)targ->query_outlaw()))
+      //ROOM_SHERIFF->rescue_me(targ, this_object());
+    if(leaderp(this_object())) return 1;
+    if((int)targ->query_level() > NEWBIE_LEVEL) return 1;
+    return 0;
 }
 
 //  This is the kill command.  If the victim is not yet attacked
@@ -133,11 +174,6 @@ int kill_ob(object victim, int which) {
     any_attack = 1;
     if(!which) victim->kill_ob(this_object(), 1);
     return 1;
-}
-
-void set_attackers(object *what) {
-    attackers = what;
-    any_attack = 1;
 }
 
 //  Called from heart_beat
@@ -278,50 +314,6 @@ void execute_attack() {
     casting = 0;
 }
 
-void stop_hunting() {
-    hunting = 0;
-    hunters = ({});
-}
-void cease_all_attacks() {
-    attackers = ({});
-    any_attack = 0;
-}
-
-object query_current_attacker() {
-    if(!sizeof(attackers)) return 0;
-    else return attackers[0];
-}
-
-void run_away() {
-    string *str, *enters;
-    int e, s;
-
-    str = (string *)environment(this_object())->query_exits();
-    enters = (string *)environment(this_object())->query_exits();
-    if((!str || !(s = sizeof(str))) && (!enters || !sizeof(enters))) {
-        message("my_combat", "There is nowhere to run!!!", this_object());
-        return;
-    }
-    message("my_combat", "You run away.", this_object());
-    if(member_array(wimpydir, str) != -1)
-      this_object()->force_me("go "+wimpydir);
-    else if(enters && (e = sizeof(enters)) && member_array(wimpydir,enters)!=-1)
-      this_object()->force_me("enter "+wimpydir);
-    else if(s) this_object()->force_me("go "+str[random(s)]);
-    else this_object()->force_me("enter "+enters[random(e)]);
-}
-
-void set_wimpydir(string str) {
-    if(!stringp(str)) return;
-    wimpydir = str;
-}
-
-void set_wimpy(int x) { wimpy = x; }
-
-string query_wimpydir() { return wimpydir; }
-
-int query_wimpy() { return wimpy; }
-
 int get_damage(object weap) {
     int damage, melee, attack, two_handed, double_wielding, use;
     int weap_class;
@@ -359,34 +351,50 @@ int get_damage(object weap) {
     return damage;
 }
 
-void set_casting(int x) { casting = x; }
+int sight_adjustment() {
+    int elight, ret;
 
-int query_casting() { return casting; }
-
-void set_magic_protection(string limb, int x) {
-    if(!magic_protection) magic_protection = ([]);
-    if(!limb) magic_protection["overall"] = x;
-    else magic_protection[limb] = x;
+    ret = 0;
+    elight = effective_light(this_object());
+    if(elight >6 || elight < 1)
+	ret = random(5);
+    if(attackers[0] && attackers[0]->query_invis()) {
+	ret += 45 / (1+random((int)this_object()->query_skill("perception")));
+        attackers[0]->add_sp(-ret);
+    }
+    return ret;
 }
 
-void add_magic_protection(mixed *info) {
-    string limb;
-    int time, x, i;
+void miss(int magic, string type, string target_thing) {
+    string you, me;
+    string *missed;
 
-    if(sizeof(info) != 3) return;
-    limb = info[i];
-    x= info[1];
-    time = info[2];
-    if(!magic_protection) magic_protection = ([]);
-    if(!limb) magic_protection["overall"] += x;
-    else magic_protection[limb] += x;
-    if(time > 0) call_out("add_magic_protection", time, ({ limb, -x, 0 }) );
-}
-
-int query_magic_protection(string limb) {
-    if(!magic_protection) return 0;
-    if(!limb) return magic_protection["overall"];
-    else return (magic_protection["overall"] + magic_protection[limb]);
+    you = (string)attackers[0]->query_cap_name();
+    me = query_cap_name();
+    if(magic) {
+        message("my_combat", "Your magic powers fail you.", this_object());
+        message("my_combat", sprintf("%s's magic powers fail in an attack "
+          "on you.", me), attackers[0]);
+        message("other_combat", sprintf("%s's magic powers fail in an attack "
+          "on %s.", me, you), environment(this_object()),
+          ({ this_object(), attackers[0] }));
+        return;
+    }
+    missed = ({
+      "You miss.",
+      "You deal a deadly blow... to empty space!",
+      you+" sidesteps your poorly planned attack.",
+      "You decide to daydream a moment instead of attack.",
+      "A swing and a miss...  Strike "+(1+random(3))+" for you!",
+      you+" dances around as you miss.",
+      you+" never knew what missed "+(string)attackers[0]->query_objective()+".",
+      you+" dodges your inept attack."
+    });
+    message("my_combat", missed[random(sizeof(missed))], this_object());
+    message("other_combat", sprintf("%s misses %s attack on %s.",
+      me, (string)this_object()->query_possessive(), you),
+      environment(this_object()), ({ this_object(), attackers[0] }));
+    message("my_combat", sprintf("%s missed you.", me), attackers[0]);
 }
 
 void send_messages(int magic, object current, string what, int x) {
@@ -459,59 +467,66 @@ void send_messages(int magic, object current, string what, int x) {
       ({ attackers[0], this_object() }));
 }
 
-object *query_hunted() { return hunters; }
+// -------------------------------------------------------------------------
 
-object *query_attackers() {
-    if(!attackers) return ({});
-    if(!sizeof(attackers)) return ({});
-    return attackers;
-}
+void run_away() {
+    string *str, *enters;
+    int e, s;
 
-int sight_adjustment() {
-    int elight, ret;
-
-    ret = 0;
-    elight = effective_light(this_object());
-    if(elight >6 || elight < 1)
-	ret = random(5);
-    if(attackers[0] && attackers[0]->query_invis()) {
-	ret += 45 / (1+random((int)this_object()->query_skill("perception")));
-        attackers[0]->add_sp(-ret);
-    }
-    return ret;
-}
-
-void miss(int magic, string type, string target_thing) {
-    string you, me;
-    string *missed;
-
-    you = (string)attackers[0]->query_cap_name();
-    me = query_cap_name();
-    if(magic) {
-        message("my_combat", "Your magic powers fail you.", this_object());
-        message("my_combat", sprintf("%s's magic powers fail in an attack "
-          "on you.", me), attackers[0]);
-        message("other_combat", sprintf("%s's magic powers fail in an attack "
-          "on %s.", me, you), environment(this_object()),
-          ({ this_object(), attackers[0] }));
+    str = (string *)environment(this_object())->query_exits();
+    enters = (string *)environment(this_object())->query_exits();
+    if((!str || !(s = sizeof(str))) && (!enters || !sizeof(enters))) {
+        message("my_combat", "There is nowhere to run!!!", this_object());
         return;
     }
-    missed = ({
-      "You miss.",
-      "You deal a deadly blow... to empty space!",
-      you+" sidesteps your poorly planned attack.",
-      "You decide to daydream a moment instead of attack.",
-      "A swing and a miss...  Strike "+(1+random(3))+" for you!",
-      you+" dances around as you miss.",
-      you+" never knew what missed "+(string)attackers[0]->query_objective()+".",
-      you+" dodges your inept attack."
-    });
-    message("my_combat", missed[random(sizeof(missed))], this_object());
-    message("other_combat", sprintf("%s misses %s attack on %s.",
-      me, (string)this_object()->query_possessive(), you),
-      environment(this_object()), ({ this_object(), attackers[0] }));
-    message("my_combat", sprintf("%s missed you.", me), attackers[0]);
+    message("my_combat", "You run away.", this_object());
+    if(member_array(wimpydir, str) != -1)
+      this_object()->force_me("go "+wimpydir);
+    else if(enters && (e = sizeof(enters)) && member_array(wimpydir,enters)!=-1)
+      this_object()->force_me("enter "+wimpydir);
+    else if(s) this_object()->force_me("go "+str[random(s)]);
+    else this_object()->force_me("enter "+enters[random(e)]);
 }
+void set_wimpydir(string str) {
+    if(!stringp(str)) return;
+    wimpydir = str;
+}
+void set_wimpy(int x) { wimpy = x; }
+string query_wimpydir() { return wimpydir; }
+int query_wimpy() { return wimpy; }
+
+// -------------------------------------------------------------------------
+
+void set_casting(int x) { casting = x; }
+int query_casting() { return casting; }
+
+// -------------------------------------------------------------------------
+
+void set_magic_protection(string limb, int x) {
+    if(!magic_protection) magic_protection = ([]);
+    if(!limb) magic_protection["overall"] = x;
+    else magic_protection[limb] = x;
+}
+void add_magic_protection(mixed *info) {
+    string limb;
+    int time, x, i;
+
+    if(sizeof(info) != 3) return;
+    limb = info[i];
+    x= info[1];
+    time = info[2];
+    if(!magic_protection) magic_protection = ([]);
+    if(!limb) magic_protection["overall"] += x;
+    else magic_protection[limb] += x;
+    if(time > 0) call_out("add_magic_protection", time, ({ limb, -x, 0 }) );
+}
+int query_magic_protection(string limb) {
+    if(!magic_protection) return 0;
+    if(!limb) return magic_protection["overall"];
+    else return (magic_protection["overall"] + magic_protection[limb]);
+}
+
+// -------------------------------------------------------------------------
 
 void set_paralyzed(int x, string drow) {
     if(archp(this_object())) {
@@ -526,11 +541,8 @@ void set_paralyzed(int x, string drow) {
     paralyzed = 1;
     call_out("remove_paralyzed", x);
 }
-
 string query_paralyze_message() { return paralyze_message; }
-
 int query_paralyzed() { return paralyzed; }
-
 void remove_paralyzed() {
     if(!this_object()) return;
     remove_call_out("remove_paralyzed");
@@ -551,6 +563,8 @@ int mobility(int magic) {
     return ret;
 }
 
+// -------------------------------------------------------------------------
+
 int query_current_protection(string target_thing) {
     int prot, tmp;
 
@@ -563,23 +577,7 @@ int query_current_protection(string target_thing) {
 }
 
 void set_magic_round() { magic_round = 1; }
-
 int query_magic_round() { return magic_round; }
-
-int ok_to_kill(object targ) {
-    if((int)targ->is_invincible()) return 0;
-    if(query_ghost() || (int)targ->query_ghost()) return 0;
-    if(creatorp(this_object()) || !userp(this_object()) || !userp(targ))
-      return 1;
-    if(!query_outlaw() && !((int)targ->query_outlaw()))
-      this_object()->set_outlaw(1);
-//These lines commented at forlocks request, due to the jail being buggy.
-    //if(!((int)targ->query_outlaw()))
-      //ROOM_SHERIFF->rescue_me(targ, this_object());
-    if(leaderp(this_object())) return 1;
-    if((int)targ->query_level() > NEWBIE_LEVEL) return 1;
-    return 0;
-}
 
 int query_outlaw() { return 0; }
 
