@@ -231,12 +231,15 @@ void set_level(int x) {
     set_skill("blunt", (x*4));
     set_skill("projectile", (x*4));
     set_skill("two handed", (x*4));
-    set_stats("constitution", x*3/2);
+
     set_stats("strength", x*3/2);
-    set_stats("intelligence", x*3/2);
-    set_stats("wisdom", x*3/2);
-    set_stats("dexterity", x*3/2);
+    set_stats("perception", x*3/2);
+    set_stats("endurance", x*3/2);
     set_stats("charisma", x*3/2);
+    set_stats("intelligence", x*3/2);
+    set_stats("agility", x*3/2);
+    set_stats("luck", x*3/2);
+
     set_exp( (int)ADVANCE_D->get_exp(x) );
     set_mp(query_max_mp());
     set_hp(query_max_hp());

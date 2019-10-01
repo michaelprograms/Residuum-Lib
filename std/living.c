@@ -29,7 +29,6 @@ int __PlayerKiller;
 mapping language_exp;
 
 int query_age();
-void set_stats(string str, int x);
 void set_alignment(int x);
 void add_alignment(int x);
 void adj_alignment(int x);
@@ -230,9 +229,9 @@ void update_vitals() {
     int spAdj = 0;
     int mpAdj = 0;
 
-    int maxHP = 50 + query_level() * (10 + hpAdj) + this_object()->query_stats("constitution") * (10 + hpAdj);
-    int maxSP = 5  + query_level() * ( 2 + spAdj) + this_object()->query_stats("dexterity")    * ( 6 + spAdj);
-    int maxMP = 50 + query_level() * (10 + mpAdj) + this_object()->query_stats("intelligence") * (10 + mpAdj) +this_object()-> query_stats("wisdom") * ( 5 + mpAdj);
+    int maxHP = 50 + query_level() * (10 + hpAdj) + this_object()->query_stats("endurance") * (10 + hpAdj);
+    int maxSP = 5  + query_level() * ( 2 + spAdj) + this_object()->query_stats("agility") * (6 + spAdj);
+    int maxMP = 50 + query_level() * (10 + mpAdj) + this_object()->query_stats("intelligence") * (10 + mpAdj);
 
     set_max_hp(maxHP);
     set_max_sp(maxSP);
@@ -291,7 +290,7 @@ void adj_alignment(int x) {
 }
 /*----------------------------------------------------------------------------*/
 int query_max_consume() {
-    return (query_stats("strength") + query_stats("charisma") + query_stats("constitution")*2 + query_stats("dexterity"))*6;
+    return (query_stats("strength") + query_stats("charisma") + query_stats("endurance")*2 + query_stats("agility"))*6;
 }
 int add_intox(int x) {
     if(x>0) x = x*3 + x/2;
@@ -446,7 +445,7 @@ void adjust_biorhythms() {
     float freq, temps;
 
     temps = to_float(query_age()/1000);
-    freq = to_float( (int)this_object()->query_stats("wisdom"));
+    freq = to_float( (int)this_object()->query_stats("perception"));
     spiritual = to_int( 5.0 * sin(freq*temps) );
     freq = to_float( (int)this_object()->query_stats("strength") );
     physical = to_int( 5.0 * sin(freq*temps) );

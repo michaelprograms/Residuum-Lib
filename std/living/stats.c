@@ -1,4 +1,4 @@
-//	/std/living/stats.c
+// /std/living/stats.c
 
 mapping stats;
 static mapping stat_bonus;
@@ -27,13 +27,13 @@ int query_stats(string stat) {
     return stats[stat] + x;
 }
 void set_stats(string stat, int amount) {
-    if(stats[stat] && stats[stat] != amount) {
+    if(stats[stat] && stats[stat] != amount && userp(this_object())) {
         log_file("stats", this_object()->query_name()+" went from "+stats[stat]+" to "+amount+" in "+stat+" ("+ctime(time())+")\n");
         log_file("stats", "PRIV: "+query_privs(previous_object())+" ("+file_name(previous_object())+")\n");
     }
     stats[stat] = amount;
     update_vitals();
-    if(stat == "constitution") augment_body(!!amount);
+    if(stat == "endurance") augment_body(!!amount);
 }
 
 void add_stat_bonus(string stat, int amount) {

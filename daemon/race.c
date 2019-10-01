@@ -31,7 +31,7 @@ void create() {
         races[data[0]] =
           ([ "sight":to_int(data[1]), "weight":to_int(data[2]), "fingers":to_int(data[3]) ]);
         races[data[0]]["wielding"] = ({});
-        for(j=0, tmp2=sizeof(w_limbs=explode(data[4], ";")); j<tmp2; j++) 
+        for(j=0, tmp2=sizeof(w_limbs=explode(data[4], ";")); j<tmp2; j++)
             races[data[0]]["wielding"] += ({ w_limbs[j] });
         races[data[0]]["str"] = to_int(data[5]);
         races[data[0]]["con"] = to_int(data[6]);
@@ -54,9 +54,9 @@ void create() {
           j<tmp2; j++) {
             if(lines[j][0] == '#')
 	      continue;
-            if(sizeof(data = explode(lines[j], ":")) != 4) 
+            if(sizeof(data = explode(lines[j], ":")) != 4)
 	      continue;
-            if(data[1] == "0") 
+            if(data[1] == "0")
 	      data[1] = "";
             limbs[b_types[i]][data[0]] =
               ([ "ref":data[1], "max":to_int(data[2]), "attach":data[3] ]);
@@ -75,7 +75,7 @@ int query_fingers(string res) {
 }
 
 int query_stat_adjustment(string stat, string res);
-int query_sight_bonus(string res) { 
+int query_sight_bonus(string res) {
     if(!res || !races[res]) return 0;
     else return races[res]["sight"];
 }
@@ -91,7 +91,7 @@ int is_race(string res) {
 }
 
 int query_max_dam(string limb, string res) {
-    if(!limb || !res || !races[res] || !limbs[races[res]["body type"]]) 
+    if(!limb || !res || !races[res] || !limbs[races[res]["body type"]])
       return 2;
     if(limb == "torso") return 1;
     else if(!limbs[races[res]["body type"]][limb]) return 0;
@@ -107,7 +107,7 @@ string *query_races() { return keys(races); }
 
 int is_limb(string limb, string res) {
     if(!limb || !res || !limbs[races[res]["body type"]]) return 0;
-    else 
+    else
       return (member_array(limb, keys(limbs[races[res]["body type"]])) != -1);
 }
 
@@ -119,12 +119,12 @@ mapping body(object ob) {
 
     borg = ([]);
     res = (string)ob->query_race();
-    if(!res) 
+    if(!res)
       res = "human";
     max = (int)ob->query_max_hp();
-    borg["torso"] = 
+    borg["torso"] =
       ([ "limb_ref": "FATAL", "max_dam": max+1, "damage":0, "ac":0 ]);
-    for(i=0, tmp = sizeof(what = keys(limbs[races[res]["body type"]])); 
+    for(i=0, tmp = sizeof(what = keys(limbs[races[res]["body type"]]));
 	i < tmp; i++)
       borg[what[i]] =
 	(["limb_ref":limbs[races[res]["body type"]][what[i]]["ref"],
@@ -142,11 +142,12 @@ mapping do_rolls(string res) {
     if(!res || !races[res]) return 0;
     borg = ([
       "strength": random(10) + 7 + races[res]["str"],
-      "constitution": random(10) + 7 + races[res]["con"],
+      "perception": random(10) + 7 + races[res]["wis"],
+      "endurance": random(10) + 7 + races[res]["con"],
+      "charisma": random(10) + 7 + races[res]["cha"],
       "intelligence": random(10) + 7 + races[res]["int"],
-      "wisdom": random(10) + 7 + races[res]["wis"],
-      "dexterity": random(10) + 7 + races[res]["dex"],
-      "charisma": random(10) + 7 + races[res]["cha"]
+      "agility": random(10) + 7 + races[res]["dex"],
+      "luck": random(10) + 7 + races[res]["luck"]
     ]);
     for(i=0, tmp=(sizeof(stats=keys(borg))); i<tmp; i++) {
       if(borg[stats[i]] > 23) borg[stats[i]] = 23;
@@ -175,7 +176,7 @@ int is_monster_race(string str)
   return (member_array(str, get_dir(MON_DIR)) != -1);
 }
 
-mapping monster_body(string mon_race, int max) 
+mapping monster_body(string mon_race, int max)
 {
     mapping borg;
     string *what, *lines, *data;
@@ -183,10 +184,10 @@ mapping monster_body(string mon_race, int max)
 
     borg = ([]);
     if(!mon_race || !is_monster_race(mon_race)) mon_race = "human";
-    borg["torso"] = 
+    borg["torso"] =
       ([ "limb_ref": "FATAL", "max_dam": max+1, "damage":0, "ac":0 ]);
     if (is_race(mon_race))
-      for(i=0, tmp = sizeof(what=keys(limbs[races[mon_race]["body type"]])); 
+      for(i=0, tmp = sizeof(what=keys(limbs[races[mon_race]["body type"]]));
 	  i < tmp; i++)
         borg[what[i]] =
 	  (["limb_ref":limbs[races[mon_race]["body type"]][what[i]]["ref"],
@@ -194,7 +195,7 @@ mapping monster_body(string mon_race, int max)
 	    "damage":0, "ac":0
 	    ]);
     else
-    {      
+    {
       for(i = 1, tmp = sizeof(lines = explode(read_file(MON_DIR + mon_race),
 					      "\n")); i < tmp; i++) {
 	if(sizeof(data=explode(lines[i], ":")) != 4) continue;

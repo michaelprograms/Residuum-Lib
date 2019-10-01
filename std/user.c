@@ -195,14 +195,14 @@ varargs void move_player(mixed dest, string msg) {
         set_property("stealth", (int)query_property("stealth")-1);
     if(adj = query_property("stealth")) {
         add_skill_points("stealth", adj);
-        adj += query_stats("dexterity");
+        adj += query_stats("agility");
         add_sp(-1);
     }
     if(!query_invis() && !hiddenp(this_object())) {
         inv = all_inventory(prev);
         for(i=0, bzbd = sizeof(inv); i<bzbd; i++) {
             if(!living(inv[i]) || inv[i] == this_object()) continue;
-            if(adj) tmp = (adj-(int)inv[i]->query_stats("wisdom"));
+            if(adj) tmp = (adj-(int)inv[i]->query_stats("perception"));
             else tmp = 0;
             if(tmp > random(101)) continue;
             if(effective_light(inv[i])-(query_skill("stealth")/17) < 0) continue;
@@ -213,7 +213,7 @@ varargs void move_player(mixed dest, string msg) {
         for(i=0, bzbd = sizeof(inv); i<bzbd; i++) {
             if(!living(inv[i])) continue;
             if(inv[i] == this_object()) continue;
-            if(adj) tmp = (adj-(int)inv[i]->query_stats("wisdom"));
+            if(adj) tmp = (adj-(int)inv[i]->query_stats("perception"));
             else tmp = 0;
             if(tmp > random(101)) continue;
             if(effective_light(inv[i])-(query_skill("stealth")/17) < 0) continue;
@@ -276,12 +276,12 @@ void new_body() {
     init_limb_data();
     if(!race) return;
     tmp = race;
-    set_max_hp(50 + stats["constitution"] * 10);
-    set_hp( (50 + stats["constitution"]*8)/2 );
+    set_max_hp(50 + stats["endurance"] * 10);
+    set_hp( (50 + stats["endurance"]*8)/2 );
     set_max_mp( (50 + stats["intelligence"]*10) );
     set_mp( 0 );
-    set_max_sp(7*query_stats("dexterity"));
-    set_sp(query_stats("dexterity"));
+    set_max_sp(7*query_stats("agility"));
+    set_sp(query_stats("agility"));
     set_heal_rate(2);
     borg = (mapping)RACE_D->body(this_object());
     for(i=0, max=sizeof(zippo=keys(borg)); i<max; i++)
@@ -346,7 +346,7 @@ void setup() {
       query_money("silver")+" sl, "+
       query_money("copper")+" cp\n");
     NEWS_D->read_news();
-    set_max_sp(query_stats("dexterity")*7);
+    set_max_sp(query_stats("agility")*7);
 }
 
 void heart_beat() {

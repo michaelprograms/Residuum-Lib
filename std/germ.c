@@ -82,7 +82,7 @@ void heart_beat() {
     }
     if(!__Communicable) return;
     if(__Communicable > random(1000)) {
-        boo = sort_array(filter_array(obs, "filter_living",  this_object()), 
+        boo = sort_array(filter_array(obs, "filter_living",  this_object()),
           "sort_weak", this_object());
         if(sizeof(boo)) ob = obs[0];
         else return;
@@ -95,8 +95,8 @@ int filter_living(object ob) { return living(ob); }
 int sort_weak(object a, object b) {
     int x, y;
 
-    x = (int)a->query_stats("constitution") + (int)a->query_sp();
-    y = (int)b->query_stats("constitution") + (int)b->query_sp();
+    x = (int)a->query_stats("endurance") + (int)a->query_sp();
+    y = (int)b->query_stats("endurance") + (int)b->query_sp();
     if( x > y ) return -1;
     else if( y > x ) return 1;
     else return 0;
@@ -105,7 +105,7 @@ int sort_weak(object a, object b) {
 void multiply() {
     object ob;
 
-    if(__Communicable > random(10000)) { 
+    if(__Communicable > random(10000)) {
         ob = environment();
         if(environment(ob) && random(100) > 50) ob = environment(ob);
         new(base_name(this_object()))->move(ob);
@@ -156,7 +156,7 @@ void set_infect(function f) {
 
 function query_infect() { return __Infect; }
 
-void set_life_span(int x) { 
+void set_life_span(int x) {
     if(x > 600) x = 600;
     __LifeSpan = x;
 }

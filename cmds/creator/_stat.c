@@ -1,20 +1,20 @@
 #include <std.h>
 //#include <str_fmt.h>
- 
+
 inherit DAEMON;
- 
+
 object ob;
- 
+
 void show_quests(object tp);
 void money_display();
 void stats_display();
 void skills_display();
 void language_display();
- 
+
 int cmd_stat(string str) {
    string name, title, Class, race, married, guild;
    int level, hp, max_hp, mp, max_mp, sp, max_sp, exp;
- 
+
    if(!str) {
       notify_fail("stat <living>\n");
       return 0;
@@ -45,7 +45,7 @@ int cmd_stat(string str) {
    max_sp = (int)ob->query_max_sp();
    married = (string)ob->query_married();
    guild = (string)ob->query_guild();
- 
+
    if(!married) married = "none";
    if(!guild) guild = "none";
    if(!race) race = "undefined";
@@ -79,11 +79,11 @@ int cmd_stat(string str) {
    skills_display();
    return 1;
 }
- 
+
 void show_quests(object tp) {
     string *quests;
     int i;
- 
+
     quests = (string *)tp->query_quests();    message("Nwrite", "quests: ", this_player());
     for(i=0; i<sizeof(quests); i++) {
         message("Nwrite", quests[i]+" ", this_player());
@@ -110,12 +110,12 @@ void language_display() {
     message("info", ret + "\n", this_player());
 */
 }
- 
+
 void money_display() {
     string *currs;
     string borg;
     int i, tmp;
- 
+
     currs = (string *)ob->query_currencies();
     if((!currs || !sizeof(currs)) ) {
         message("info", "No money.", this_player());
@@ -131,7 +131,7 @@ void money_display() {
     message("info", borg, this_player());
     return;
 }
- 
+
 void skills_display() {
     string tmp, sign;
     string *attack, *weapon, *decep, *mag;
@@ -142,9 +142,9 @@ void skills_display() {
     decep = ({ "locks", "stealth", "murder", "stealing", "bargaining" });
     mag = ({ "faith", "healing", "conjuring", "magic attack",
              "magic defense"});
- 
+
     for(i=0; i<5; i++) {
-        if(i<4) message("Nwrite", arrange_string(attack[i], 17)+": ", 
+        if(i<4) message("Nwrite", arrange_string(attack[i], 17)+": ",
                         this_player());
         else message("Nwrite", arrange_string(" ", 19), this_player());
         if(i<4) tmp = ""+(int)ob->query_base_skill(attack[i]);
@@ -157,7 +157,7 @@ void skills_display() {
           else
             sign = "-";
           tmp += " ("+sign+blah+")";
-        } else 
+        } else
           tmp = " ";
         message("Nwrite", arrange_string(tmp, 19), this_player());
         message("Nwrite", arrange_string(weapon[i], 17)+": ", this_player());
@@ -193,28 +193,23 @@ void skills_display() {
     }
     return;
 }
- 
+
 void stats_display() {
     int i, stats_size;
-    string *stats;
- 
-    stats = ({ "strength", "constitution", "dexterity", "charisma",
-      "intelligence", "wisdom" });
+    string *stats, msg;
+
+    stats = ({ "strength", "perception", "endurance", "charisma", "intelligence", "agility", "luck" });
     stats_size = sizeof(stats); /* speed patch by Val */
     for(i = 0; i < stats_size; i += 3) {
-        message("Nwrite", arrange_string(stats[i], 13)+": ", this_player());
-        message("Nwrite", (int)ob->query_stats(stats[i])+"     ", 
-                this_player());
+        message("Nwrite", arrange_string(stats[i], 13)+": " + (int)ob->query_stats(stats[i])+"     ", this_player());
         if(i+1 >= stats_size) message("Nwrite", "\n", this_player());
         else {
-            message("Nwrite", arrange_string(stats[i+1], 13)+": ", 
-                    this_player());
-            message("Nwrite", (int)ob->query_stats(stats[i+1])+"     ", 
-                    this_player());
+            message("Nwrite", arrange_string(stats[i+1], 13)+": ", this_player());
+            message("Nwrite", (int)ob->query_stats(stats[i+1])+"     ", this_player());
         }
         if(i+2 >= stats_size) message("Nwrite", "\n", this_player());
         else {
-            message("Nwrite", arrange_string(stats[i+2], 13)+": ", 
+            message("Nwrite", arrange_string(stats[i+2], 13)+": ",
                     this_player());
             message("Nwrite", (int)ob->query_stats(stats[i+2])+"     ",
                     this_player());

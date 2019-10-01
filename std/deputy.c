@@ -66,12 +66,12 @@ void launch_deputy(object victim, object attacker, int nr) {
 
     set_level(j);
 
-    // BALANCE: adjust here! 
-    set_stats("constitution",j * 2);
+    // BALANCE: adjust here!
+    set_stats("endurance",j * 2);
     set_stats("strength", j * 2);
     set_stats("intelligence", j * 2);
-    set_stats("wisdom", j * 2);
-    set_stats("dexterity", j * 2);
+    set_stats("perception", j * 2);
+    set_stats("agility", j * 2);
     set_stats("charisma", j * 2);
     set_skill("melee", j * 5);
     set_skill("attack", j * 5);

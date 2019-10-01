@@ -5,7 +5,7 @@
 
 #include <std.h>
 
-inherit DAEMON;
+inherit CMD_UTILITY;
 
 int cmd_stats(string str) {
     int i, stats_size;
@@ -17,18 +17,19 @@ int cmd_stats(string str) {
         return 0;
     }
     message("status", "You have the following physical traits:",this_player());
-    stats = ({ "strength", "constitution", "dexterity", "charisma",
-      "intelligence", "wisdom" });
+    stats = ({ "strength", "perception", "endurance", "charisma", "intelligence", "agility", "luck" });
     stats_size = sizeof(stats); /* speed patch by Val */
-    for(i = 0; i < stats_size; i += 3) {
-        message("status", sprintf("%s: %d     ", arrange_string(stats[i],
-          13), (int)this_player()->query_base_stats(stats[i]))+
-          (i+1 >= stats_size ? "" : sprintf("%s: %d     ",
-          arrange_string(stats[i+1], 13),
-          (int)this_player()->query_base_stats(stats[i+1])))+(i+2>=stats_size ?
-          "" : sprintf("%s: %d", arrange_string(stats[i+2], 13),
-          (int)this_player()->query_base_stats(stats[i+2]))), this_player());
+    foreach(string stat in stats) {
+        message("status", sprintf("%s: %d     ", arrange_string(stat, 13), (int)this_player()->query_base_stats(stat)), this_player());
     }
+    // for(i = 0; i < stats_size; i += 3) {
+    //     message("status", sprintf("%s: %d     ", arrange_string(stats[i],
+    //       13), (int)this_player()->query_base_stats(stats[i]))+
+    //       (i+1 >= stats_size ? "" : sprintf("%s: %d     ", arrange_string(stats[i+1], 13),
+    //       (int)this_player()->query_base_stats(stats[i+1])))+(i+2>=stats_size ?
+    //       "" : sprintf("%s: %d", arrange_string(stats[i+2], 13),
+    //       (int)this_player()->query_base_stats(stats[i+2]))), this_player());
+    // }
     return 1;
 }
 

@@ -34,11 +34,8 @@ void init() {
     add_action("read", "read");
     add_action("pick","pick");
     if (this_player()->query_exp() != 0) {
-        write("\nWelcome to Nightmare!\n"
-	"Please choose a race for yourself.  Your race determines your main "
-	"genetic attributes, strength, intelligence, dexterity, constitution, "
-	"and charisma.");
-	this_player()->set_rolls(0); 
+        write("\nWelcome to "+mud_name()+"!\nPlease choose a race for yourself.  Your race determines your main genetic attributes, strength, perception, endurance, charisma, intelligence, agility, and luck.");
+        this_player()->set_rolls(0);
     }
 }
 int pick(string str) {
@@ -91,7 +88,7 @@ void do_rolls() {
         return;
     }
     write("You roll your stats.");
-    for(i=0, tmp=sizeof(which=keys(borg=(mapping)RACE_D->do_rolls((string)this_player()->query_race()))); i<tmp; i++) 
+    for(i=0, tmp=sizeof(which=keys(borg=(mapping)RACE_D->do_rolls((string)this_player()->query_race()))); i<tmp; i++)
         this_player()->set_stats(which[i], borg[which[i]]);
     this_player()->set_rolls(this_player()->query_rolls()+1);
     return;

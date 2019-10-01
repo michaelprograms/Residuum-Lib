@@ -2,15 +2,15 @@
 //      from the Nightmare Mudlib
 //      the basic inherited armour object
 //      created by Descartes of Borg 25 june 1993
- 
+
 #include <std.h>
 #include <move.h>
- 
+
 inherit OBJECT;
- 
+
 private mapping armour_save;
 private static mapping armour_static;
- 
+
 void unwear();
 void extinguish_glow();
 void unequip();
@@ -29,7 +29,7 @@ string query_remove_string();
 object query_remove_func();
 string query_type();
 object query_worn();
- 
+
 void init() {
     ::init();
     if(environment(this_object()) != this_player()) return;
@@ -37,19 +37,19 @@ void init() {
     add_action("do_remove", "remove");
     add_action("illuminate", "illuminate");
 }
- 
+
 void create() {
     ::create();
     set_vendor_type("armour");
     armour_save = ([]);
     armour_static = ([]);
 }
- 
+
 int wear(string str) {
     mixed *limbs;
     string ret, what, where;
     int i, j;
- 
+
     if(!str) return notify_fail("Wear what?\n");
     if(!id(what = str) && sscanf(str, "%s on %s", what, where) != 2) {
         if(parse_objects(this_player(), str) != this_object()) {
@@ -96,7 +96,7 @@ int wear(string str) {
     armour_static["actual limbs"] = limbs;
     return 1;
 }
- 
+
 int do_remove(string str) {
     if(!str) return notify_fail("Remove what?\n");
     if(!id(str) && parse_objects(this_player(), str) != this_object()) {
@@ -113,17 +113,17 @@ int do_remove(string str) {
     unwear();
     return 1;
 }
- 
+
 int illuminate(string str) {
     int heure;
- 
-    if(!query_property("magic item") || 
+
+    if(!query_property("magic item") ||
       member_array("illuminate", query_property("magic item")) == -1) return 0;
     if(!str || !id(str)) {
         notify_fail("Illuminate what?\n");
         return 0;
     }
-    heure = 5*((int)this_player()->query_stats("wisdom")) +
+    heure = 5*((int)this_player()->query_stats("perception")) +
       (int)this_player()->query_skill("conjuring");
     if(heure < 20) heure = 20;
     if((int)this_player()->query_mp() < heure/10) {
@@ -139,7 +139,7 @@ glow.\n");
     call_out("extinguish_glow", heure);
     return 1;
 }
- 
+
 void unwear() {
     if(stringp(armour_static["unwear"]))
       message("my_action", armour_static["unwear"], armour_static["worn by"]);
@@ -154,7 +154,7 @@ void unwear() {
     map_delete(armour_static, "worn by");
     map_delete(armour_static, "actual limbs");
 }
- 
+
 void extinguish_glow() {
     if(!this_object()) return;
     if(!armour_static["lit"]) return;
@@ -170,13 +170,13 @@ environment(this_object())->query_cap_name()+"'s "+query_name()+
     environment(this_object())->add_property("light", -armour_static["lit"]);
     map_delete(armour_static, "lit");
 }
- 
+
 void unequip() { if(armour_static["worn by"]) unwear(); }
- 
+
 void set_not_equipped() {
     if(query_worn()) map_delete(armour_static, "worn by");
     if(armour_static["actual limbs"]) map_delete(armour_static, "actual limbs");}
- 
+
 int remove() {
     if(armour_static && armour_static["lit"]) {
       if(environment(this_object()))
@@ -186,10 +186,10 @@ int remove() {
     unequip();
     return ::remove();
 }
- 
+
 int move(mixed dest) {
     int x;
- 
+
     if(armour_static["lit"])
       environment(this_object())->add_property("light", -armour_static["lit"]);
     x = ::move(dest);
@@ -198,41 +198,41 @@ int move(mixed dest) {
     if(x == MOVE_OK) unequip();
     return x;
 }
- 
+
 void set_ac(int x) { armour_save["ac"] = x; }
- 
+
 void set_illuminate(int x) { set_property("magic item", ({ "illuminate" })); }
- 
+
 void set_limbs(mixed *borg) { armour_save["possible limbs"] = borg; }
- 
+
 void set_wear(mixed val) {
     armour_static["wear"] = val;
 }
- 
+
 void set_remove(mixed val) {
     armour_static["unwear"] = val;
 }
- 
+
 void set_type(string str) { armour_save["type"] = str; }
- 
+
 int query_ac() { return armour_save["ac"] + query_property("enchantment"); }
- 
+
 mixed *query_limbs() { return armour_save["possible limbs"]; }
- 
+
 mixed query_wear() { return armour_static["wear"]; }
- 
+
 mixed query_unwear() { return armour_static["unwear"]; }
- 
+
 string query_type() { return armour_save["type"]; }
- 
+
 object query_worn() { return armour_static["worn by"]; }
- 
- 
+
+
 string query_short() {
     if(!armour_static["worn by"]) return ::query_short();
     else return ::query_short()+" (worn)";
 }
- 
+
 string query_long(string str) {
     string ret;
     int i;
@@ -246,11 +246,11 @@ string query_long(string str) {
         return ret;
     }
 }
- 
+
 string *query_actual_limbs() { return armour_static["actual limbs"]; }
- 
+
 int is_armour() { return 1; }
- 
+
 void set_struck(mixed val) {
     armour_static["struck"] = val;
 }

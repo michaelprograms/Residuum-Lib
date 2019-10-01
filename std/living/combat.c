@@ -231,7 +231,7 @@ void execute_attack() {
         else {
             to_hit += 35-to_int(percent(query_encumbrance(),
               query_max_encumbrance())/4);
-            to_hit += (int)this_object()->query_stats("dexterity");
+            to_hit += (int)this_object()->query_stats("agility");
         }
         if(to_hit < random(110)) {
             if(!current) miss(casting, 0, target_thing);
@@ -475,7 +475,7 @@ int sight_adjustment() {
     if(elight >6 || elight < 1)
 	ret = random(5);
     if(attackers[0] && attackers[0]->query_invis()) {
-	ret += 45 / (1+random((int)this_object()->query_skill("wisdom")));
+	ret += 45 / (1+random((int)this_object()->query_skill("perception")));
         attackers[0]->add_sp(-ret);
     }
     return ret;
@@ -541,10 +541,10 @@ void remove_paralyzed() {
 int mobility(int magic) {
     int ret;
 
-    if(magic) ret = 70 - (int)this_object()->query_stats("wisdom");
+    if(magic) ret = 70 - (int)this_object()->query_stats("perception");
     else {
         ret = to_int(percent(query_encumbrance(),query_max_encumbrance()))/4;
-        ret += 35-(int)this_object()->query_stats("dexterity");
+        ret += 35-(int)this_object()->query_stats("agility");
     }
     if(ret > 50) ret = 50;
     if(ret < 0) ret = 0;
