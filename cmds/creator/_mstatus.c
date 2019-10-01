@@ -2,18 +2,15 @@
 
 inherit DAEMON;
 
-int
-cmd_mstatus(string arg)
-{
-	int flag;
+int cmd_mstatus(string arg) {
+    int flag;
 
-	flag = !!arg;
-	mud_status(flag);
-	return 1;
+    flag = !!arg;
+    write(mud_status(flag));
+    return 1;
 }
 
-int help()
-{
+int help() {
   write( @EndText
 Syntax: mstatus [<arg>]
 Effect: Give you statistics on the driver and mudlib

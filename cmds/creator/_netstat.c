@@ -5,7 +5,7 @@
 #include <std.h>
 inherit DAEMON;
 
-int cmd_netstat() { dump_socket_status(); return 1; }
+int cmd_netstat() { write(dump_socket_status()); return 1; }
 
 int help()
 {
