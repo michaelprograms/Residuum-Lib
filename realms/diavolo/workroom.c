@@ -16,7 +16,10 @@ void create() {
       "This is the grand workroom of a new immortal.  "
       "Inventive new realms will originate here."
     );
-    set_exits( ([ "square" : "/domains/Praxis/square" ]) );
+    set_exits( ([
+      "square" : "/domains/Praxis/square",
+      "station" : "/domains/Station/room/center",
+    ]) );
     set_items( ([ "workroom" : "Code is being created here." ]) );
     set_smell("default", "It smells like a new immortal.");
     set_listen("default", "The sounds of code creation vibrate the room.");
