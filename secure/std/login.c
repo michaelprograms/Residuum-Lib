@@ -45,9 +45,14 @@ void create() {
     __Player = 0; 
   } 
  
-static void logon() { 
+static void logon() {
+    mapping ansiMap = TERMINAL_D->query_term_info("ansi");
+
     call_out("idle", LOGON_TIMEOUT); 
-    receive(read_file(WELCOME));
+    
+    //receive(read_file(WELCOME));
+    receive(replace_strings(explode(read_file("/news/welcome"),"%^"), ansiMap));
+
     receive("\n"+center("Driver: "+version()+"    Mudlib: "+mudlib()+" "+
       mudlib_version()+"    AMCP 1.1 compliant"));
     receive("\nWhat name do you wish? ");
