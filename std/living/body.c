@@ -19,7 +19,7 @@ string *limbs;
 int all_my_fingers;
 static int num_wielded;
 private int heal_rate;
-
+private static mapping magic_protection;
 
 void set_wielding_limbs(string *str);
 int check_on_limb(string limb);
@@ -98,7 +98,7 @@ void add_hp(int x) {
     if(player_data["general"]["hp"] > player_data["general"]["max_hp"]) player_data["general"]["hp"] = player_data["general"]["max_hp"];
     if(player_data["general"]["hp"] < 1) player_data["general"]["hp"] = 1;
 }
-void set_max_sp(int x) { 
+void set_max_sp(int x) {
     player_data["general"]["max_sp"] = x;
 }
 
@@ -109,7 +109,7 @@ void set_sp(int x) {
 }
 
 void add_sp(int x) {
-    if(!player_data["general"]["sp"])  
+    if(!player_data["general"]["sp"])
         set_sp(x);
     else player_data["general"]["sp"] += x;
     if(player_data["general"]["sp"] > query_max_sp())
@@ -125,7 +125,7 @@ void set_max_mp(int x) {
 
 int query_max_mp() { return magic["max points"]; }
 
-void set_mp(int x) { 
+void set_mp(int x) {
     if(!query_max_mp()) magic["max points"] = x;
     if(x > query_max_mp()) {
 	if(this_object()->is_player()) {
@@ -273,7 +273,7 @@ int query_is_limb(string limb) {
 
 int query_max_hp() { return player_data["general"]["max_hp"]; }
 
-int query_sp() { 
+int query_sp() {
     if(!player_data["general"]["sp"]) return 0;
     return player_data["general"]["sp"];
 }
@@ -339,7 +339,7 @@ string equip_weapon_to_limb(object weap, string limb1, string limb2) {
           return "You are wielding something with your "+limb2+".\n";
         if(member_array("shield", body[limb2]["armour"]) != -1)
           return "You cannot wield a weapon where you wear a shield.\n";
-        if(!body[limb2]["wieldable"]) 
+        if(!body[limb2]["wieldable"])
           return "You cannot wield anything with your "+limb2+".\n";
         body[limb2]["ac"] += (int)weap->query_ac();
         body[limb2]["weapons"] = weap;
@@ -392,9 +392,9 @@ string type_ok(string type, string limb) {
 	case "ring":
             i = 0;
             x = sizeof(body[limb]["armour"]);
-            while(x--) 
+            while(x--)
 		if(body[limb]["armour"][x] == "ring") i++;
-            if(i > all_my_fingers-1) 
+            if(i > all_my_fingers-1)
               return "You do not have that many fingers on your "+limb+".\n";
             else return 0;
 	    break;
@@ -477,7 +477,7 @@ string *query_wielding_limbs() {
     tmp = ({});
 
     for(i=0; i<sizeof(limbs); i++) {
-	if(body[limbs[i]]["wieldable"]) 
+	if(body[limbs[i]]["wieldable"])
 	    tmp += ({ limbs[i] });
     }
     return tmp;
@@ -654,3 +654,38 @@ void set_max_dam(string limb, int x) {
 
 object query_current_attacker() { return 0; }
 
+// -------------------------------------------------------------------------
+
+void set_magic_protection(string limb, int x) {
+    if(!magic_protection) magic_protection = ([]);
+    if(!limb) magic_protection["overall"] = x;
+    else magic_protection[limb] = x;
+}
+void add_magic_protection(mixed *info) {
+    string limb;
+    int time, x, i;
+
+    if(sizeof(info) != 3) return;
+    limb = info[i];
+    x= info[1];
+    time = info[2];
+    if(!magic_protection) magic_protection = ([]);
+    if(!limb) magic_protection["overall"] += x;
+    else magic_protection[limb] += x;
+    if(time > 0) call_out("add_magic_protection", time, ({ limb, -x, 0 }) );
+}
+int query_magic_protection(string limb) {
+    if(!magic_protection) return 0;
+    if(!limb) return magic_protection["overall"];
+    else return (magic_protection["overall"] + magic_protection[limb]);
+}
+int query_current_protection(string target_thing) {
+    int prot, tmp;
+
+    prot = query_ac(target_thing)+this_object()->query_skill("defense")/15;
+    this_object()->add_skill_points("defense", 2*prot);
+    tmp = this_object()->query_magic_protection(target_thing);
+    this_object()->add_skill_points("magic defense", tmp);
+    prot += tmp;
+    return prot;
+}

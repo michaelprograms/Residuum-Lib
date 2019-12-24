@@ -30,7 +30,6 @@ private static object *attackers;
 private static int any_attack;
 private static int casting;
 private static object *hunters;
-private static mapping magic_protection;
 private static string paralyze_message;
 
 int ok_to_kill(object targ);
@@ -57,9 +56,6 @@ void update_current_skill();
 void cease_all_attacks();
 private string check_up(string limb);
 void execute_attack();
-void set_magic_protection(string limb, int x);
-void add_magic_protection(mixed *info);
-int query_magic_protection(string limb);
 int query_magic_round();
 string query_paralyze_message();
 
@@ -502,32 +498,6 @@ int query_casting() { return casting; }
 
 // -------------------------------------------------------------------------
 
-void set_magic_protection(string limb, int x) {
-    if(!magic_protection) magic_protection = ([]);
-    if(!limb) magic_protection["overall"] = x;
-    else magic_protection[limb] = x;
-}
-void add_magic_protection(mixed *info) {
-    string limb;
-    int time, x, i;
-
-    if(sizeof(info) != 3) return;
-    limb = info[i];
-    x= info[1];
-    time = info[2];
-    if(!magic_protection) magic_protection = ([]);
-    if(!limb) magic_protection["overall"] += x;
-    else magic_protection[limb] += x;
-    if(time > 0) call_out("add_magic_protection", time, ({ limb, -x, 0 }) );
-}
-int query_magic_protection(string limb) {
-    if(!magic_protection) return 0;
-    if(!limb) return magic_protection["overall"];
-    else return (magic_protection["overall"] + magic_protection[limb]);
-}
-
-// -------------------------------------------------------------------------
-
 void set_paralyzed(int x, string drow) {
     if(archp(this_object())) {
         message("my_action", "Your Archhood just saved you from being "
@@ -564,17 +534,6 @@ int mobility(int magic) {
 }
 
 // -------------------------------------------------------------------------
-
-int query_current_protection(string target_thing) {
-    int prot, tmp;
-
-    prot = query_ac(target_thing)+query_skill("defense")/15;
-    add_skill_points("defense", 2*prot);
-    tmp = query_magic_protection(target_thing);
-    add_skill_points("magic defense", tmp);
-    prot += tmp;
-    return prot;
-}
 
 void set_magic_round() { magic_round = 1; }
 int query_magic_round() { return magic_round; }
