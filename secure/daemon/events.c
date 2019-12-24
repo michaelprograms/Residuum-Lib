@@ -60,7 +60,7 @@ void set_reboot_interval(int x) {
 varargs void add_events(object ob, string fun, int when, mixed *args, int reg) {
     if(file_name(previous_object()) != OB_SIMUL_EFUN) return;
     __Events[file_name(ob)] =
-      (["time":time()+when, "function":fun, "regular":(reg?when:0), 
+      (["time":time()+when, "function":fun, "regular":(reg?when:0),
       "args":(pointerp(args) ? args : ({})) ]);
     Save();
 }
@@ -82,10 +82,10 @@ static void check_events() {
               map_delete(__Events, events[i]);
         }
     }
-    if(uptime() > __RebootInterval*3600 && !__InReboot) {
-      __InReboot = 1;
-        reboot();
-    }
+    // if(uptime() > __RebootInterval*3600 && !__InReboot) {
+    //   __InReboot = 1;
+    //     reboot();
+    // }
     Save();
 }
 
@@ -194,11 +194,11 @@ mapping almanac_data() {
     int temps, days, x, morn, even, tmp, hour, min;
     mapping ret;
 
-    if((days= ((query_month(temps = time())*20) + query_day(temps))) == 
+    if((days= ((query_month(temps = time())*20) + query_day(temps))) ==
       LONGEST_DAY)
         return (["sunrise":({4,0}),"morning":({5,0}),"sunset":({18,0}),
           "twilight":({17,0}) ]);
-    else if(days == SHORTEST_DAY) 
+    else if(days == SHORTEST_DAY)
       return (["sunrise":({6,0}),"morning":({7,0}),"sunset":({16,0}),
         "twilight":({15,0}) ]);
     else if(days > LONGEST_DAY) x = days-LONGEST_DAY;
