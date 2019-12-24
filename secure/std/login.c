@@ -13,7 +13,8 @@
  
 static private int __CrackCount, __CopyExists; 
 static private string __Name, __CapName, __Client; 
-static private object __Player; 
+static private object __Player;
+static mapping __ansiMap; 
  
 static void logon();
 static void get_name(string str);
@@ -43,19 +44,17 @@ void create() {
     __Client = 0;
     __CrackCount = 0; 
     __Player = 0; 
+    __ansiMap = TERMINAL_D->query_term_info("ansi");
   } 
  
 static void logon() {
-    mapping ansiMap = TERMINAL_D->query_term_info("ansi");
+    string *welcome = explode(read_file("/news/welcome"),"%^"); // "/news/welcome"
 
     call_out("idle", LOGON_TIMEOUT); 
     
-    //receive(read_file(WELCOME));
-    receive(replace_strings(explode(read_file("/news/welcome"),"%^"), ansiMap));
-
-    receive("\n"+center("Driver: "+version()+"    Mudlib: "+mudlib()+" "+
-      mudlib_version()+"    AMCP 1.1 compliant"));
-    receive("\nWhat name do you wish? ");
+    receive(replace_strings(welcome, __ansiMap)+"\n");
+    receive(center("Driver: "+version()+"    "+"Mudlib: "+mudlib()+" "+mudlib_version())+"\n\n"); // AMCP 1.1 compliant
+    receive("What name do you wish? ");
     input_to("get_name"); 
 } 
  

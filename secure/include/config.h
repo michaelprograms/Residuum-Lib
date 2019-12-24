@@ -3,9 +3,8 @@
 
 #include <options.h>
 
-#define __nightmare__            3.2
-#define MUDLIB                   "Nightmare"
-#define MUDLIB_VERSION           "3.3.1"
+#define MUDLIB                   "NM"
+#define MUDLIB_VERSION           "III"
 #define ADMIN_EMAIL              "dude@here"
 
 #define DEFAULT_PROMPT           "> "

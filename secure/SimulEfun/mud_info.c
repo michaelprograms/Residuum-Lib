@@ -12,7 +12,7 @@ string version() { return MUDOS_VERSION; }
 #endif // MUDOS_VERSION
 
 #ifdef __VERSION__
-string version() { return __VERSION__; }
+string version() { return explode(__VERSION__, " (git-")[0]; }
 #endif // __VERSION__
 
 #ifdef MUDOS_ARCH
