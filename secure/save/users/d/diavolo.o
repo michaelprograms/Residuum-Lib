@@ -19,8 +19,8 @@ __PreventGet 0
 __PreventPut 0
 __Read 0
 deaths 0
-player_data (["general":(["sp":46,"max_hp":110,"hp":560,"max_sp":35,]),])
-magic (["max points":130,"points":145,])
+player_data (["general":(["sp":28,"max_hp":110,"hp":110,"max_sp":35,]),])
+magic (["max points":130,"points":130,])
 severed ([])
 healing ([])
 body (["head":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":280,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"right leg":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"right foot","armour":({}),]),"right foot":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left arm":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"left hand","armour":({}),]),"left foot":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left leg":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"left foot","armour":({}),]),"torso":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":560,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"right hand":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"wieldable":1,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"right arm":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"right hand","armour":({}),]),"left hand":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"wieldable":1,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),])
@@ -35,12 +35,12 @@ wimpydir "out"
 env_var (["PROMPT":"%^GREEN%^$h/$H hp%^RED%^|%^GREEN%^$i/$I sp%^RED%^|%^GREEN%^$g/$G mp %^RED%^> $v%^CYAN%^$D %^RED%^> %^RESET%^ ","start":"/domains/Station/room/center","TITLE":"$N","NO_CLEAR":"off","LINES":"100","ANSI":0,"TERM":"ansi",])
 money ([])
 invis 0
-ok_to_heal 1495322
+ok_to_heal 2873719
 description 0
 gender "male"
 languages (["loyavenku":10,])
 primary_language "loyavenku"
-__PlayerAge 1495320
+__PlayerAge 2873715
 __PlayerKiller 0
 language_exp 0
 platinum 0
@@ -61,7 +61,7 @@ char_name "diavolo"
 real_name "Michael"
 email "none"
 ip "172.17.0.1"
-last_on "Tue Oct  1 20:51:53 2019"
+last_on "Tue Dec 24 03:57:07 2019"
 password "jgdgfnac!ddjbonefilbeancgijlcjedlhgccm`hh"
 race "giant"
 original_site 0
