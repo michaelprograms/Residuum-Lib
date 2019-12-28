@@ -1,0 +1,79 @@
+#/secure/save/users/m/macros.c
+__AutoLoad ({})
+__ItemsValue 0
+auto_load 0
+__CurrentWorkingDirectory 0
+__Nicknames ([])
+__Aliases (["n":"go north","bio":"biography","nw":"go northwest","l":"look $*","ne":"go northeast","i":"inventory","w":"go west","exa":"look at $*","sw":"go southwest","u":"go up","e":"go east","d":"go down","se":"go southeast","s":"go south",])
+__Xverbs (["'":"say $*",":":"emote $*",])
+__Invis 0
+__Value 0
+__Mass 500
+__Material 0
+__CapName "Macros"
+__VendorType "treasure"
+__Short 0
+__Long 0
+__PreventDrop 0
+__PreventGet 0
+__PreventPut 0
+__Read 0
+deaths 0
+player_data (["general":(["sp":-7,"max_hp":280,"max_sp":73,"hp":25,]),])
+magic (["max points":160,"points":0,])
+severed ([])
+healing ([])
+body (["torso":(["damage":0,"armour_ob":({}),"max_dam":280,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"left leg":(["damage":0,"armour_ob":({}),"max_dam":93,"weapons":0,"ac":0,"limb_ref":"left foot","armour":({}),]),"right foot":(["damage":0,"armour_ob":({}),"max_dam":70,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"right leg":(["damage":0,"armour_ob":({}),"max_dam":93,"weapons":0,"ac":0,"limb_ref":"right foot","armour":({}),]),"head":(["damage":0,"armour_ob":({}),"max_dam":140,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"right hand":(["damage":0,"armour_ob":({}),"max_dam":70,"wieldable":1,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left foot":(["damage":0,"armour_ob":({}),"max_dam":70,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left arm":(["damage":0,"armour_ob":({}),"max_dam":93,"weapons":0,"ac":0,"limb_ref":"left hand","armour":({}),]),"left hand":(["damage":0,"armour_ob":({}),"max_dam":70,"wieldable":1,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"right arm":(["damage":0,"armour_ob":({}),"max_dam":93,"weapons":0,"ac":0,"limb_ref":"right hand","armour":({}),]),])
+limbs ({"left leg","torso","head","right leg","right foot","right hand","left arm","left foot","right arm","left hand",})
+all_my_fingers 5
+heal_rate 2
+str_class "child"
+skills ([])
+stats (["agility":11,"strength":15,"intelligence":10,"luck":13,"perception":13,"endurance":22,"charisma":11,])
+wimpy 0
+wimpydir "out"
+env_var (["TITLE":"Newbie $N the boy","TERM":"ansi",])
+money ([])
+invis 0
+ok_to_heal 871
+description 0
+gender "male"
+languages (["tlinghan":10,])
+primary_language "tlinghan"
+__PlayerAge 865
+__PlayerKiller 0
+language_exp 0
+platinum 0
+gold 0
+electrum 0
+silver 0
+copper 0
+player_age 0
+__NoQuit 0
+level 1
+ghost 0
+rolls 1
+verbose_moves 1
+birth 1577216466
+blocked ([])
+news (["class":51,"general":69,])
+char_name "macros"
+real_name "Unknown"
+email "none@none"
+ip "172.17.0.1"
+last_on "Tue Dec 24 19:41:06 2019"
+password "fikfbafd!ihoo`knaefdddnodolhaongaglonnoig"
+race "klingon"
+original_site 0
+position "player"
+primary_start 0
+__RestrictedChannels ({})
+__WhereBlock 0
+mini_quests 0
+quests ({})
+mysites 0
+guild 0
+message 0
+married 0
+current_marriage 0
+divorced 0
