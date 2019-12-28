@@ -1,4 +1,4 @@
-/*      
+/*
  *      /bin/user/_look.c
  *      from the Nightmare mudlib
  *      the command to look at stuff so that you might see!
@@ -12,30 +12,29 @@
 #include <std.h>
 
 inherit DAEMON;
- 
+
 int examine_object(string str);
 void look_msg(object ob, string str);
- 
+
 int cmd_look(string str) {
   string tmp;
-  
+
   if(stringp(str)) {
     if(sscanf(str, "in %s", tmp) == 1 || sscanf(str, "at %s", tmp) == 1)
       return examine_object(tmp);
     else return examine_object(str);
   }
-  if(!((int)this_player()->query_invis()))
-    say(this_player()->query_cap_name()+" looks at "+
-	possessive(this_player())+" surroundings.");
+  // if(!((int)this_player()->query_invis()))
+  //   say(this_player()->query_cap_name()+" looks at "+possessive(this_player())+" surroundings.");
   this_player()->describe_current_room(1);
   return 1;
 }
- 
+
 int examine_object(string str) {
   object ob;
   object *obs, ob_list;
   int i;
- 
+
   if(!str) return 0;
   ob = environment(this_player());
   if(effective_light(this_player()) < 1 && str != "sky") {
@@ -63,7 +62,7 @@ int examine_object(string str) {
   write("You do not notice that here.");
   return 1;
 }
- 
+
 void look_msg(object ob, string str) {
   if((int)this_player()->query_invis()) return;
   if( ob != this_player() )
@@ -74,7 +73,7 @@ void look_msg(object ob, string str) {
     }
     else say(this_player()->query_cap_name()+" looks over the "+str+".");
 }
- 
+
 void help() {
   write("Command: look\nSyntax: look [at object]\n"
         "If no object is specified this command makes you look "
