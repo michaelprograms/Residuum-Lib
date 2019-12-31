@@ -1,6 +1,11 @@
 #ifndef __SIMULEFUN_H
 #define __SIMULEFUN_H
 
+// format
+varargs string format_syntax(string text, int wrap);
+string format_uptime();
+
+// unsorted
 int absolute_value(int x);
 void add_sky_event(function f);
 int alignment_ok(object ob);
@@ -37,7 +42,6 @@ int export_uid(object ob);
 int file_exists(string str);
 string file_privs(string file);
 string format_page(string *items, int columns);
-string format_string(string format, mixed *variables);
 int geteuid(object ob);
 int getuid(object ob);
 varargs object get_object(string str, object player);

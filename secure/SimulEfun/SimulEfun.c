@@ -26,7 +26,7 @@
 #include "/secure/SimulEfun/exclude_array.c"
 #include "/secure/SimulEfun/files.c"
 #include "/secure/SimulEfun/format_page.c"
-#include "/secure/SimulEfun/format_string.c"
+#include "/secure/SimulEfun/format.c"
 #include "/secure/SimulEfun/get_object.c"
 #include "/secure/SimulEfun/idle.c"
 #include "/secure/SimulEfun/interact.c"
@@ -56,7 +56,7 @@
 int destruct(object ob) {
     string *privs;
     string tmp;
-   
+
     if(previous_object(0) == ob) return efun::destruct(ob);
     if(!(tmp = query_privs(previous_object(0)))) return 0;
     if(member_array(PRIV_SECURE, explode(tmp, ":")) != -1)
@@ -66,7 +66,7 @@ int destruct(object ob) {
       return efun::destruct(ob);
     else return 0;
 }
-    
+
 varargs void shutdown(int code) {
     if(!((int)master()->valid_apply(({})))) return;
     if(this_player())
