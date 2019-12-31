@@ -126,14 +126,14 @@ static void continue_login() {
     if(!__Player){
         //debug_message("no player, dude.");
     }
-    message("password", "%^ORANGE%^Password:%^RESET%^ ", this_object());
+    message("password", "Password: ", this_object());
     if(__Client) input_to("get_password");
     else input_to("get_password", I_NOECHO | I_NOESC);
   }
 
 static void get_password(string str) {
     if(!str || str == "") {
-        message("system", "\n%^ORANGE%^You must enter a password. Try again later.%^RESET%^\n", this_object());
+        message("system", "\nYou must enter a password. Try again later.\n", this_object());
         internal_remove();
         return;
     }
