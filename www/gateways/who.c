@@ -60,12 +60,12 @@ static int filter_people(object ob) {
 
 static int filter_admin(object ob) { return archp(ob); }
 
-static int filter_creator(object ob) { 
-    return (wizardp(ob) && !archp(ob));
+static int filter_creator(object ob) {
+    return (creatorp(ob) && !archp(ob));
 }
 
 static int filter_hm(object ob) { return high_mortalp(ob); }
 
 static int filter_mortal(object ob) {
-    return (!wizardp(ob) && !high_mortalp(ob));
+    return (!creatorp(ob) && !high_mortalp(ob));
 }
