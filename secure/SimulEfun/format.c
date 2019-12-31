@@ -11,7 +11,7 @@ varargs string format_syntax(string text, int wrap) {
     s = replace_string(s, ")", "%^RESET%^BOLD%^)%^RESET%^CYAN%^");
     s = replace_string(s, "{", "%^RESET%^{%^CYAN%^");
     s = replace_string(s, "}", "%^RESET%^}%^CYAN%^");
-    s = replace_string(s, ">$", ">%^RESET%^");
+    s = replace_string(s, ">", ">%^RESET%^");
     return s;
 }
 
