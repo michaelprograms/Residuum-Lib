@@ -7,35 +7,22 @@
 
 inherit CMD_UTILITY;
 
-int cmd_stats(string str) {
-    int i, stats_size;
-    string *stats;
+int cmd_stats(string input) {
+    string *stats = ({ "strength", "perception", "endurance", "charisma", "intelligence", "agility", "luck" });
 
-    if(str) return 0;
-    if(this_player()->query_ghost()) {
-        notify_fail("You cannot do that in an immaterial state.\n");
-        return 0;
-    }
-    message("status", "You have the following physical traits:",this_player());
-    stats = ({ "strength", "perception", "endurance", "charisma", "intelligence", "agility", "luck" });
-    stats_size = sizeof(stats); /* speed patch by Val */
+    if(input) return 0; // TODO add admin targeting
+    message("info", format_header_bar("STATS"), this_player());
+
     foreach(string stat in stats) {
         message("status", sprintf("%s: %d     ", arrange_string(stat, 13), (int)this_player()->query_base_stats(stat)), this_player());
     }
-    // for(i = 0; i < stats_size; i += 3) {
-    //     message("status", sprintf("%s: %d     ", arrange_string(stats[i],
-    //       13), (int)this_player()->query_base_stats(stats[i]))+
-    //       (i+1 >= stats_size ? "" : sprintf("%s: %d     ", arrange_string(stats[i+1], 13),
-    //       (int)this_player()->query_base_stats(stats[i+1])))+(i+2>=stats_size ?
-    //       "" : sprintf("%s: %d", arrange_string(stats[i+2], 13),
-    //       (int)this_player()->query_base_stats(stats[i+2]))), this_player());
-    // }
+    message("info", format_footer_bar(), this_player());
     return 1;
 }
 
 void help() {
     message("help",
-      "Syntax: <stats>\n\n"
+      "Syntax: "+format_syntax("<stats"+(creatorp(this_player())?" ([target])":"")+">")+"\n\n"
       "Gives you a numerical representation of your genetically inherited "
       "physical traits.\n\nSee also: score, skills, status", this_player()
     );

@@ -120,22 +120,9 @@ string list_users(string *races, string order) {
     }
     max = sizeof(who);
     borg = format_header_bar("WHO") + "\n";
-    borg += "%^RED%^%^BOLD%^          Our Reality Which Is Nightmare\n";
-    if(sizeof(races) && max == 1)
-        borg += "%^RED%^There is only one such person experiencing our Nightmare!\n";
-    else
-        if(max == 1)
-            borg += "%^RED%^   You are the only person experiencing our Nightmare!\n";
-        else
-            borg += "%^RED%^   There are currently "+max+" people in our Nightmare!\n";
-    borg +="\n";
+    borg += "%^ORANGE%^"+center("Residuum players: "+max, 75)+"%^RESET%^\n";
+
     max = sizeof(hms);
-    if(sizeof(races) && max == 1)
-        borg += "%^RED%^There is only one such High mortal experiencing our Nightmare!\n";
-    else if(max > 0)
-        borg += "%^RED%^There are currently "+max+" High mortals in our Nightmare :\n";
-    if(max)
-	borg += "\n";
     if(max)
     for(i=0; i<max; i++) {
 	tmp = "  ";
@@ -159,10 +146,6 @@ string list_users(string *races, string order) {
     borg += "\n";
     }
     max = sizeof(nrs);
-    if(max == 1)
-        borg += "\n%^RED%^There is only one such mid-level player experiencing our Nightmare!\n";
-    else if(max > 0)
-        borg += "\n%^RED%^There are currently "+max+" mid-level players in our Nightmare :\n";
     if(max)
 	borg += "\n";
     if(max)
@@ -188,10 +171,6 @@ string list_users(string *races, string order) {
     borg += "\n";
     }
     max = sizeof(nbs);
-    if(sizeof(races) && max ==1)
-        borg += "\n%^RED%^There is only one such newbie player experiencing our Nightmare!\n";
-    else if(max > 0)
-        borg += "\n%^RED%^There are currently "+max+" newbie players in our Nightmare :\n";
     if(max)
 	borg += "\n";
     if(max)
@@ -219,10 +198,6 @@ string list_users(string *races, string order) {
     borg += "\n";
     }
     max = sizeof(abs);
-    if(sizeof(races) && max ==1)
-        borg += "\n%^RED%^There is only one such ambassador experiencing our Nightmare!\n";
-    else if(max > 0)
-        borg += "\n%^RED%^There are currently "+max+" ambassadors in our Nightmare :\n";
     if(max)
 	borg += "\n";
     if(max)
@@ -248,10 +223,6 @@ string list_users(string *races, string order) {
     borg += "\n";
     }
     max = sizeof(ims);
-    if(sizeof(races) && max ==1)
-        borg += "\n%^RED%^There is only one such Immortal experiencing our Nightmare!\n";
-    else if(max > 0)
-        borg += "\n%^RED%^There are currently "+max+" Immortals in our Nightmare :\n";
     if(max)
 	borg += "\n";
     if(max)

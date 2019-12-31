@@ -5,15 +5,14 @@ inherit DAEMON;
 /* ---------------------------------------------------------------------- */
 
 varargs string format_header_bar(string title, string optional) {
-    string bar = "%^RESET%^CYAN%^=====";
+    string bar = "%^RESET%^CYAN%^==";
     if(title){
-        bar += "%^RESET%^| %^RESET%^BOLD%^" + title;
+        bar += "%^RESET%^/ %^RESET%^BOLD%^" + title;
         if(optional) bar += ":%^RESET%^ "+optional;
         else bar += "%^RESET%^";
-        if(strlen(strip_colours(bar))%2) bar += " ";
-        bar += " |%^CYAN%^=";
+        bar += "\\%^CYAN%^=";
     }
-    while(strlen(strip_colours(bar)) < 76) bar += "=";
+    for(int i = strlen(strip_colours(bar)); i < 76; i ++) bar += "=";
     bar += "%^RESET%^";
     return bar;
 }
