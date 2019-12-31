@@ -10,7 +10,7 @@ varargs string format_header_bar(string title, string optional) {
         bar += "%^RESET%^/ %^RESET%^BOLD%^" + title;
         if(optional) bar += ":%^RESET%^ "+optional;
         else bar += "%^RESET%^";
-        bar += "\\%^CYAN%^=";
+        bar += " \\%^CYAN%^=";
     }
     for(int i = strlen(strip_colours(bar)); i < 76; i ++) bar += "=";
     bar += "%^RESET%^";

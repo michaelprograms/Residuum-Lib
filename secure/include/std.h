@@ -9,7 +9,7 @@
 #define BODY        "/std/living/body"
 #define SKILLS      "/std/living/skills"
 #define STATS       "/std/living/stats"
-#define CMD_UTILITY "/std/commands/utility"
+#define CMD_UTILITY "/std/cmds/utility"
 #define PIER        "/std/pier"
 #define VAULT       "/std/vault"
 #define WEAPON      "/std/weapon"
