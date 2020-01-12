@@ -32,9 +32,12 @@ void init() {
     add_action("cmd_enter", "enter");
 }
 
+int skip_obvious=0;
+int skip_obvious() { skip_obvious=1; }
+int query_skip_obvious() { return skip_obvious; }
+
 int cmd_go(string str) {
-    if((int)this_player()->query_paralyzed())
-      return notify_fail("You are unable to move.\n");
+    if((int)this_player()->query_paralyzed()) return notify_fail("You are unable to move.\n");
     if(!__Exits[str]) return notify_fail("You go nowhere at all.\n");
     if(__Exits[str]["pre"] && !((int)(*__Exits[str]["pre"])(str))) return 1;
     add_track(this_player(), str);
@@ -45,8 +48,7 @@ int cmd_go(string str) {
 }
 
 int cmd_enter(string str) {
-    if((int)this_player()->query_paralyzed())
-      return notify_fail("You are unable to move.\n");
+    if((int)this_player()->query_paralyzed()) return notify_fail("You are unable to move.\n");
     if(!__Enters[str]) return notify_fail("You cannot enter that.\n");
     if(__Enters[str]["pre"] && !((int)(*__Enters[str]["pre"])(str))) return 1;
     add_track(this_player(), str);
@@ -72,20 +74,20 @@ void set_exits(mapping mp) {
     __Exits = ([]);
     i = sizeof(cles = keys(mp));
     while(i--) {
-	it = mp[cles[i]];
-	if (stringp(it))
-	    __Exits[cles[i]] = ([ "room" : it ]);
-	else if ( pointerp(it) && (j = sizeof(it)) ) {
-	    if (j && stringp(it[0]) ) {
-		__Exits[cles[i]] = ([ "room" : it[0] ]);
-		if (j > 1 && functionp(it[1])) {
-		    __Exits[cles[i]]["pre"]=it[1];
-		    if (j > 2 && functionp(it[2]))
-			__Exits[cles[i]]["post"]=it[2];
-		}
-	    }
-	}
+        it = mp[cles[i]];
+        if(stringp(it))
+            __Exits[cles[i]] = ([ "room" : it ]);
+        else if( pointerp(it) && (j = sizeof(it)) ) {
+            if(j && stringp(it[0]) ) {
+                __Exits[cles[i]] = ([ "room" : it[0] ]);
+            if(j > 1 && functionp(it[1])) {
+                __Exits[cles[i]]["pre"]=it[1];
+                if(j > 2 && functionp(it[2]))
+                    __Exits[cles[i]]["post"]=it[2];
+            }
+        }
     }
+}
 }
 
 varargs void add_exit(string dir, string dest, function pre, function post) {
@@ -219,7 +221,7 @@ string *query_obvious_exits() {
     string *exits,*sorties;
     int i;
 
-    if (!sizeof(__Exits)) return ({});
+    if(!sizeof(__Exits)) return ({});
     else i = sizeof(sorties = keys(__Exits));
     exits = ({});
     while(i--)
@@ -231,16 +233,16 @@ string query_short_exits() {
     string s;
     string *lx,*sx;
 
-    // if (skip_obvious) return "";
+    if(skip_obvious) return "";
     s="";
     sx=allocate(max=sizeof(lx=query_obvious_exits()));
     for(x=0;x<max;x++) {
-        if ((i=member_array(lx[x],TMPLONG))!=-1)
+        if((i=member_array(lx[x],TMPLONG))!=-1)
             sx[x]=TMPSHORT[i];
         else sx[x]=lx[x];
     }
-    if (!sizeof(sx)) return "[no exits]";
-    if (max==1) return "[1: "+sx[0]+"]";
+    if(!sizeof(sx)) return "[no exits]";
+    if(max==1) return "[1: "+sx[0]+"]";
     s=("["+max+": ");
     for(x=0;x<max;x++) {
         if(x) s+=", ";
@@ -253,15 +255,15 @@ string query_long_exits() {
     string str;
     string *sorties;
 
-    // if (skip_obvious) return "";
-    if (!(i=sizeof(sorties=query_obvious_exits()))) return "There are no obvious exits.";
-    if (i==1) return "The only obvious exit is "+sorties[0]+".";
-    if ((max=i) > sizeof(NUMBER) + 1) max=sizeof(NUMBER)+1;
+    if(skip_obvious) return "";
+    if(!(i=sizeof(sorties=query_obvious_exits()))) return "There are no obvious exits.";
+    if(i==1) return "The only obvious exit is "+sorties[0]+".";
+    if((max=i) > sizeof(NUMBER) + 1) max=sizeof(NUMBER)+1;
     str=("There are "+NUMBER[max-2]+" obvious exits:  ");
     for(max=i,i=0;i<max;i++) {
-        if (i==max-1) str+="and ";
+        if(i==max-1) str+="and ";
         str+=sorties[i];
-        if (i==max-1) str+=".";
+        if(i==max-1) str+=".";
         else if(max>2) str+=", ";
         else str+=" ";
     }
