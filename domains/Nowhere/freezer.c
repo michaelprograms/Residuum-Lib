@@ -9,7 +9,7 @@ static private object *old;
 void create() {
     ::create();
     set_property("no teleport", 1);
-    set_short("the void");
+    set_short("nowhere");
     set_long("An expansive yet constrained void. Nothingness is everything. Far below, a sensation of somethingness pulls on the consciousness.");
     set_exits(([
         "down" : ROOM_START

@@ -4,8 +4,8 @@
 inherit ROOM;
 
 void create() {
-    room::create();
-    set_short("the void");
+    ::create();
+    set_short("nowhere");
     set_long("An expansive yet constrained void. Nothingness is everything. Far below, a sensation of somethingness pulls on the consciousness.");
     set_exits(([
         "down": ROOM_START

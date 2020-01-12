@@ -4,7 +4,7 @@
 inherit ROOM;
 
 void create() {
-    room::create();
+    ::create();
     set_short("nowhere");
     set_long("Nothing that makes up nowhere. The absense of everything can't be seen. The darkness is blinding. Shadows provide a feeling of unfelt pressure.");
     set_smell("default", "The air feels empty.");
