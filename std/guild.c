@@ -31,7 +31,7 @@ int __Initiate(string str) {
 
     if((string)this_player()->query_name() != __GuildInfo["leader"]) return 0;
     if(!str) return notify_fail("Initiate whom?\n");
-    if(!(ob=present(lower_case(str),environment(this_player()))) || !living(ob)) 
+    if(!(ob=present(lower_case(str),environment(this_player()))) || !living(ob))
       return notify_fail("No one of that nature here.\n");
     if(!((*__GuildInfo["test"])(ob))) return 1;
     if(this_player()->query_mp() < 200)
@@ -83,7 +83,7 @@ void init_arg(mixed *arg) {
     if(functionp(__GuildInfo["welcome"])) (*__GuildInfo["welcome"])(arg);
 }
 
-string extra_look() { 
+string extra_look() {
     if(stringp(__GuildInfo["guild description"]))
       return (string)environment(this_object())->query_cap_name() + " "+
         __GuildInfo["guild description"];
@@ -136,7 +136,7 @@ void set_welcome(mixed val) { __GuildInfo["welcome"] = val; }
 void set_guild_description(mixed val) { __GuildInfo["guild description"]=val; }
 
 void set_leader(string str) {
-    if(!user_exists(str)) {
+    if(!player_exists(str)) {
         error("No such user: "+str+".  You must have a real leader.");
         return;
     }

@@ -11,7 +11,7 @@
 inherit DAEMON;
 
 int cmd_banish(string str) {
-    if(!user_exists(str = lower_case(str))) {
+    if(!player_exists(str = lower_case(str))) {
 	write(capitalize(str)+" is now banished.\n");
         seteuid(UID_BANISH);
         catch(call_other(BANISH_D, "banish_name", str));

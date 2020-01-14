@@ -5,6 +5,10 @@
 varargs string format_syntax(string text, int wrap);
 string format_uptime();
 
+// user_exists
+int user_exists(string str);
+int player_exists(string str);
+
 // unsorted
 int absolute_value(int x);
 void add_sky_event(function f);
@@ -98,7 +102,6 @@ object to_object(mixed target);
 int total_light(object ob);
 string translate(string str, int prof);
 mixed unguarded(function f);
-int user_exists(string str);
 string user_path(string name);
 string version();
 varargs int visible(object detectee_obj, object detector_obj);

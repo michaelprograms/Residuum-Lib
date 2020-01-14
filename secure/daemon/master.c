@@ -197,7 +197,7 @@ int check_access(object ob, string fun, mixed file, string *ok, string oper) {
         if((tmp = base_name(ob)) == OB_USER) {
             //debug_message("master(): checking "+file+" access for "+__PlayerName);
             if(!__PlayerName) i = sizeof(stack = ({ob})+previous_object(-1));
-            else if(file == DIR_USERS+"/"+__PlayerName[0..0]+"/"+__PlayerName+__SAVE_EXTENSION__)
+            else if(file == DIR_PLAYERS+"/"+__PlayerName[0..0]+"/"+__PlayerName+__SAVE_EXTENSION__)
               return 1;
             else i = sizeof(stack = ({ ob }));
         }
@@ -268,46 +268,36 @@ object connect() {
 object compile_object(string str) {
     string nom, tmp, where, which;
     object ob;
-    //debug_message("master(): compile_object(\""+str+"\")");
     if(sscanf(str, REALMS_DIRS+"/%s/%*s", nom)){
-      //debug_message("alpha");
-      tmp = sprintf("%svirtual/server", user_path(nom));
+        tmp = sprintf("%svirtual/server", user_path(nom));
     }
     else if(sscanf(str, DOMAINS_DIRS+"/%s/%*s", nom)){
-      //debug_message("bravo");
-      tmp = sprintf("%s/%s/virtual/server", DOMAINS_DIRS, nom);
+        tmp = sprintf("%s/%s/virtual/server", DOMAINS_DIRS, nom);
     }
     else if(strsrch(str, ESTATES_DIRS) == 0){
-      //debug_message("charlie");
-      tmp = sprintf("%s/adm/server", ESTATES_DIRS);
+        tmp = sprintf("%s/adm/server", ESTATES_DIRS);
     }
-    else if(sscanf(str, DIR_USERS+"/%*s/%s", nom)) {
-        //debug_message("yoohoo!");
+    else if(sscanf(str, DIR_PLAYERS+"/%*s/%s", nom)) {
         if(!__NewPlayer) return 0;
-        //debug_message("over here!");
         if((string)__NewPlayer->query_name() != nom) return 0;
-        //debug_message("hi sailor!");
         __PlayerName = nom;
         ob = new(OB_USER);
-        //debug_message("master() str: "+str);
         if(file_exists(str+__SAVE_EXTENSION__)) ob->restore_player(nom);
-        else if(file_size(DIR_USERS) != -2) mkdir(DIR_USERS);
-        else if(file_size(DIR_USERS+"/"+nom[0..0]) != -2)
-          mkdir(DIR_USERS+"/"+nom[0..0]);
+        else if(file_size(DIR_PLAYERS) != -2) mkdir(DIR_PLAYERS);
+        else if(file_size(DIR_PLAYERS+"/"+nom[0..0]) != -2)
+            mkdir(DIR_PLAYERS+"/"+nom[0..0]);
         ob->set_name(nom);
         __PlayerName = 0;
-        //debug_message("master() ob: "+identify(ob));
         return ob;
     }
     else {
-       //debug_message("delta");
     }
     if(file_size(tmp+",c") < 0) {
         if(sscanf(str, "%s.%s", where, which) != 2) return 0;
         if(sscanf(str, REALMS_DIRS+"/%s/%*s", nom))
-          tmp = sprintf("%svirtual/%s_server", user_path(nom), which);
+            tmp = sprintf("%svirtual/%s_server", user_path(nom), which);
         else if(sscanf(str, DOMAINS_DIRS+"/%s/%*s", nom))
-          tmp = sprintf("%s/%s/virtual/%s_server", DOMAINS_DIRS, nom, which);
+            tmp = sprintf("%s/%s/virtual/%s_server", DOMAINS_DIRS, nom, which);
         if(file_size(tmp+".c") < 0) return 0;
         else return (object)call_other(tmp, "compile_object", where);
     }
@@ -325,7 +315,7 @@ static void crash(string err) {
 int valid_seteuid(object ob, string id) {
     string fn, uid;
 
-return 1;
+    return 1;
     if((uid = getuid(ob)) == id) return 1;
     if(uid == "Root") return 1;
     if(file_name(ob) == OB_SIMUL_EFUN) return 1;
@@ -471,10 +461,15 @@ string make_path_absolute(string file) {
     return absolute_path((string)this_player()->get_path(), file);
 }
 
-int player_exists(string str) {
+int player_exists(string str) { // TODO remove
     if(!str) return 0;
-    str = DIR_USERS+"/"+str[0..0]+"/"+str+__SAVE_EXTENSION__;
+    str = DIR_PLAYERS+"/"+str[0..0]+"/"+str+__SAVE_EXTENSION__;
     return (file_size(str) > -1);
+}
+int player_exists2(string str) { // TODO rename
+    if(!str) return 0;
+    str = DIR_PLAYERS+"/"+str[0..0]+"/"+str+__SAVE_EXTENSION__;
+    return file_size(str) > -1;
 }
 
 string get_root_uid() { return "Root"; }
@@ -561,36 +556,24 @@ void create_save() {
     string str;
 
     if(!stringp(str = (string)previous_object()->query_name())) return;
-    if(file_size(DIR_USERS+"/"+str[0..0]) == -2) return;
+    if(file_size(DIR_PLAYERS+"/"+str[0..0]) == -2) return;
     if(str[0] < 'a' || str[0] > 'z') return;
-    mkdir(DIR_USERS+"/"+str[0..0]);
+    mkdir(DIR_PLAYERS+"/"+str[0..0]);
 }
 
 object player_object(string nom) {
     object ob;
     string err;
-    string pfile = DIR_USERS+"/"+nom[0..0]+"/"+nom;
 
-    //debug_message("1");
     if(base_name(ob = previous_object(0)) != OB_LOGIN) return 0;
-    //debug_message("2");
     set_eval_limit(1000000000);
     __NewPlayer = ob;
-    //mkdir(DIR_USERS+"/"+nom[0..0]);
-    //if(file_size(pfile) == -1) write_file(pfile,"");
-    //debug_message("master() about to try loading: "+pfile);
-    err = catch(ob = load_object(pfile));
+    err = catch(ob = load_object(DIR_PLAYERS+"/"+nom[0..0]+"/"+nom));
     __NewPlayer = 0;
     set_eval_limit(-1);
-    if(err){
-    //debug_message("error: "+err);
-    error(err);
-    }
-    //if(!ob) ob = new("/std/user");
-    //if(!ob) ob = ;
+    if(err) error(err);
     return ob;
 }
 
 string *query_group(string grp) { return copy(__Groups[grp]); }
-
 mapping query_groups() { return copy(__Groups); }

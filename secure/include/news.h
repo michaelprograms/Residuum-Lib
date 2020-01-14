@@ -8,8 +8,6 @@
 #define ARCH_NEWS		    "/news/arch"
 #define BATES_NEWS		    "/news/bates"
 #define NEW_PLAYER_NEWS     "/news/new_player"
-#define LOCKED_NEWS         "/news/locked"
-#define REGISTRATION_NEWS   "/news/registration"
 #define BANISHED_NEWS       "/news/banished"
 
 #endif /* __NEWS_H */

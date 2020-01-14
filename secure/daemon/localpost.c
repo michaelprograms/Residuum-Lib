@@ -48,7 +48,7 @@ void load_groups() {
                 }
             }
             else switch(sizeof(parts)) {
-                case 2: 
+                case 2:
                     tmp[a] = (string *)call_other(parts[0],parts[1]);
                     break;
                 case 3:
@@ -76,13 +76,13 @@ void load_groups() {
     __MudGroups = ([]);
     while(i--) __MudGroups[lower_case(parts[i])] = tmp[parts[i]];
 }
- 
+
 varargs string *send_post(mapping borg, mixed who) {
     mapping remote_mail, grps;
     string *rejects, *tmp, *tmpwho, *cles;
     string msg, a, b, tmpstr;
     int i, j, x;
-  
+
     if(!who) who = distinct_array(borg["to"] + borg["cc"]);
     tmpstr = base_name(previous_object(0));
     if(tmpstr != OB_POSTAL && tmpstr != REMOTEPOST_D && tmpstr != FOLDERS_D)
@@ -98,7 +98,7 @@ varargs string *send_post(mapping borg, mixed who) {
         tmpwho = ({});
         x = (int)OPTIONS_D->query_option(borg["from"], "metoo");
         while(i--) {
-            if(pointerp(who[i] = map_groups(who[i], grps, borg["from"], x))) 
+            if(pointerp(who[i] = map_groups(who[i], grps, borg["from"], x)))
               tmpwho += who[i];
             else tmpwho += ({ who[i] });
         }
@@ -108,11 +108,11 @@ varargs string *send_post(mapping borg, mixed who) {
                 if(!remote_mail[b]) remote_mail[b] = ({});
                 remote_mail[b] += ({});
 	    }
-            else if(!user_exists(who[i])) rejects += ({ who[i] });
+            else if(!player_exists(who[i])) rejects += ({ who[i] });
             else FOLDERS_D->add_post(who[i], "new", borg);
         }
         j = sizeof(cles = keys(remote_mail));
-        while(j--) 
+        while(j--)
           if(!((int)REMOTEPOST_D->send_post(borg+(["message":msg]), cles[j])))
             rejects += remote_mail[cles[j]];
         return rejects;
@@ -123,11 +123,11 @@ varargs string *send_post(mapping borg, mixed who) {
                 if(!remote_mail[b]) remote_mail[b] = ({});
                 remote_mail[b] += ({ tmp[i] });
 	      }
-            else if(!user_exists(tmp[i])) rejects += ({ tmp[i] });
+            else if(!player_exists(tmp[i])) rejects += ({ tmp[i] });
             else FOLDERS_D->add_post(tmp[i], "new", borg);
 	  }
         i = sizeof(cles = keys(remote_mail));
-        while(i--) 
+        while(i--)
           if(!((int)REMOTEPOST_D->send_post(borg+(["message":msg]), cles[i])))
             rejects += remote_mail[cles[i]];
         return rejects;
@@ -139,7 +139,7 @@ varargs string *send_post(mapping borg, mixed who) {
                 if(!remote_mail[b]) remote_mail[b] = ({});
                 remote_mail[b] += ({ tmp[i] });
 	      }
-            else if(!user_exists(tmp[i])) rejects += ({ tmp[i] });
+            else if(!player_exists(tmp[i])) rejects += ({ tmp[i] });
             else FOLDERS_D->add_post(tmp[i], "new", borg);
 	  }
         i = sizeof(cles = keys(remote_mail));
@@ -153,7 +153,7 @@ varargs string *send_post(mapping borg, mixed who) {
             if(!((int)REMOTEPOST_D->send_post(borg+(["message":msg]),b)))
               return ({ who });
 	  }
-        else if(!user_exists(who)) return ({ who });
+        else if(!player_exists(who)) return ({ who });
         else FOLDERS_D->add_post(who, "new", borg);
         return ({});
     }

@@ -13,7 +13,7 @@ DDEESSCCRRIIPPTTIIOONN
 
 EEXXAAMMPPLLEESS
        _i_d_e_n_t_i_f_y(_t_h_i_s___p_l_a_y_e_r_(_)) returns OBJ("descartes",
-       "/secure/save/users/d/descartes")
+       "/secure/save/players/d/descartes")
 
 LLOOCCAATTIIOONN
        /secure/SimulEfun/identify.c

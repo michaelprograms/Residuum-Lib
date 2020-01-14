@@ -22,7 +22,7 @@ int cmd_arrest(string str) {
         return 0;
     }
     ob = find_player(str);
-    if(!ob && !user_exists(str)) {
+    if(!ob && !player_exists(str)) {
 	notify_fail("No such player: "+capitalize(str)+".\n");
 	return 0;
     }
@@ -30,8 +30,8 @@ int cmd_arrest(string str) {
     if(ob) {
         destruct(ob);
     }
-    rename(DIR_USERS+"/"+str[0..0]+"/"+str+".o", DIR_USERS+"/arrest/"+str+".o");
-    if(file_exists(ACCOUNTS_DIR+str+".o")) rm(ACCOUNTS_DIR+str+".o");
+    rename(DIR_PLAYERS+"/"+str[0..0]+"/"+str+".o", DIR_PLAYERS+"/arrest/"+str+".o");
+    if(file_exists(DIR_BANKACCOUNTS+str+".o")) rm(DIR_BANKACCOUNTS+str+".o");
     write(capitalize(str)+" is arrested for "+mud_name()+".\n");
     log_file("arrest", (string)this_player()->query_name()+" arrested "+
 	str+": "+ctime(time())+"\n");

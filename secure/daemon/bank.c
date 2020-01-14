@@ -42,14 +42,14 @@ mapping query_balance(string who, string bank) {
 	   account = 0;
 	    return 0;
 	}
-        else unguarded((: restore_object, DIR_ACCOUNTS+"/"+current :));
+        else unguarded((: restore_object, DIR_BANKACCOUNTS+"/"+current :));
     }
     if(!account) return 0;
     if(!account[bank]) return 0;
     else ret = account[bank];
     account[bank]["transaction"] = 0;
     account[bank]["time"] = time();
-    unguarded((: save_object, DIR_ACCOUNTS+"/"+current :));
+    unguarded((: save_object, DIR_BANKACCOUNTS+"/"+current :));
     return ret;
 }
 
@@ -66,7 +66,7 @@ int deposit(string who, string bank, int amount, string type) {
 	    account = ([]);
 	    return NO_ACCOUNT;
 	}
-        else unguarded((: restore_object, DIR_ACCOUNTS+"/"+current :));
+        else unguarded((: restore_object, DIR_BANKACCOUNTS+"/"+current :));
     }
     if(!account) return NO_ACCOUNT;
     if(!account[bank]) return NO_ACCOUNT;
@@ -76,7 +76,7 @@ int deposit(string who, string bank, int amount, string type) {
     account[bank]["time"] = time();
     log_file("bank", sprintf("%s deposited %d %s in %s: (%s)\n",
       who, amount, type, bank, ctime(time())));
-    unguarded((: save_object, DIR_ACCOUNTS+"/"+current :));
+    unguarded((: save_object, DIR_BANKACCOUNTS+"/"+current :));
     return TRANSACTION_OK;
 }
 
@@ -93,7 +93,7 @@ int withdraw(string who, string bank, int amount, string type) {
 	    account = ([]);
 	    return NO_ACCOUNT;
 	}
-        else unguarded((: restore_object, DIR_ACCOUNTS+"/"+current :));
+        else unguarded((: restore_object, DIR_BANKACCOUNTS+"/"+current :));
     }
     if(!account) return NO_ACCOUNT;
     if(!account[bank]) return NO_ACCOUNT;
@@ -103,7 +103,7 @@ int withdraw(string who, string bank, int amount, string type) {
     account[bank]["transaction"] = -amount;
     account[bank]["time"] = time();
     log_file("bank", who+" withdrew "+amount+" coins in "+bank+": "+ctime(time())+"\n");
-    unguarded((: save_object, DIR_ACCOUNTS+"/"+current :));
+    unguarded((: save_object, DIR_BANKACCOUNTS+"/"+current :));
     return TRANSACTION_OK;
 }
 
@@ -114,7 +114,7 @@ int open_account(string who, string bank) {
     if(current != who) {
 	current = who;
 	if(!account_exists(current)) account = ([]);
-        else unguarded((: restore_object, DIR_ACCOUNTS+"/"+current :));
+        else unguarded((: restore_object, DIR_BANKACCOUNTS+"/"+current :));
     }
     if(!account) account = ([]);
     if(account) {
@@ -122,7 +122,7 @@ int open_account(string who, string bank) {
 	  return ALREADY_EXISTS;
     }
     account[bank] = ([ "transaction":0, "time":0, "platinum":0, "gold":0, "electrum":0, "silver":0, "copper":0 ]);
-    unguarded((: save_object, DIR_ACCOUNTS+"/"+current :));
+    unguarded((: save_object, DIR_BANKACCOUNTS+"/"+current :));
     return TRANSACTION_OK;
 }
 
@@ -137,17 +137,17 @@ int close_account(string who, string bank) {
 	    account = ([]);
 	    return NO_ACCOUNT;
 	}
-        else unguarded((: restore_object, DIR_ACCOUNTS+"/"+current :));
+        else unguarded((: restore_object, DIR_BANKACCOUNTS+"/"+current :));
     }
     if(!account) return NO_ACCOUNT;
     if(!account[bank]) return NO_ACCOUNT;
     map_delete(account, bank);
-    unguarded((: save_object, DIR_ACCOUNTS+"/"+current :));
+    unguarded((: save_object, DIR_BANKACCOUNTS+"/"+current :));
     return TRANSACTION_OK;
 }
 
 int account_exists(string who) {
-    if(!unguarded((: file_exists, DIR_ACCOUNTS+"/"+who+__SAVE_EXTENSION__ :)))
+    if(!unguarded((: file_exists, DIR_BANKACCOUNTS+"/"+who+__SAVE_EXTENSION__ :)))
       return 0;
     else return 1;
 }
@@ -160,7 +160,7 @@ string *query_bank_accounts(string who) {
 	    current = 0;
 	    return ({});
 	}
-        else unguarded((: restore_object, DIR_ACCOUNTS+"/"+current :));
+        else unguarded((: restore_object, DIR_BANKACCOUNTS+"/"+current :));
     }
     if(!account) return ({});
     return keys(account);
@@ -179,7 +179,7 @@ mapping account_summary(string who) {
             account = ([]);
             return ([]);
         }
-        else unguarded((: restore_object, DIR_ACCOUNTS+"/"+current :));
+        else unguarded((: restore_object, DIR_BANKACCOUNTS+"/"+current :));
     }
     borg = ([]);
     i = sizeof(banks = keys(account));

@@ -21,7 +21,7 @@ int cmd_passwd(string str) {
       return notify_fail("Guest has no such ability.");
     if(str && str != "") {
         if(sscanf(str, "%s %s", str, what) != 2) return 0;
-        if(!user_exists(str)) return notify_fail("No such user.\n");
+        if(!player_exists(str)) return notify_fail("No such user.\n");
         if(!member_group(nom, "SECURE")) return 0;
         if(member_group(lower_case(str), "SECURE")) return 0;
         USERS_D->change_password(str, what);

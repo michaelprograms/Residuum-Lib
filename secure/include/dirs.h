@@ -2,19 +2,19 @@
 #define __DIRS_H
 
 #define DIR_SECURE              "/secure"
-#define DIR_SECURE_CFG		(DIR_SECURE+"/cfg")
+#define DIR_SECURE_CFG	    	DIR_SECURE+"/cfg"
 #define DIR_DATA                DIR_SECURE+"/save"
 #define DIR_SECURE_DAEMONS      DIR_SECURE+"/daemon"
-#define DIR_ACCOUNTS            DIR_DAEMONS_SAVE+"/accounts"
-#define DIR_BOARDS              "/secure/save"+"/boards"
-#define DIR_USERS               DIR_DATA+"/users"
+#define DIR_BANKACCOUNTS        DIR_DAEMONS_SAVE+"/accounts"
+#define DIR_BOARDS              DIR_DATA+"/boards"
+#define DIR_PLAYERS             DIR_DATA+"/players"
 #define DIR_LETTERS             DIR_DATA+"/letters"
 #define DIR_POSTAL              DIR_DATA+"/postal"
 #define DIR_SECURE_DAEMONS_SAVE DIR_DATA+"/daemons"
 #define DIR_VOTES               DIR_DATA+"/votes"
 
 #define DIR_DAEMONS             "/daemon"
-#define DIR_DAEMONS_CFG		(DIR_DAEMONS+"/cfg")
+#define DIR_DAEMONS_CFG		    DIR_DAEMONS+"/cfg"
 #define DIR_DAEMONS_SAVE        DIR_DAEMONS+"/save"
 #define DIR_DAEMONS_DATA        DIR_DAEMONS+"/db"
 #define DIR_SOUL_FILES          DIR_DAEMONS+"/soul"

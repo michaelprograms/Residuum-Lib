@@ -25,7 +25,7 @@ int cmd_allow(string str) {
 	notify_fail("Syntax: <allow [who] [email]>\n");
 	return 0;
     }
-    if(user_exists(who)) {
+    if(player_exists(who)) {
 	notify_fail("A character by that name already exists.\n");
 	return 0;
     }

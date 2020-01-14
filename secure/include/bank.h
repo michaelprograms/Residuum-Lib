@@ -1,4 +1,3 @@
-#define ACCOUNTS_DIR		"/secure/save/accounts/"
 #define LISCENSED_BANKS		({ "praxis" })
 
 #define TRANSACTION_OK		0

@@ -15,7 +15,7 @@ string gateway(string args) {
 
     str = sprintf("<TITLE>%s Finger Gateway</TITLE>", mud_name());
     if(args == "" || !args) args = 0;
-    else if(!user_exists(lower_case(args)))
+    else if(!player_exists(lower_case(args)))
       return sprintf("%s<h1>%s not found.</h1>No such member of the %s"
         " reality.", str, capitalize(args), mud_name());
     tmp = explode((string)FINGER_D->user_finger_display(args), "\n");

@@ -884,7 +884,7 @@ void set_id(string *bogus) {
     if((i=sizeof(bogus = explode(lower_case(query_CapName()), " "))) == 1)
         return;
     while(i--)
-        if(!user_exists(bogus[i])) __UserId += ({ bogus[i] });
+        if(!player_exists(bogus[i])) __UserId += ({ bogus[i] });
 }
 
 string *query_id() { return __UserId; }

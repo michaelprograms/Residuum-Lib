@@ -26,12 +26,12 @@ string user_finger_display(string who) {
 
     if(!who) return "You must specify whom you wish to finger.";
     name = lower_case(who);
-    if(!user_exists(name)) return "No such member of the Nightmare Reality.";
-    who = sprintf("%s/%s/%s", DIR_USERS, name[0..0], name);
+    if(!player_exists(name)) return "No such member of the Nightmare Reality.";
+    who = sprintf("%s/%s/%s", DIR_PLAYERS, name[0..0], name);
     unguarded((: restore_object, who :));
     mail_stat = (mapping)FOLDERS_D->mail_status(name);
     drow = sprintf("%s\n", query_ttl(name));
-    if(!race=query_race()) 
+    if(!race=query_race())
         race = "unborn";
     if(!Class=query_class())
         Class = "child";
@@ -92,7 +92,7 @@ string user_finger_display(string who) {
         tmp = sprintf("%sNo unread mail.\n", drow);
     else if(mail_stat["unread"] == 1)
         tmp = sprintf("%s1 unread piece of mail.\n", drow);
-    else 
+    else
         tmp = sprintf("%s%d unread pieces of mail.\n", drow, mail_stat["unread"]);
     drow = tmp;
     who = user_path(name);
@@ -111,7 +111,7 @@ string user_finger_display(string who) {
 string query_hah(object ob, int verbose) {
     int time, tmp;
     string line;
- 
+
     if(!interactive(ob)) {
 	if(verbose) return "Disconnected.";
 	else return "disconnected";
@@ -120,12 +120,12 @@ string query_hah(object ob, int verbose) {
     time = query_idle(ob);
     if(time < 60) return line;
     tmp = time / 86400;
-    if(tmp) {   
+    if(tmp) {
 	if(!verbose) return tmp + " d";
 	else line += tmp + " day" + (tmp>1 ? "s " : " ");
     }
     tmp = (time%86400)/3600;
-    if(tmp) {   
+    if(tmp) {
       if(!verbose) {
 	if(tmp>9) return tmp+" h";
 	else line += tmp+":";
@@ -133,8 +133,8 @@ string query_hah(object ob, int verbose) {
 	else line += tmp + " hour"+(tmp>1 ? "s " : " ");
    }
      tmp = (time%3600)/60;
-   if(tmp) {   
- 	if(!verbose) {  
+   if(tmp) {
+ 	if(!verbose) {
 	    if(strlen(line)>0 && tmp < 10) line += "0";
 	    line += tmp;
 	}
@@ -144,15 +144,15 @@ string query_hah(object ob, int verbose) {
     else line += "idle";
     return line;
 }
- 
+
 string query_last_on() { return last_on; }
- 
+
 string query_ttl(string name) {
     string pre, post;
     if(!getenv("TITLE")) return capitalize(name);
     return replace_string(getenv("TITLE"), "$N", capitalize(name));
 }
-    
+
 int remove() {
     destruct(this_object());
     return !(this_object());
