@@ -14,10 +14,9 @@ static private string __Name, __CapName, __Client;
 static private object __Player;
 static mapping __ansiMap;
 
-static void get_name(string str);
-string query_name();
+
 static void get_password(string str);
-static private int locked_access();
+
 static private int check_password(string str);
 static private int valid_site(string ip);
 static private int boot_copy();
@@ -26,7 +25,6 @@ static private void exec_user();
 static void new_user(string str);
 static void choose_password(string str);
 static void confirm_password(string str2, string str1);
-static void continue_login();
 static void choose_gender(string str);
 static void enter_email(string str);
 static void enter_real_name(string str);
@@ -56,15 +54,12 @@ static void logon() {
 
     call_out("idle", LOGON_TIMEOUT);
     input_to("get_name");
-    // input_to("get_account_name");
 }
 
 static void idle() {
     receive("\n"+format_ansi(PROMPT_COLOR+"Connection timed out."+PROMPT_RESET)+"\n");
     internal_remove();
 }
-
-// ----- Old Functions -----------------------------------------------------
 
 static void get_name(string str) {
     if(!str || str == "") {
@@ -89,47 +84,59 @@ static void get_name(string str) {
 
 static void continue_login() {
     if(master()->is_locked()) {
-        message("news", read_file("/news/locked"), this_object());
-        if(locked_access())
-          message("system", "\n    >>> Access allowed <<<\n", this_object());
+        receive(format_ansi(read_file("/news/locked"))+"\n");
+        if(locked_access()) receive("\n"+format_ansi(PROMPT_COLOR+"    >>> Access allowed <<<"+PROMPT_RESET)+"\n");
         else {
-            message("system", "\n    >>> Access denied <<<\n", this_object());
+            receive("\n"+format_ansi(PROMPT_COLOR+"    >>> Access denied <<<"+PROMPT_RESET)+"\n");
             internal_remove();
             return;
         }
     }
     if(!player_exists(__Name)) {
-        if(!(BANISH_D->valid_name(__Name))) {
-            message("system", sprintf("\n%s is not a valid name choice for %s.\n", capitalize(__Name), mud_name()), this_object());
-            message("system", sprintf("Names must be alphabetic characters no "
-              "longer than %d letters,\nand no less than %d letters.\n", MAX_PLAYER_NAME_LENGTH, MIN_PLAYER_NAME_LENGTH), this_object());
-            message("prompt", "\nPlease enter another name: ", this_object());
+        if(!BANISH_D->valid_name(__Name)) {
+            receive(format_ansi(PROMPT_COLOR+sprintf("\nThe account name '%s' is not a valid account name.\n", capitalize(__Name))+PROMPT_RESET));
+            receive(format_ansi(PROMPT_COLOR+sprintf("Names must be alphabetic characters between %d and %d letters in length.\n\n", MIN_PLAYER_NAME_LENGTH, MAX_PLAYER_NAME_LENGTH)+PROMPT_RESET));
+            receive(format_ansi(PROMPT_COLOR+"Enter account name:"+PROMPT_RESET)+" ");
             input_to("get_name");
             return;
         }
-        if(!(BANISH_D->allow_logon(__Name, query_ip_number()))) {
-            message("news", read_file("/news/registration"), this_object());
+        if(!BANISH_D->allow_logon(__Name, query_ip_number())) {
+            receive(format_ansi(read_file("/news/registration"))+"\n");
             internal_remove();
             return;
         }
-        message("prompt", sprintf("Do you really wish %s to be your name? (y/n) ", __CapName), this_object());
-        __Player = (object)master()->player_object(__Name);
+        receive(format_ansi(PROMPT_COLOR+sprintf("Do you really wish '%s' as an account name? (y/n) ", capitalize(__Name))+PROMPT_RESET));
+        __Player = master()->player_object(__Name);
         input_to("new_user");
         return;
+    } else {
+        if(!BANISH_D->allow_logon(__Name, query_ip_number())) {
+            receive(format_ansi(read_file("/news/registration"))+"\n");
+            internal_remove();
+            return;
+        }
+        __Player = master()->player_object(__Name);
+        if(!__Player) {
+            //debug_message("no player, dude.");
+        }
+        message("password", "Password: ", this_object());
+        if(__Client) input_to("get_password");
+        else input_to("get_password", I_NOECHO | I_NOESC);
     }
-    if(!(BANISH_D->allow_logon(__Name, query_ip_number()))) {
-        message("news", read_file(BANISHED_NEWS), this_object());
-        internal_remove();
+}
+
+static void new_user(string str) {
+    if((str = lower_case(str)) == "" || str[0] != 'y') {
+        receive(format_ansi(PROMPT_COLOR+"Enter account name:"+PROMPT_RESET)+" ");
+        __Player->remove();
+        input_to("get_name");
         return;
     }
-    __Player = (object)master()->player_object(__Name);
-    if(!__Player){
-        //debug_message("no player, dude.");
-    }
-    message("password", "Password: ", this_object());
-    if(__Client) input_to("get_password");
-    else input_to("get_password", I_NOECHO | I_NOESC);
-  }
+    log_file("new_players", sprintf("%s : %s : %s\n", query_ip_number(), __Name, ctime(time())));
+    receive(format_ansi(PROMPT_COLOR+"Choose a password of at least 5 characters:"+PROMPT_RESET)+" ");
+    if(__Client) input_to("choose_password");
+    else input_to("choose_password", I_NOECHO | I_NOESC);
+}
 
 static void get_password(string str) {
     if(!str || str == "") {
@@ -152,16 +159,7 @@ static void get_password(string str) {
     }
     if(!__CopyExists) exec_user();
     else boot_copy();
-  }
-
-static private int locked_access() {
-    int i;
-
-    if(BANISH_D->is_guest(__Name)) return 1;
-    i = sizeof(LOCKED_ACCESS_ALLOWED);
-    while(i--) if(member_group(__Name, LOCKED_ACCESS_ALLOWED[i])) return 1;
-    return 0;
-  }
+}
 
 static private int check_password(string str) {
     string pass;
@@ -228,19 +226,6 @@ static private void exec_user() {
     __Player->set_client(__Client);
     catch(__Player->setup());
     destruct(this_object());
-  }
-
-static void new_user(string str) {
-    if((str = lower_case(str)) == "" || str[0] != 'y') {
-        message("prompt", "\nOk, then enter the name you really want: ", this_object());
-        __Player->remove();
-        input_to("get_name");
-        return;
-    }
-    log_file("new_players", sprintf("%s : %s : %s\n", query_ip_number(), __Name, ctime(time())));
-    message("password", "Please choose a password of at least 5 letters: ", this_object());
-    if(__Client) input_to("choose_password");
-    else input_to("choose_password", I_NOECHO | I_NOESC);
 }
 
 static void choose_password(string str) {
@@ -319,19 +304,6 @@ static void enter_real_name(string str) {
     exec_user();
 }
 
-string query_name() {
-    if(!interactive(this_object())) return 0;
-    else if(__Name) return __Name;
-    else return "";
-}
-
-string query_CapName() {
-    string tmp;
-
-    tmp = query_name();
-    return (tmp ? capitalize(tmp) : "");
-}
-
 // -------------------------------------------------------------------------
 
 static string format_ansi(string input) {
@@ -348,7 +320,14 @@ static private void internal_remove() {
     destruct(this_object());
 }
 
-// -------------------------------------------------------------------------
+static private int locked_access() {
+    int i;
+
+    if(BANISH_D->is_guest(__Name)) return 1;
+    i = sizeof(LOCKED_ACCESS_ALLOWED);
+    while(i--) if(member_group(__Name, LOCKED_ACCESS_ALLOWED[i])) return 1;
+    return 0;
+}
 
 static int register_client() {
     string client, ver;
@@ -362,7 +341,6 @@ static int register_client() {
     receive("<connect>\n");
     return 1;
 }
-
 static void input_protocol(string str) {
     string str_class, client;
 
@@ -372,4 +350,14 @@ static void input_protocol(string str) {
     else __Client = client;
     if(__Client) receive("<connect>\n");
     continue_login();
+}
+
+string query_name() {
+    if(!interactive(this_object())) return 0;
+    else if(__Name) return __Name;
+    else return "";
+}
+string query_CapName() {
+    string tmp = query_name();
+    return (tmp ? capitalize(tmp) : "");
 }
