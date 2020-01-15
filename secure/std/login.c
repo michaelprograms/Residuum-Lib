@@ -119,7 +119,7 @@ static void continue_login() {
         if(!__Player) {
             //debug_message("no player, dude.");
         }
-        message("password", "Password: ", this_object());
+        message("password", "%^ORANGE%^Password:%^RESET%^ ", this_object());
         if(__Client) input_to("get_password");
         else input_to("get_password", I_NOECHO | I_NOESC);
     }
@@ -145,14 +145,14 @@ static void get_password(string str) {
         return;
     }
     if(!check_password(str)) {
-        message("system", "\nInvalid password.\n", this_object());
+        message("system", PROMPT_COLOR+"Invalid password.\n"+PROMPT_RESET, this_object());
         if(++__CrackCount > MAX_PASSWORD_TRIES) {
-            message("system", "No more attempts allowed.\n", this_object());
+            message("system", PROMPT_COLOR+"No more attempts allowed.\n"+PROMPT_RESET, this_object());
             internal_remove();
             return;
     }
         log_file("watch/logon", sprintf("%s from %s\n", __Name, query_ip_number()));
-        message("password", "Password: ", this_object());
+        message("password", PROMPT_COLOR+"Password: "+PROMPT_RESET, this_object());
         if(__Client) input_to("get_password");
         else input_to("get_password", I_NOECHO | I_NOESC);
         return;
@@ -311,8 +311,9 @@ static string format_ansi(string input) {
 }
 
 void receive_message(string cl, string msg) {
+    if(member_array(cl, ({"system", "prompt", "password"}))==-1) return;
     if(__Client) receive("<"+cl+">"+msg+"\n");
-    else receive(msg);
+    else receive(format_ansi(msg));
 }
 
 static private void internal_remove() {
