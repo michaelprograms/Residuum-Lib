@@ -1,103 +1,43 @@
-//    /bin/adm/_callouts.c
-//    From the Nightmare mudlib
-//    Coded by Valodin on Feb 4, 1993
-
 #include <std.h>
+
 inherit DAEMON;
 
-int cmd_callouts(string str)
-{
-  mixed *crap;
-  mixed *element;
-  object ob;
-  string func, filename, trash, spaces;
-  int i, j, delay;
-  mixed args;
-  string printing_crap;
+int myfun(mixed a, mixed b) {
+if(a[2]==b[2]) return 0;
+  if (a[2]>b[2]) return 1;
+  return -1;
+}
+mixed cmd_callouts(string args) {
+    mixed *coi;
+    string tmp;
+    int i, maxi;
 
-  crap = call_out_info();
-
-  if(!sizeof(crap))
-  {
-    write("There are no call_outs right now.\n");
-    return 1;
-  }
-
-  write("Object                               Function  Delay  Arguments\n" +
-        "------                               --------  -----  ---------");
-
-  for(i = 0; i < sizeof(crap); i++)
-  {
-    element = crap[i];
-    if(sizeof(element) != 4)
-    {
-      write("Size problem " + sizeof(element) + " " + identify(element) + " \n");
-      continue;
+    coi = call_out_info();
+coi = sort_array(coi, "myfun");
+    if( !sizeof(coi) ) {
+        message("system", "No pending callouts.", this_player());
+        return 1;
     }
-    ob = (object)element[0];
-    func = (string)element[1];
-    delay = (int)element[2];
-    args  = element[3];
-    filename = file_name(ob);
-    if(strlen(filename) > 35)
-    {
-      while(strlen(filename) > 34)
-        sscanf(filename, "%s/%s", trash, filename);
-      filename = "~" + filename;
-    }
-    spaces = "  ";
-    for(j = strlen(filename); j < 35; j++)
-      spaces += " ";
-    printing_crap = filename + spaces + func + "  "  + delay;
-    if(sizeof(args))
-      for(j = 0; j < sizeof(args); j++)
-        if(sizeof(args[j]))
-          printing_crap += "  <ARRAY:" + sizeof(args[j]);
-        else
-          if(objectp(args[j]))
-            if(args[j]->is_player())
-              printing_crap += "  " + args[j]->query_cap_name();
-            else
-            {
-              filename = file_name(args[j]);
-              if(strlen(filename) > 25)
-                {
-                  while(strlen(filename) > 24)
-                    sscanf(filename, "%s/%s", trash, filename);
-                  filename = "~" + filename;
-                }
-              printing_crap += "  " + filename;
-            }
-          else
-            printing_crap += "  " + (string)args[j];
-    else
-      if(objectp(args))
-        if(args->is_player())
-          printing_crap += "  " + args->query_cap_name();
-        else
-        {
-          filename = file_name(args);
-          if(strlen(filename) > 25)
-            {
-              while(strlen(filename) > 24)
-                sscanf(filename, "%s/%s", trash, filename);
-              filename = "~" + filename;
-            }
-          printing_crap += "  " + filename;
+    tmp = sprintf("%:-40s %:-25s %:-6s\n", "Object", "Function",
+                  "Delay");
+
+    tmp += "--------------------------------------------------"
+      "-------------------------\n";
+    for(i=0, maxi = sizeof(coi); i<maxi; i++) {
+        if( sizeof(coi[i]) != 3 ) {
+            tmp += sprintf("Error in element %O\n", coi[i]);
+            continue;
         }
-      else
-        printing_crap += "  " + (string)args;
-    write(printing_crap);
-  }
-  return 1;
+        tmp += sprintf("%:-40s %:-25s %:-5s \n",
+                       identify(coi[i][0]), identify(coi[i][1]),
+                       identify(coi[i][2]));
+    }
+    this_player()->more(explode(tmp, "\n"), "system");
+    return 1;
 }
 
-int help()
-{
-  write("Command: callouts\n\n" +
-        "This command lists all the call_outs on the mud.\n" +
-        "See man: call_out_info\n"+
-        "See also: cache, mstatus, netstat, fdinfo, opcprof, dumpallobj\n"+
-        "" );
-  return 1;
+void help() {
+    message("help", "Syntax: <callouts>\n\n"
+            "Lists all pending callouts.\n\n"
+            "See also: events, mstatus, netstat", this_player());
 }
