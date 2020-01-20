@@ -25,7 +25,7 @@ static private void exec_user();
 static void new_user(string str);
 static void choose_password(string str);
 static void confirm_password(string str2, string str1);
-static void choose_gender(string str);
+// static void choose_gender(string str);
 static void enter_email(string str);
 static void enter_real_name(string str);
 
@@ -67,11 +67,11 @@ static void get_name(string str) {
         internal_remove();
         return;
     }
-    if(sscanf(str, "%s:%s", __CapName, __Client) != 2) {
+    if(sscanf(str, "%s:%s", __Name, __Client) != 2) {
         __Client = 0;
-        __Name = convert_name(__CapName = str);
+        __Name = convert_name(__Name = str);
     } else {
-        __Name = convert_name(__CapName);
+        __Name = convert_name(__Name);
         receive("\n");
         if(find_player(__Name)) __CopyExists = 1;
         else __CopyExists = 0;
@@ -105,7 +105,7 @@ static void continue_login() {
             internal_remove();
             return;
         }
-        receive(format_ansi(PROMPT_COLOR+sprintf("Do you really wish '%s' as an account name? (y/n) ", capitalize(__Name))+PROMPT_RESET));
+        receive("\n"+format_ansi(PROMPT_COLOR+"Do you really wish %^BOLD%^"+capitalize(__Name)+"%^BOLD_OFF%^ as an account name? (y/%^BOLD%^n%^BOLD_OFF%^) "+PROMPT_RESET));
         __Player = master()->player_object(__Name);
         input_to("new_user");
         return;
@@ -133,14 +133,14 @@ static void new_user(string str) {
         return;
     }
     log_file("new_players", sprintf("%s : %s : %s\n", query_ip_number(), __Name, ctime(time())));
-    receive(format_ansi(PROMPT_COLOR+"Choose a password of at least 5 characters:"+PROMPT_RESET)+" ");
+    receive("\n"+format_ansi(PROMPT_COLOR+"Choose a password of at least 5 characters:"+PROMPT_RESET)+" ");
     if(__Client) input_to("choose_password");
     else input_to("choose_password", I_NOECHO | I_NOESC);
 }
 
 static void get_password(string str) {
     if(!str || str == "") {
-        message("system", "\nYou must enter a password. Try again later.\n", this_object());
+        message("system", "\n"+PROMPT_COLOR+"Invalid entry, connection terminated."+PROMPT_RESET+"\n", this_object());
         internal_remove();
         return;
     }
@@ -218,7 +218,7 @@ static private void exec_user() {
         return;
     }
     if(!exec(__Player, this_object())) {
-        message("system", "\Problem connecting.\n", this_object());
+        message("system", PROMPT_COLOR+"\nProblem connecting.\n"+PROMPT_RESET, this_object());
         __Player->remove();
         destruct(this_object());
         return;
@@ -230,12 +230,12 @@ static private void exec_user() {
 
 static void choose_password(string str) {
     if(strlen(str) < 5) {
-        message("system", "\nYour password must be at least 5 letters long.\n", this_object());
-        message("password", "Please choose another password: ", this_object());
+        message("system", PROMPT_COLOR+"Your password must be at least 5 letters long.\n"+PROMPT_RESET, this_object());
+        message("password", PROMPT_COLOR+"Choose a password: "+PROMPT_RESET, this_object());
         if(__Client) input_to("choose_password");
         else input_to("choose_password", I_NOECHO | I_NOESC);
     }
-    message("password", "\nPlease confirm your password choice: ", this_object());
+    message("password", PROMPT_COLOR+"Please confirm your password choice: "+PROMPT_RESET, this_object());
     if(__Client) input_to("confirm_password", str);
     else input_to("confirm_password", I_NOECHO | I_NOESC, str);
 }
@@ -243,30 +243,33 @@ static void choose_password(string str) {
 static void confirm_password(string str2, string str1) {
     if(str1 == str2) {
         __Player->set_password(str2 = crypt(str2, 0));
-        message("prompt", "\nPlease choose an interesting gender (male or female): ", this_object());
-        input_to("choose_gender");
+        // message("prompt", "\nPlease choose an interesting gender (male or female): ", this_object());
+        // input_to("choose_gender");
+
+        __CapName = capitalize(__Name);
+        message("system", "\n"+PROMPT_COLOR+"You may format %^BOLD%^"+__CapName+"%^BOLD_OFF%^ capitalization, spaces, \"'\", or \"-\"."+PROMPT_RESET+"\n", this_object());
+        message("prompt", PROMPT_COLOR+"Please choose a display name (default: %^BOLD%^"+__CapName+"%^BOLD_OFF%^): "+PROMPT_RESET, this_object());
+        input_to("choose_cap_name");
+
         return;
     } else {
-        message("password", "\nPassword entries do not match.  Choose a password: ", this_object());
+        message("password", PROMPT_COLOR+"Password entries do not match. Choose a password: "+PROMPT_RESET, this_object());
         if(__Client) input_to("choose_password");
         else input_to("choose_password", I_NOECHO | I_NOESC);
         return;
     }
 }
 
-static void choose_gender(string str) {
-    if(str != "male" && str != "female") {
-        message("system", "\nCute, but pretend to be either male or female instead\n", this_object());
-        message("prompt", "Gender: ", this_object());
-        input_to("choose_gender");
-        return;
-    }
-    __Player->set_gender(str);
-    message("system", sprintf("You may format %s to appear however you want "
-      "using alternative\ncapitalization, spaces, \"'\", or \"-\".\n", __CapName), this_object());
-    message("prompt", sprintf("Please choose a display name (default: %s): ", __CapName), this_object());
-    input_to("choose_cap_name");
-}
+// static void choose_gender(string str) {
+//     if(str != "male" && str != "female") {
+//         message("system", "\nCute, but pretend to be either male or female instead\n", this_object());
+//         message("prompt", "Gender: ", this_object());
+//         input_to("choose_gender");
+//         return;
+//     }
+//     __Player->set_gender(str);
+
+// }
 
 static void choose_cap_name(string str) {
     if(!str || str == "") str = capitalize(__CapName);
@@ -276,9 +279,7 @@ static void choose_cap_name(string str) {
         return;
     }
     __Player->set_cap_name(capitalize(str));
-    message("system", sprintf("\nFor security reasons only, %s requires you to enter "
-      "a valid email address\nin the form of user@host.  Only admins will have "
-      "access to this information.\n", mud_name()), this_object());
+    message("system", "\n"+PROMPT_COLOR+"Please enter your email address in the form of user@host.\nOnly admins will have unless configured by you."+PROMPT_RESET+"\n", this_object());
     message("prompt", "Email: ", this_object());
     input_to("enter_email");
 }

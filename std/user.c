@@ -331,7 +331,7 @@ void setup() {
             move(ROOM_START);
         setenv("start", primary_start);
     }
-    if(!stringp(tmp = getenv("TERM"))) setenv("TERM", tmp = "unknown");
+    if(!stringp(tmp = getenv("TERM"))) setenv("TERM", tmp = "ansi");
     term_info = (mapping)TERMINAL_D->query_term_info(tmp);
     write_messages();
     autosave::setup();

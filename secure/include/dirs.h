@@ -70,7 +70,7 @@
 #define REALMS_DIRS             "/realms"
 
 #define DOMAINS_DIRS            "/domains"
-#define DIR_STANDARD_DOMAIN     DOMAINS_DIRS+"/Praxis"
+#define DIR_STANDARD_DOMAIN     DOMAINS_DIRS+"/Nowhere"
 
 #define ESTATES_DIRS            "/estates"
 
