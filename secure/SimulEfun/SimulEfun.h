@@ -1,6 +1,9 @@
 #ifndef __SIMULEFUN_H
 #define __SIMULEFUN_H
 
+// debug_print
+void debug_print(string name, string msg);
+
 // format
 varargs string format_syntax(string text, int wrap);
 string format_uptime();

@@ -18,6 +18,7 @@
 #include "/secure/SimulEfun/convert_name.c"
 #include "/secure/SimulEfun/copy.c"
 #include "/secure/SimulEfun/creator_file.c"
+#include "/secure/SimulEfun/debug_print.c"
 #include "/secure/SimulEfun/distinct_array.c"
 #include "/secure/SimulEfun/domains.c"
 #include "/secure/SimulEfun/economy.c"
