@@ -337,14 +337,7 @@ void setup() {
     autosave::setup();
     call_out("save_player", 2, query_name());
     PLAYER_D->add_player_info();
-    log_file("enter", query_name()+" (enter): "+ctime(time())+" from "+
-      query_ip_name()+" with\n"+
-      query_exp()+" exp, "+
-      query_money("platinum")+" pl, "+
-      query_money("gold")+" gd, "+
-      query_money("electrum")+" el, "+
-      query_money("silver")+" sl, "+
-      query_money("copper")+" cp\n");
+    log_file("enter", query_name()+" (enter): "+ctime(time())+" from "+query_ip_name()+"\n");
     NEWS_D->read_news();
     set_max_sp(query_stats("agility")*7);
 }
