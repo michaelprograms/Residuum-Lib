@@ -26,7 +26,7 @@ varargs string arrange_string(string str, int x) {
 varargs string wrap(string str, int x) {
     if(!str || !stringp(str)) return "";
     if(strlen(str) > 8190) str=str[0..8190];
-    return terminal_colour(str, TERMINAL_D->query_term_info(previous_object()->getenv("TERM")), (x?x:0));//n"\n";
+    return terminal_colour(str, TERMINAL_D->query_term_info(previous_object()->query_option("TERM")), (x?x:0));
 }
 varargs string wrap2(string str, int x) {
     return sprintf(sprintf("%%-=%ds\n", (x ? x : 76)), str);

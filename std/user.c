@@ -233,7 +233,6 @@ void create() {
     editor::create();
     nmsh::create();
     more::create();
-    options::create();
     living::create();
     __IgnoreMsgClass = ({ "broadcast", "info", "more", "room_description", "room_exits","smell","sound","write","say", "system", "prompt", "inanimate_item", "living_item"});
     position = "player";
@@ -265,6 +264,7 @@ int quit(string str) {
     say(query_cap_name() + " is gone from our reality.");
     log_file("enter", query_name()+" (quit): "+ctime(time())+"\n");
     PLAYER_D->add_player_info();
+    move(ROOM_FREEZER);
     remove();
     return 1;
 }
@@ -333,8 +333,6 @@ void setup() {
             move(ROOM_START);
         setenv("start", primary_start);
     }
-    if(!stringp(tmp = getenv("TERM"))) setenv("TERM", tmp = "ansi");
-    term_info = (mapping)TERMINAL_D->query_term_info(tmp);
     write_messages();
     autosave::setup();
     call_out("save_player", 2, query_name());
@@ -362,7 +360,7 @@ void heart_beat() {
     if(query_age() > ok_to_heal) do_healing(calculate_healing());
     else calculate_healing();
     if(query_idle(this_object()) >= 3600 && !creatorp(this_object()) ) {
-        this_object()->move_player(ROOM_IDLE_SHOP);
+        this_object()->move_player(ROOM_FREEZER);
         this_object()->force_me("sell all");
         this_object()->force_me("quit");
     }
@@ -499,12 +497,20 @@ int set_snoop() {
 
 int query_snoop() { return snoop; }
 
+void display_options_at_login() {
+    message("system", "\n", this_object());
+    message("system", "        >>> option TERM currently set to "+query_option("TERM")+" <<<", this_object());
+    message("system", "        >>> option SCREEN currently set to "+query_option("SCREEN")+" <<<", this_object());
+    message("system", "        >>> option LINES currently set to "+query_option("LINES")+" <<<", this_object());
+    message("system", "        >>> option PROMPT currently set to "+query_option("WIDTH")+" <<<", this_object());
+}
 
 void write_messages() {
     mapping mail_stat;
     int i;
 
-    message("system", sprintf("\n        >>> Terminal currently set to %s <<<", getenv("TERM")), this_object());
+    display_options_at_login();
+
     mail_stat = (mapping)FOLDERS_D->mail_status(query_name());
     if(mail_stat["unread"]) {
         message("login", sprintf("\n        >>> %d of your %d %s are unread! <<<",
@@ -806,7 +812,7 @@ mapping query_mini_quest_map() { return (mini_quests ? mini_quests : ([])); }
 int query_login_time() { return time_of_login; }
 
 void reset_terminal() {
-    term_info = (mapping)TERMINAL_D->query_term_info(getenv("TERM"));
+    term_info = (mapping)TERMINAL_D->query_term_info(query_option("TERM"));
 }
 
 void set_name(string str) {
