@@ -20,12 +20,13 @@
 #include <dirs.h>
 #include <council.h>
 
-inherit AUTOSAVE;
-inherit EDITOR;
-inherit FILES;
-inherit NMSH;
-inherit MORE;
-inherit REFS;
+inherit "/std/user/autosave";
+inherit "/std/user/editor";
+inherit "/std/user/files";
+inherit "/std/user/more";
+inherit "/std/user/nmsh";
+inherit "/std/user/options";
+inherit "/std/user/refs";
 inherit LIVING;
 
 
@@ -232,6 +233,7 @@ void create() {
     editor::create();
     nmsh::create();
     more::create();
+    options::create();
     living::create();
     __IgnoreMsgClass = ({ "broadcast", "info", "more", "room_description", "room_exits","smell","sound","write","say", "system", "prompt", "inanimate_item", "living_item"});
     position = "player";
