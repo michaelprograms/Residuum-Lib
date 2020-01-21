@@ -7,11 +7,11 @@
 #include <std.h>
 
 inherit DAEMON;
-inherit "/adm/daemon/refs_d";
+inherit "/daemon/refs";
 
 #define SYNTAX "Syntax: ss [<object>]\n"
 
-int cmd_ss( string a ) 
+int cmd_ss( string a )
 {
   mixed ob, cont;
   object obj;
@@ -22,7 +22,7 @@ int cmd_ss( string a )
   ob = ref_ob( a );
   if( !objectp( ob ) )
   {
-    notify_fail( wrap( "Could not identify " + identify( ob ) + 
+    notify_fail( wrap( "Could not identify " + identify( ob ) +
       " as an object." ) );
     return 0;
   }
@@ -45,4 +45,4 @@ int help()
     "See also: refs, sc, I\n"+
   "" );
 }
-    
+

@@ -13,8 +13,7 @@ inherit DAEMON;
 int cmd_cls() {
     string str;
 
-    if((str = (string)this_player()->getenv("TERM")) != "ansi" &&
-      str != "xterm" && str != "ansi-status") {
+    if((str = (string)this_player()->getenv("TERM")) != "ansi" && str != "xterm" && str != "ansi-status") {
 	notify_fail("You do not have ansi set.  Try <help ansi>.\n");
 	return 0;
     }
