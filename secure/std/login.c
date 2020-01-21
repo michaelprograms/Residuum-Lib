@@ -318,7 +318,10 @@ void receive_message(string cl, string msg) {
 }
 
 static private void internal_remove() {
-    if(__Player && !__CopyExists) destruct(__Player);
+    if(__Player && !__CopyExists) {
+        debug_print("diavolo", "internal_remove is about to destruct "+identify(__Player));
+        destruct(__Player);
+    }
     destruct(this_object());
 }
 
