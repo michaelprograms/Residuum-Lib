@@ -11,7 +11,7 @@ inherit DAEMON;
 int cmd_date(string str) {
     int borg;
 
-    if(!str) str = (string)this_player()->getenv("TZONE");
+    if(!str) str = (string)this_player()->query_option("TZONE");
     borg = (int)TIME_D->query_tzone(str);
     if(!str) write("Current mud time: "+ctime(borg)+"\n");
     else write("Current time "+str+": "+ctime(borg)+"\n");

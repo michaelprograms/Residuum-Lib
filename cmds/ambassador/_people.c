@@ -56,7 +56,7 @@ int cmd_people(string str) {
         if(uflag) display += filter_array(who, "filter_undead", this_object());
         display = distinct_array(display);
     }
-    if(!eflag && !gflag && !lflag && !rflag && !sflag) 
+    if(!eflag && !gflag && !lflag && !rflag && !sflag)
       maxi = sizeof(display=sort_array(display,"general_sort",this_object()));
     else {
         __SortFlags = ({ eflag, gflag, lflag, rflag, sflag });
@@ -108,7 +108,7 @@ static int general_sort(object alpha, object beta) {
 
     if(archp(alpha)) {
         if(!archp(beta)) return -1;
-        else return strcmp((string)alpha->query_CapName(), 
+        else return strcmp((string)alpha->query_CapName(),
           (string)beta->query_CapName());
     }
     else if(archp(beta)) return 1;
@@ -150,7 +150,7 @@ static int special_sort(object alpha, object beta) {
         }
     }
     if(__SortFlags[3]) {
-        if((a = file_name(environment(alpha))) != 
+        if((a = file_name(environment(alpha))) !=
           (b = file_name(environment(beta)))) return strcmp(a, b);
     }
     if(__SortFlags[2]) {
@@ -197,7 +197,7 @@ static string map_info(object ob) {
     ip = query_ip_name(ob);
     if(!environment(ob)) env = "no environment";
     else env = file_name(environment(ob));
-    if(!strsrch(env, REALMS_DIRS)) 
+    if(!strsrch(env, REALMS_DIRS))
       env = "~"+env[strlen(REALMS_DIRS)+1..strlen(env)-1];
     else if(!strsrch(env, DOMAINS_DIRS))
       env = "^"+env[strlen(DOMAINS_DIRS)+1..strlen(env)-1];
@@ -209,12 +209,12 @@ static private string query_time() {
     string tmp, ret;
     int tzone;
 
-    tzone=(int)TIME_D->query_tzone(tmp=(string)this_player()->getenv("TZONE"));
+    tzone=(int)TIME_D->query_tzone(tmp=(string)this_player()->query_option("TZONE"));
     if(!tmp) ret = mud_name()+" local time is: ";
     else ret = tmp+" time is: ";
     return ret + ctime(tzone);
 }
-    
+
 void help() {
     message("help", "Syntax: people [-abceghlmnprsu]\n\n"
       "Gives you a listing of people on "+mud_name()+".  Output is "

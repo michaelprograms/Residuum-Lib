@@ -14,9 +14,11 @@ int cmd_localcmds() {
     string result;
     int i, tmp;
 
-    seteuid(UID_USERACCESS);
-    catch(cmds = (mixed *)this_player()->local_commands());
-    seteuid(getuid());
+    // seteuid(UID_USERACCESS);
+    /*catch(*/
+    cmds = (mixed *)this_player()->local_commands();
+  /*)*/
+    // seteuid(getuid());
     if(!cmds || !sizeof(cmds)) {
         notify_fail("No commands available.\n");
         return 0;
@@ -28,7 +30,7 @@ int cmd_localcmds() {
       if((i++<(sizeof(cmds)-1)) && cmds[i-1][2] != cmds[i][2])
          result += "\n\n" + file_name(cmds[i][2]) + ":\n";
    }
-    write(wrap(result, (tmp=(string)this_player()->getenv("LINES") ?
+    write(wrap(result, (tmp=(string)this_player()->query_option("LINES") ?
       to_int(tmp) : 75))+"\n");
    return 1;
 }

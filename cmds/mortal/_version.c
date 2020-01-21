@@ -13,8 +13,8 @@ int cmd_version(string str) {
     int x;
     string tz;
 
-    if(!(tz = (string)this_player()->getenv("TZONE"))) {
-        tz = "PST";
+    if(!(tz = (string)this_player()->query_option("TZONE"))) {
+        tz = "EST";
         x = time() - uptime();
     }
     else x = (int)TIME_D->query_tzone(tz) - uptime();

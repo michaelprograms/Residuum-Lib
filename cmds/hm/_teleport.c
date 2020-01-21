@@ -22,8 +22,8 @@ int cmd_teleport(string str) {
 	    notify_fail("Too low on magic power.\n");
 	    return 0;
   	}
-	location = (string)this_player()->getenv("marked");
-	if(!location) location = (string)this_player()->getenv("start");
+	location = (string)this_player()->query_option("marked");
+	if(!location) location = (string)this_player()->query_option("start");
 	this_player()->add_mp(-15);
 	this_player()->move_player(location);
 	return 1;

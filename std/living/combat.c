@@ -204,7 +204,7 @@ void continue_attack() {
 	    log_file("kills",
 		file_name(attackers[0])+" (PRIV:"+query_privs(attackers[0])+")\n");
             if(attackers[0]->is_player()) {
-              nin = explode((string)attackers[0]->getenv("TITLE"), " ");
+              nin = explode((string)attackers[0]->query_option("TITLE"), " ");
               if(!nin || !sizeof(nin) || (n=member_array("$N", nin)) == -1)
                 attackers[0]->setenv("TITLE", capitalize(query("race"))+" murderer $N");
               else attackers[0]->setenv("TITLE",
