@@ -25,7 +25,6 @@ inherit "/std/user/editor";
 inherit "/std/user/files";
 inherit "/std/user/more";
 inherit "/std/user/nmsh";
-inherit "/std/user/options";
 inherit "/std/user/refs";
 inherit LIVING;
 

@@ -1,6 +1,7 @@
 private mapping __Options = ([
     // New Character defaults:
     "TERM": "ansi",
+    "TZONE": "EST",
 ]);
 
 mapping query_options() {
