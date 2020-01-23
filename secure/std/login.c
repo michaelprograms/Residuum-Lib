@@ -52,6 +52,8 @@ static void logon() {
 
     receive(format_ansi(PROMPT_COLOR+"Enter account name:"+PROMPT_RESET)+" ");
 
+    log_file("login_connect", time()+" "+query_ip_number()+"\n");
+
     call_out("idle", LOGON_TIMEOUT);
     input_to("get_name");
 }
@@ -320,7 +322,7 @@ void receive_message(string cl, string msg) {
 static private void internal_remove() {
     if(__Player && !__CopyExists) {
         debug_print("diavolo", "internal_remove is about to destruct "+identify(__Player));
-        log_file("login_destruct", time()+" "+__Name+" "+identify(__Player)+"\n");
+        log_file("login_destruct", time()+" "+__Name+" "+identify(__Player)+" "+query_ip_number()+"\n");
         destruct(__Player);
     }
     destruct(this_object());
