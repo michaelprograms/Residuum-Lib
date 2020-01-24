@@ -50,7 +50,7 @@ nomask static void check_password(string pass) {
     message("system", "Try again with another character sometime then!",
       this_player());
     message("other_action", (string)this_player()->query_cap_name()+
-      "ends "+possessive(this_player())+" miserable existence on "+mud_name()+".",
+      " ends "+possessive(this_player())+" miserable existence on "+mud_name()+".",
       this_player());
     USERS_D->suicide((string)this_player()->query_name());
 }
