@@ -14,22 +14,6 @@ static private string __Name, __CapName, __Client;
 static private object __Player;
 static mapping __ansiMap;
 
-
-static void get_password(string str);
-
-static private int check_password(string str);
-static private int valid_site(string ip);
-static private int boot_copy();
-static void disconnect_copy(string str);
-static private void exec_user();
-static void new_user(string str);
-static void choose_password(string str);
-static void confirm_password(string str2, string str1);
-// static void choose_gender(string str);
-static void enter_email(string str);
-static void enter_real_name(string str);
-
-
 // -------------------------------------------------------------------------
 
 void create() {
@@ -50,7 +34,7 @@ static void logon() {
     receive(format_ansi(read_file("/news/welcome"))+"\n");
     receive("            Driver: "+version()+"    "+"Mudlib: "+mudlib()+" "+mudlib_version()+"\n\n"); // AMCP 1.1 compliant
 
-    receive(format_ansi(PROMPT_COLOR+"Enter account name:"+PROMPT_RESET)+" ");
+    receive(format_ansi(PROMPT_COLOR+"Enter name:"+PROMPT_RESET)+" ");
 
     log_file("login_connect", time()+" "+query_ip_number()+"\n");
 
@@ -96,9 +80,9 @@ static void continue_login() {
     }
     if(!player_exists(__Name)) {
         if(!BANISH_D->valid_name(__Name)) {
-            receive(format_ansi(PROMPT_COLOR+sprintf("\nThe account name '%s' is not a valid account name.\n", capitalize(__Name))+PROMPT_RESET));
+            receive(format_ansi(PROMPT_COLOR+sprintf("\nThe name '%s' is not a valid name.\n", capitalize(__Name))+PROMPT_RESET));
             receive(format_ansi(PROMPT_COLOR+sprintf("Names must be alphabetic characters between %d and %d letters in length.\n\n", MIN_PLAYER_NAME_LENGTH, MAX_PLAYER_NAME_LENGTH)+PROMPT_RESET));
-            receive(format_ansi(PROMPT_COLOR+"Enter account name:"+PROMPT_RESET)+" ");
+            receive(format_ansi(PROMPT_COLOR+"Enter name:"+PROMPT_RESET)+" ");
             input_to("get_name");
             return;
         }
@@ -107,7 +91,7 @@ static void continue_login() {
             internal_remove();
             return;
         }
-        receive("\n"+format_ansi(PROMPT_COLOR+"Do you really wish %^BOLD%^"+capitalize(__Name)+"%^BOLD_OFF%^ as an account name? (y/%^BOLD%^n%^BOLD_OFF%^) "+PROMPT_RESET));
+        receive("\n"+format_ansi(PROMPT_COLOR+"New character. Confirm %^BOLD%^"+capitalize(__Name)+"%^BOLD_OFF%^ as name? (y/%^BOLD%^n%^BOLD_OFF%^) "+PROMPT_RESET));
         __Player = master()->player_object(__Name);
         input_to("new_user");
         return;
@@ -129,13 +113,13 @@ static void continue_login() {
 
 static void new_user(string str) {
     if((str = lower_case(str)) == "" || str[0] != 'y') {
-        receive(format_ansi(PROMPT_COLOR+"Enter account name:"+PROMPT_RESET)+" ");
+        receive(format_ansi(PROMPT_COLOR+"Enter name:"+PROMPT_RESET)+" ");
         __Player->remove();
         input_to("get_name");
         return;
     }
     log_file("new_players", sprintf("%s : %s : %s\n", query_ip_number(), __Name, ctime(time())));
-    receive("\n"+format_ansi(PROMPT_COLOR+"Choose a password of at least 5 characters:"+PROMPT_RESET)+" ");
+    receive("\n"+format_ansi(PROMPT_COLOR+"Create password (min length 5):"+PROMPT_RESET)+" ");
     if(__Client) input_to("choose_password");
     else input_to("choose_password", I_NOECHO | I_NOESC);
 }
@@ -152,36 +136,17 @@ static void get_password(string str) {
             message("system", PROMPT_COLOR+"No more attempts allowed.\n"+PROMPT_RESET, this_object());
             internal_remove();
             return;
-    }
+        }
         log_file("watch/logon", sprintf("%s from %s\n", __Name, query_ip_number()));
         message("password", PROMPT_COLOR+"Password: "+PROMPT_RESET, this_object());
         if(__Client) input_to("get_password");
         else input_to("get_password", I_NOECHO | I_NOESC);
         return;
     }
+
     if(!__CopyExists) exec_user();
     else boot_copy();
 }
-
-static private int check_password(string str) {
-    string pass;
-
-    if((pass = (string)__Player->query_password()) != crypt(str, pass)) return 0;
-    return valid_site(query_ip_number());
-  }
-
-static private int valid_site(string ip) {
-    string a, b;
-    string *miens;
-    int i;
-
-    if(!(i = sizeof(miens = (string *)__Player->query_valid_sites()))) return 1;
-    while(i--) {
-        if(ip == miens[i]) return 1;
-        if(sscanf(miens[i], "%s.*s", a) && sscanf(ip, a+"%s", b)) return 1;
-    }
-    return 0;
-  }
 
 static private int boot_copy() {
     if(interactive(__Player)) {
@@ -195,7 +160,7 @@ static private int boot_copy() {
     else message("system", "Problem reconnecting.\n", this_object());
     internal_remove();
     return 1;
-  }
+}
 
 static void disconnect_copy(string str) {
     object tmp;
@@ -212,32 +177,16 @@ static void disconnect_copy(string str) {
     destruct(tmp);
     message("system", "\nAllowing login.\n", __Player);
     internal_remove();
-  }
-
-static private void exec_user() {
-    if(MULTI_D->query_prevent_login(__Name)) {
-        internal_remove();
-        return;
-    }
-    if(!exec(__Player, this_object())) {
-        message("system", PROMPT_COLOR+"\nProblem connecting.\n"+PROMPT_RESET, this_object());
-        __Player->remove();
-        destruct(this_object());
-        return;
-    }
-    __Player->set_client(__Client);
-    catch(__Player->setup());
-    destruct(this_object());
 }
 
 static void choose_password(string str) {
     if(strlen(str) < 5) {
-        message("system", PROMPT_COLOR+"Your password must be at least 5 letters long.\n"+PROMPT_RESET, this_object());
+        message("system", PROMPT_COLOR+"Password must be at least 5 letters long.\n"+PROMPT_RESET, this_object());
         message("password", PROMPT_COLOR+"Choose a password: "+PROMPT_RESET, this_object());
         if(__Client) input_to("choose_password");
         else input_to("choose_password", I_NOECHO | I_NOESC);
     }
-    message("password", PROMPT_COLOR+"Please confirm your password choice: "+PROMPT_RESET, this_object());
+    message("password", PROMPT_COLOR+"Confirm password: "+PROMPT_RESET, this_object());
     if(__Client) input_to("confirm_password", str);
     else input_to("confirm_password", I_NOECHO | I_NOESC, str);
 }
@@ -245,12 +194,11 @@ static void choose_password(string str) {
 static void confirm_password(string str2, string str1) {
     if(str1 == str2) {
         __Player->set_password(str2 = crypt(str2, 0));
-        // message("prompt", "\nPlease choose an interesting gender (male or female): ", this_object());
-        // input_to("choose_gender");
+        log_file("enter", sprintf("%s (new player): %s\n", __Name, ctime(time())));
 
         __CapName = capitalize(__Name);
-        message("system", "\n"+PROMPT_COLOR+"You may format %^BOLD%^"+__CapName+"%^BOLD_OFF%^ capitalization, spaces, \"'\", or \"-\"."+PROMPT_RESET+"\n", this_object());
-        message("prompt", PROMPT_COLOR+"Please choose a display name (default: %^BOLD%^"+__CapName+"%^BOLD_OFF%^): "+PROMPT_RESET, this_object());
+        message("system", "\n"+PROMPT_COLOR+"Name may be formatted with uppercase, spaces, ', or -."+PROMPT_RESET+"\n", this_object());
+        message("prompt", PROMPT_COLOR+"Choose a sensible display name (default: %^BOLD%^"+__CapName+"%^BOLD_OFF%^): "+PROMPT_RESET, this_object());
         input_to("choose_cap_name");
 
         return;
@@ -262,27 +210,20 @@ static void confirm_password(string str2, string str1) {
     }
 }
 
-// static void choose_gender(string str) {
-//     if(str != "male" && str != "female") {
-//         message("system", "\nCute, but pretend to be either male or female instead\n", this_object());
-//         message("prompt", "Gender: ", this_object());
-//         input_to("choose_gender");
-//         return;
-//     }
-//     __Player->set_gender(str);
-
-// }
-
 static void choose_cap_name(string str) {
     if(!str || str == "") str = capitalize(__CapName);
-    if(!(BANISH_D->valid_cap_name(str, __Name))) {
-        message("prompt", "Incorrect format.  Choose again: ", this_object());
+    if(sizeof(str) > sizeof(__Name)*3/2 || !(BANISH_D->valid_cap_name(str, __Name))) {
+        message("prompt", PROMPT_COLOR+"Invalid format. Choose a sensible display name: "+PROMPT_RESET, this_object());
         input_to("choose_cap_name");
         return;
     }
     __Player->set_cap_name(capitalize(str));
-    message("system", "\n"+PROMPT_COLOR+"Please enter your email address in the form of user@host.\nOnly admins will have unless configured by you."+PROMPT_RESET+"\n", this_object());
-    message("prompt", "Email: ", this_object());
+    prompt_email();
+}
+
+static void prompt_email() {
+    message("system", "\n"+PROMPT_COLOR+"Enter email address in the format of user@host.\nThis information is private by default."+PROMPT_RESET+"\n", this_object());
+    message("prompt", PROMPT_COLOR+"Email (user@host): "+PROMPT_RESET, this_object());
     input_to("enter_email");
 }
 
@@ -290,36 +231,33 @@ static void enter_email(string str) {
     string a, b;
 
     if(!str || str == "" || sscanf(str, "%s@%s", a, b) != 2) {
-        message("system", "\nEmail must be in the form user@host.\n", this_object());
-        message("prompt", "Email: ", this_object());
-        input_to("enter_email");
+        prompt_email();
         return;
     }
     __Player->set_email(str);
-    message("prompt", "\nIf you do not mind, enter your real name (optional): ", this_object());
-    input_to("enter_real_name");
+    prompt_gender();
 }
 
-static void enter_real_name(string str) {
-    if(!str || str == "") str = "Unknown";
-    __Player->set_rname(str);
-    log_file("enter", sprintf("%s (new player): %s\n", __Name, ctime(time())));
+static void prompt_gender() {
+    message("prompt", PROMPT_COLOR+"Choose a gender (female, male, neuter): "+PROMPT_RESET, this_object());
+    input_to("enter_gender");
+}
+
+static void enter_gender(string str) {
+    if(member_array(str, ({"female", "male", "neuter"})) == -1) {
+        prompt_gender();
+        return;
+    }
+    __Player->set_gender(str);
     exec_user();
 }
 
 // -------------------------------------------------------------------------
 
-static string format_ansi(string input) {
-    return replace_strings(explode(input, "%^"), __ansiMap);
-}
-
-void receive_message(string cl, string msg) {
-    if(member_array(cl, ({"system", "prompt", "password"}))==-1) return;
-    if(__Client) receive("<"+cl+">"+msg+"\n");
-    else receive(format_ansi(msg));
-}
-
 static private void internal_remove() {
+    if(find_player(__Name)) __CopyExists = 1;
+    else __CopyExists = 0;
+
     if(__Player && !__CopyExists) {
         debug_print("diavolo", "internal_remove is about to destruct "+identify(__Player));
         log_file("login_destruct", time()+" "+__Name+" "+identify(__Player)+" "+query_ip_number()+"\n");
@@ -335,6 +273,64 @@ static private int locked_access() {
     i = sizeof(LOCKED_ACCESS_ALLOWED);
     while(i--) if(member_group(__Name, LOCKED_ACCESS_ALLOWED[i])) return 1;
     return 0;
+}
+
+static private int valid_site(string ip) {
+    string a, b;
+    string *miens;
+    int i;
+
+    if(!(i = sizeof(miens = (string *)__Player->query_valid_sites()))) return 1;
+    while(i--) {
+        if(ip == miens[i]) return 1;
+        if(sscanf(miens[i], "%s.*s", a) && sscanf(ip, a+"%s", b)) return 1;
+    }
+    return 0;
+}
+
+static private int check_password(string str) {
+    string pass;
+    if((pass = (string)__Player->query_password()) != crypt(str, pass)) return 0;
+    return valid_site(query_ip_number());
+}
+
+static private void exec_user() {
+
+    // Verify new account setup is complete in case of disconnect
+    if(!__Player->query_email()) {
+        message("system", "Email not set.\n", this_object());
+        return prompt_email();
+    }
+    if(!__Player->query_gender()) {
+        message("system", "Gender not set.\n", this_object());
+        return prompt_gender();
+    }
+
+    if(MULTI_D->query_prevent_login(__Name)) {
+        internal_remove();
+        return;
+    }
+    if(!exec(__Player, this_object())) {
+        message("system", PROMPT_COLOR+"\nProblem connecting.\n"+PROMPT_RESET, this_object());
+        __Player->remove();
+        destruct(this_object());
+        return;
+    }
+    __Player->set_client(__Client);
+    catch(__Player->setup());
+    destruct(this_object());
+}
+
+// -------------------------------------------------------------------------
+
+static string format_ansi(string input) {
+    return replace_strings(explode(input, "%^"), __ansiMap);
+}
+
+void receive_message(string cl, string msg) {
+    if(member_array(cl, ({"system", "prompt", "password"}))==-1) return;
+    if(__Client) receive("<"+cl+">"+msg+"\n");
+    else receive(format_ansi(msg));
 }
 
 static int register_client() {

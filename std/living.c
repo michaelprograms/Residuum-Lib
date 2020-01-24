@@ -564,7 +564,7 @@ void set_gender(string str) {
     if(str != "male" && str != "female" && str != "neuter") return;
     gender = str;
 }
-string query_gender() { return (gender ? gender : "neuter"); }
+string query_gender() {return gender; }
 string query_subjective() { return nominative(gender); }
 string query_possessive() { return possessive(gender); }
 string query_objective() { return objective(gender); }

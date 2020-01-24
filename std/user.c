@@ -461,7 +461,7 @@ int is_player() { return 1; }
 
 string query_ip() { return ip; }
 
-string query_email() { if (email) return email; return "???@" + ip; }
+string query_email() { return email; }
 
 string query_rname() { return real_name ? real_name : "???"; }
 
