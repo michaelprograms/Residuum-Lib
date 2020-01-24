@@ -39,16 +39,15 @@ void suicide(string who) {
     if(!((int)master()->valid_apply(({ (string)this_player(1)->query_name()}))))
       return;
     if(archp(this_player())) return;
+    log_file("suicide", who+" at "+ctime(time())+" "+query_ip_number()+"\n");
     this_player()->remove();
-    log_file("suicide", who+" at "+ctime(time())+"\n");
     delete_user(who);
 }
 
 static private void delete_user(string who) {
     string tmp;
-
-    rename(sprintf("%s/%s/%s%s", DIR_PLAYERS, who[0..0], who, __SAVE_EXTENSION__),
-      sprintf("%s/rid/%s%s", DIR_PLAYERS, who, __SAVE_EXTENSION__));
+    if(file_size(DIR_PLAYERS+"/rid") != -2) mkdir(DIR_PLAYERS+"/rid");
+    rename(sprintf("%s/%s/%s%s", DIR_PLAYERS, who[0..0], who, __SAVE_EXTENSION__), sprintf("%s/rid/%s%s", DIR_PLAYERS, who, __SAVE_EXTENSION__));
     if(unguarded((: file_exists, tmp = DIR_BANKACCOUNTS+"/"+who+__SAVE_EXTENSION__ :)))
       unguarded((: rm, tmp :));
 }
