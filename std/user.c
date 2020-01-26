@@ -839,18 +839,22 @@ void unrestrict_channel(string str) {
 nomask string *query_channels() { return channels - __RestrictedChannels; }
 
 static private register_channels() {
-    if(creatorp(this_object()))
-        channels = ({ "cleric","fighter","kataan","mage","monk","rogue"});
-    else channels = (query_class() ? ({ query_class() }) : ({}));
-    if(query_guild()) channels += ({ query_guild() });
-    if(creatorp(this_object()) || high_mortalp(this_object())) channels += ({ "hm", "newbie" });
-    else if(query_level() < 6) channels += ({ "newbie" });
-    if(creatorp(this_object())) channels += ({ "cre", "gossip", "intercre"});
+    channels = ({});
+    // if(creatorp(this_object()))
+    //     channels = ({ "cleric","fighter","kataan","mage","monk","rogue"});
+    // else channels = (query_class() ? ({ query_class() }) : ({}));
+    // if(query_guild()) channels += ({ query_guild() });
+    // if(creatorp(this_object()) || high_mortalp(this_object())) channels += ({ "hm", "newbie" });
+    // else if(query_level() < 6) channels += ({ "newbie" });
+    channels += ({ "newbie" });
+    if(this_object()->query_level() > 19) channels += ({ "hm" });
+
+    if(creatorp(this_object())) channels += ({ "error", "cre"});
+
     if(ambassadorp(this_object())) channels += ({ "gossip" });
     if(archp(this_object())) channels += ({ "admin" });
-    if(creatorp(this_object()) || ambassadorp(this_object())) channels += ({ "gossip" });
-    if(creatorp(this_object()) || leaderp(this_object()))
-        channels += ({ "council" });
+    // if(creatorp(this_object()) || ambassadorp(this_object())) channels += ({ "gossip" });
+    // if(creatorp(this_object()) || leaderp(this_object())) channels += ({ "council" });
     if(!__RestrictedChannels) __RestrictedChannels = ({});
     CHAT_D->add_user(channels - __RestrictedChannels);
 }

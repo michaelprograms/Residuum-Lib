@@ -156,8 +156,7 @@ int valid_write(string file, object ob, string fun) {
     if(file[0] != '/') file = "/"+file;
     if(!(ok = match_path(__WriteAccess, file))) ok = 0;
     if(check_access(ob, fun, file, ok, "write")) return 1;
-    log_file("access", "Write access denied: "+file+" : "+
-      identify(previous_object(-1))+" : "+fun+"\n");
+    log_file("access", "Write access denied: "+file+" : "+identify(previous_object(-1))+" : "+fun+"\n");
     return 0;
 }
 
@@ -174,8 +173,7 @@ int valid_read(string file, object ob, string fun) {
     //tc("-----------\n");
 
     if(check_access(ob, fun, file, ok, "read")) return 1;
-    log_file("access", "Read access denied: "+file+" : "+
-      identify(previous_object(-1))+" : "+fun+"\n");
+    log_file("access", "Read access denied: "+file+" : "+identify(previous_object(-1))+" : "+fun+"\n");
     return 0;
 }
 
@@ -305,8 +303,7 @@ object compile_object(string str) {
 }
 
 static void crash(string err) {
-    write_file(DIR_LOGS+"/crashes", mud_name()+" crashed "+ctime(time())+" with error "+
-      err+".\n");
+    log_file("crashes", mud_name()+" crashed "+ctime(time())+" with error "+err+".\n");
     shout("Atmos tells you think "+mud_name()+" is crashing!\n");
     shout("Atmos forced you to: quit\n");
     users()->force_me("quit");
@@ -382,17 +379,26 @@ mixed apply_unguarded(function f) {
 }
 
 string error_handler(mapping mp, int caught) {
-    string ret;
+    object tp = this_player(1);
+    string trace, info;
 
-    ret = "---\n"+standard_trace(mp);
-    if (caught) {
-        write_file("/log/catch", ret);
-    } else {
-        write_file("/log/runtime", ret);
-    }
-    if (this_player(1)) {
-        tell_object(this_player(1), sprintf("%sTrace written to /log/%s\n", mp["error"], (caught ? "catch" : "runtime")));
-        this_player(1)->set_error(mp);
+    trace = standard_trace(mp);
+
+    info = ctime(time()) + " ";
+    if(tp) info += tp->query_CapName();
+    else if(previous_object()) info += identify(previous_object());
+    else info += "unknown";
+    info += "\n" + trace;
+
+    log_file((caught?"catch":"runtime"), "---\n"+info);
+    CHAT_D->do_chat("error", info);
+
+    if(tp) {
+        if(creatorp(tp)) {
+            if(file_name(mp["object"]) != "/secure/cmds/creator/_update") tell_object(tp, "\n"+trace);
+            tell_object(tp, "Trace written to /log/"+(caught?"catch":"runtime")+"\n");
+            tp->set_error(mp);
+        } else tell_object(tp, "An error has been logged.");
     }
     return 0;
 }
@@ -418,7 +424,7 @@ varargs string standard_trace(mapping mp, int flag) {
     n = sizeof(trace);
 
     for (i=0; i<n; i++) {
-    if (flag) ret += sprintf("#%d: ", i);
+        if (flag) ret += sprintf("#%d: ", i);
 
         ret += sprintf("'%s' at %s", trace[i]["function"], trace_line(trace[i]["object"], trace[i]["program"], trace[i]["file"], trace[i]["line"]));
     }
@@ -446,7 +452,7 @@ int different(string fn, string pr) {
 
 void master_log_file(string file, string msg) {
     if(file_name(previous_object()) != OB_SIMUL_EFUN) return;
-    if(file_size(file) > MAX_LOG_SIZE) rename(file, file+".old");
+    if(file_size(file) > MAX_LOG_SIZE) rename(file, file+"-"+time());
     write_file(file, msg);
 }
 
@@ -503,7 +509,7 @@ string author_file(string str) {
 }
 
 static int slow_shutdown() {
-    write_file(DIR_LOGS+"/game_log", "Armageddon loaded by master: "+ctime(time())+".\n");
+    log_file("game_log", "Armageddon loaded by master: "+ctime(time())+".\n");
     new(OB_SHUT)->move(ROOM_START);
     SHUT_D->reboot_mud(4);
     return 1;

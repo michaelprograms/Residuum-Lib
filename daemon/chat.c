@@ -43,7 +43,7 @@ void add_user(string *chans) {
 
     if(!userp(ob = previous_object())) return;
     i = sizeof(chans);
-    while(i--) { 
+    while(i--) {
         if(!channels[chans[i]]) channels[chans[i]] = ({});
          channels[chans[i]] = distinct_array(channels[chans[i]]+({ob}));
     }
@@ -63,6 +63,7 @@ void remove_user(string *chans) {
 }
 
 int do_chat(string verb, string str) {
+    object *list;
     string msg;
     int emote;
     string name;
@@ -72,6 +73,13 @@ int do_chat(string verb, string str) {
         if(sscanf(verb, "%semote", verb)) emote = 1;
         else return 0;
         if(!channels[verb]) return 0;
+    }
+    if(str && str!="" && verb == "error" ) {
+        if(this_player(1) && creatorp(this_player(1))) return 1;
+        if(!(list = channels["error"])) return 1;
+        msg = "<error> "+str;
+        message(verb, msg, list);
+        return 1;
     }
     if(member_array(this_player(), channels[verb]) == -1) return 0;
     if(!str) {
