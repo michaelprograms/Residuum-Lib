@@ -6,13 +6,12 @@
 inherit ROOM;
 
 string get_long() {
-    string msg = "\nYou are naught...nowhere...nobody...nothing...\n\n"+
-        "...you feel an expectation to guide your destiny...\n\n";
+    string msg = "\nYou are naught...nowhere...nobody...nothing...but a feeling of an expectation to guide destiny compels you...\n\n";
 
     if(this_player()) {
-        msg += "You are "+this_player()->query_gender()+".\n";
+        msg += sprintf("%-20s %s", "You are %^ORANGE%^"+this_player()->query_gender()+"%^RESET%^.", format_syntax(BECOME_SYNTAX))+"\n";
 
-        msg += "\n"+format_syntax(BECOME_SYNTAX)+"\n";
+        msg += "\n...or roll the dice on your fate... " + format_syntax("<randomize>") + ".";
     }
 
     return msg;
@@ -30,6 +29,7 @@ void create() {
 void init() {
     ::init();
     add_action("cmd_become", "become");
+    add_action("cmd_randomize", "randomize");
 }
 
 int cmd_become(string input) {
@@ -45,5 +45,12 @@ int cmd_become(string input) {
     } else {
         write("Become what? "+format_syntax(BECOME_SYNTAX));
     }
+    return 1;
+}
+int cmd_randomize(string str) {
+
+    int x;
+    write("About to error.");
+    x = 1 / to_int(str);
     return 1;
 }
