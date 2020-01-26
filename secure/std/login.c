@@ -10,7 +10,7 @@
 #include "login.h"
 
 static private int __CrackCount, __CopyExists;
-static private string __Name, __CapName, __Client;
+static private string __Name, __CapName, __Client, __IPAddress;
 static private object __Player;
 static mapping __ansiMap;
 
@@ -22,6 +22,7 @@ void create() {
     __CrackCount = 0;
     __Player = 0;
     __ansiMap = TERMINAL_D->query_term_info("ansi");
+    __IPAddress = query_ip_number();
 }
 
 void remove() {
@@ -33,10 +34,9 @@ void remove() {
 static void logon() {
     receive(format_ansi(read_file("/news/welcome"))+"\n");
     receive("            Driver: "+version()+"    "+"Mudlib: "+mudlib()+" "+mudlib_version()+"\n\n"); // AMCP 1.1 compliant
-
     receive(format_ansi(PROMPT_COLOR+"Enter name:"+PROMPT_RESET)+" ");
 
-    log_file("login_connect", time()+" "+query_ip_number()+"\n");
+    log_file("login_connect", time()+" "+__IPAddress+"\n");
 
     call_out("idle", LOGON_TIMEOUT);
     input_to("get_name");
@@ -86,7 +86,7 @@ static void continue_login() {
             input_to("get_name");
             return;
         }
-        if(!BANISH_D->allow_logon(__Name, query_ip_number())) {
+        if(!BANISH_D->allow_logon(__Name, __IPAddress)) {
             receive(format_ansi(read_file("/news/registration"))+"\n");
             internal_remove();
             return;
@@ -96,7 +96,7 @@ static void continue_login() {
         input_to("new_user");
         return;
     } else {
-        if(!BANISH_D->allow_logon(__Name, query_ip_number())) {
+        if(!BANISH_D->allow_logon(__Name, __IPAddress)) {
             receive(format_ansi(read_file("/news/registration"))+"\n");
             internal_remove();
             return;
@@ -118,7 +118,7 @@ static void new_user(string str) {
         input_to("get_name");
         return;
     }
-    log_file("new_players", sprintf("%s : %s : %s\n", query_ip_number(), __Name, ctime(time())));
+    log_file("new_players", sprintf("%s : %s : %s\n", __IPAddress, __Name, ctime(time())));
     receive("\n"+format_ansi(PROMPT_COLOR+"Create password (min length 5):"+PROMPT_RESET)+" ");
     if(__Client) input_to("choose_password");
     else input_to("choose_password", I_NOECHO | I_NOESC);
@@ -137,7 +137,7 @@ static void get_password(string str) {
             internal_remove();
             return;
         }
-        log_file("watch/logon", sprintf("%s from %s\n", __Name, query_ip_number()));
+        log_file("watch/logon", sprintf("%s from %s\n", __Name, __IPAddress));
         message("password", PROMPT_COLOR+"Password: "+PROMPT_RESET, this_object());
         if(__Client) input_to("get_password");
         else input_to("get_password", I_NOECHO | I_NOESC);
@@ -260,7 +260,7 @@ static private void internal_remove() {
 
     if(__Player && !__CopyExists) {
         debug_print("diavolo", "internal_remove is about to destruct "+identify(__Player));
-        log_file("login_destruct", time()+" "+__Name+" "+identify(__Player)+" "+query_ip_number()+"\n");
+        log_file("login_destruct", time()+" "+__Name+" "+identify(__Player)+" "+__IPAddress+"\n");
         destruct(__Player);
     }
     destruct(this_object());
@@ -291,7 +291,7 @@ static private int valid_site(string ip) {
 static private int check_password(string str) {
     string pass;
     if((pass = (string)__Player->query_password()) != crypt(str, pass)) return 0;
-    return valid_site(query_ip_number());
+    return valid_site(__IPAddress);
 }
 
 static private void exec_user() {
