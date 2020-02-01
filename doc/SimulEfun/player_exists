@@ -1,0 +1,23 @@
+
+PLAYER_EXISTS(1)                                 PLAYER_EXISTS(1)
+
+NAME
+       player_exists() - returns true if a given player exists
+
+SYNOPSIS
+       int player_exists(string str)
+
+DESCRIPTION
+       If the argument passed is an existing player name, this function
+       returns true.  Otherwise the function returns false.
+
+EXAMPLES
+       player_exists("descartes") returns true or false
+
+LOCATION
+       /secure/SimulEfun/user_functions.c
+
+SEE ALSO
+       account_exists()
+
+                                                                1

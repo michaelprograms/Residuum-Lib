@@ -1,0 +1,23 @@
+
+ACCOUNT_EXISTS(1)                               ACCOUNT_EXISTS(1)
+
+NAME
+       account_exists() - returns true if a given account exists
+
+SYNOPSIS
+       int account_exists(string str)
+
+DESCRIPTION
+       If the argument passed is an existing account name, this function
+       returns true.  Otherwise the function returns false.
+
+EXAMPLES
+       account_exists("descartes") returns true or false
+
+LOCATION
+       /secure/SimulEfun/user_functions.c
+
+SEE ALSO
+       player_exists()
+
+                                                                1

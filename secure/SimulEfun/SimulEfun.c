@@ -50,8 +50,7 @@
 #include "/secure/SimulEfun/time.c"
 #include "/secure/SimulEfun/to_object.c"
 #include "/secure/SimulEfun/translate.c"
-#include "/secure/SimulEfun/user_exists.c"
-#include "/secure/SimulEfun/user_path.c"
+#include "/secure/SimulEfun/user_functions.c"
 #include "/secure/SimulEfun/visible.c"
 
 int destruct(object ob) {
