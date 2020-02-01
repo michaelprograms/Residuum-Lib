@@ -24,22 +24,6 @@ int tail(string file) {
     return 1;
 }
 
-varargs void tc(string str, object dude){
-    string prefix;
-    if(previous_object()){
-        prefix = file_name(previous_object())+": ";
-    }
-    else {
-        prefix = "";
-    }
-    if(!dude) dude = find_player("cratylus");
-    if(dude){
-        tell_object(dude ,prefix+str);
-        if(dude) flush_messages(dude);
-    }
-    debug_message(str);
-}
-
 varargs string get_stack( int x) {
     int i, s;
     string list = "";

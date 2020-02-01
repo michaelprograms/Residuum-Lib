@@ -181,12 +181,6 @@ int valid_read(string file, object ob, string fun) {
     if(file[0] != '/') file = "/"+file;
     if(!(ok = match_path(__ReadAccess, file))) ok = 0;
 
-    //tc("\n-------");
-    //tc("valid_read("+identify(file)+", "+identify(ob)+", "+identify(fun)+")");
-    //tc("match_path(__ReadAccess, "+identify(file)+"): "+identify(ok));
-    //tc("check_access: "+check_access(ob, fun, file, ok, "read"));
-    //tc("-----------\n");
-
     if(check_access(ob, fun, file, ok, "read")) return 1;
     log_file("access", "Read access denied: "+file+" : "+identify(previous_object(-1))+" : "+fun+"\n");
     return 0;

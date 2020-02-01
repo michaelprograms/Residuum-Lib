@@ -53,7 +53,7 @@ int eventCreateSocket(string host, int port) {
         eventSocketError("Error in socket_bind().", x);
         return x;
     }
-    x = socket_connect(Socket->Descriptor, host + " " + port, 
+    x = socket_connect(Socket->Descriptor, host + " " + port,
       "eventReadCallback", "eventWriteCallback");
     if( x != EESUCCESS ) {
         eventClose(Socket);
@@ -109,7 +109,6 @@ static void eventWriteCallback(int fd) {
 }
 
 void eventWrite(mixed val) {
-    //tc("CLIENT eventWrite: "+identify(val||"foo"),"white");
     if( !Socket ) return;
     if( Socket->Buffer ) Socket->Buffer += ({ val });
     else Socket->Buffer = ({ val });
@@ -124,16 +123,12 @@ void eventWrite(mixed val) {
 static void eventClose(mixed arg) {
     class client sock;
     if(!arg) return;
-    if(classp(arg)) sock = arg; 
+    if(classp(arg)) sock = arg;
     if(!classp(arg)){
-        //trr("arg: "+identify(arg),"yellow");
-        //trr("prevs: "+identify(previous_object(-1)),"yellow");
-        //trr("i am: "+identify(this_object()),"yellow");
         if(mapp(arg)) socket_close(arg["Descriptor"]);
         if(objectp(arg)) socket_close(arg->GetDescriptor());
         return;
     }
-    //else trr("Yes, I am a class.");
     socket_close(sock->Descriptor);
     sock = 0;
     eventSocketClose();
@@ -147,7 +142,7 @@ int eventDestruct() {
     return destruct(this_object());
 }
 
-static void eventSocketError(string str, int x) { 
-    if( LogFile ) 
+static void eventSocketError(string str, int x) {
+    if( LogFile )
         log_file(LogFile, ctime(time()) + "\n" + socket_error(x) + "\n");
 }
