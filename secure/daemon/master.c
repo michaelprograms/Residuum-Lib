@@ -208,14 +208,12 @@ int check_access(object ob, string fun, mixed file, string *ok, string oper) {
         string tmp;
 
         if((tmp = base_name(ob)) == OB_USER) {
-            //debug_message("master(): checking "+file+" access for "+__PlayerName);
             if(!__PlayerName) i = sizeof(stack = ({ob})+previous_object(-1));
             else if(file == DIR_PLAYERS+"/"+__PlayerName[0..0]+"/"+__PlayerName+__SAVE_EXTENSION__)
               return 1;
             else i = sizeof(stack = ({ ob }));
         }
         else if((tmp = base_name(ob)) == OB_ACCOUNT) {
-            debug_print("diavolo", "master()->check_access(): "+__AccountName);
             if(!__AccountName) i = sizeof(stack = ({ob})+previous_object(-1));
             else if(file == DIR_ACCOUNTS+"/"+__AccountName[0..0]+"/"+__AccountName+__SAVE_EXTENSION__)
               return 1;
@@ -296,18 +294,15 @@ object compile_object(string str) {
         tmp = sprintf("%s/adm/server", ESTATES_DIRS);
     } else if(sscanf(str, DIR_PLAYERS+"/%*s/%s", nom)) {
         if(!__NewPlayer) return 0;
-        debug_print("diavolo", "master->compile_object PLAYER: 1."+nom+" 2."+__NewPlayer->query_name());
         if((string)__NewPlayer->query_name() != nom) return 0;
         __PlayerName = nom;
         ob = new(OB_USER);
         if(file_exists(str+__SAVE_EXTENSION__)) ob->restore_player(nom);
-        debug_print("diavolo", "master->compile_object: "+identify(ob));
         ob->set_name(nom);
         __PlayerName = 0;
         return ob;
     } else if(sscanf(str, DIR_ACCOUNTS+"/%*s/%s", nom)) {
         if(!__NewAccount) return 0;
-        debug_print("diavolo", "master->compile_object ACCOUNT: 1."+nom+" 2."+__NewAccount->query_name());
         if((string)__NewAccount->query_name() != nom) return 0;
         __AccountName = nom;
         ob = new(OB_ACCOUNT);
@@ -585,7 +580,6 @@ object account_object(string nom) {
     set_eval_limit(1000000000);
     __NewAccount = ob;
     err = catch(ob = load_object(DIR_ACCOUNTS+"/"+nom[0..0]+"/"+nom));
-    debug_print("diavolo", "master->account_object: "+identify(ob));
     __NewAccount = 0;
     set_eval_limit(-1);
     if(err) error(err);
@@ -599,7 +593,6 @@ object player_object(string nom) {
     set_eval_limit(1000000000);
     __NewPlayer = ob;
     err = catch(ob = load_object(DIR_PLAYERS+"/"+nom[0..0]+"/"+nom));
-    debug_print("diavolo", "master->player_object: "+identify(ob));
     __NewPlayer = 0;
     set_eval_limit(-1);
     if(err) error(err);
