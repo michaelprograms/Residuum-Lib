@@ -6,14 +6,26 @@
 
 static void logon();
 static void idle();
-static void get_name(string str);
+
+static void prompt_account_name();
+static void get_account_name(string str);
 static void continue_login();
-static void new_user(string str);
-static void get_password(string str);
-static private int boot_copy();
-static void disconnect_copy(string str);
+static void prompt_banished();
+static void new_account(string str);
+static void prompt_create_password();
 static void choose_password(string str);
 static void confirm_password(string str2, string str1);
+static void prompt_account_menu();
+static void prompt_create_character();
+static void get_create_character(string str);
+static void confirm_new_character(string str);
+static void get_menu_choice();
+static void prompt_password();
+static void get_password(string str);
+static void prompt_delete_character();
+
+static private int boot_copy();
+static void disconnect_copy(string str);
 static void choose_cap_name(string str);
 static void prompt_email();
 static void enter_email(string str);

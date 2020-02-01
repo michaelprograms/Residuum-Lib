@@ -16,8 +16,8 @@
 #include "master.h"
 
 static private object __Unguarded;
-static private string __PlayerName;
-static private object __NewPlayer;
+static private string __PlayerName, __AccountName;
+static private object __NewPlayer, __NewAccount;
 static private mapping __Groups, __ReadAccess, __WriteAccess;
 
 void create() {
@@ -27,6 +27,21 @@ void create() {
     new_read();
     new_write();
     new_groups();
+
+    create_save_dirs();
+}
+
+void create_save_dirs() {
+    string s = "a";
+
+    if(file_size(DIR_ACCOUNTS) != -2) mkdir(DIR_ACCOUNTS);
+    if(file_size(DIR_PLAYERS) != -2) mkdir(DIR_PLAYERS);
+
+    for(int i = 'a'; i < 'z'; i ++) {
+        s[0] = i;
+        if(file_size(DIR_ACCOUNTS+"/"+s) != -2) mkdir(DIR_ACCOUNTS+"/"+s);
+        if(file_size(DIR_PLAYERS+"/"+s) != -2) mkdir(DIR_PLAYERS+"/"+s);
+    }
 }
 
 void new_read() {
@@ -199,6 +214,13 @@ int check_access(object ob, string fun, mixed file, string *ok, string oper) {
               return 1;
             else i = sizeof(stack = ({ ob }));
         }
+        else if((tmp = base_name(ob)) == OB_ACCOUNT) {
+            debug_print("diavolo", "master()->check_access(): "+__AccountName);
+            if(!__AccountName) i = sizeof(stack = ({ob})+previous_object(-1));
+            else if(file == DIR_ACCOUNTS+"/"+__AccountName[0..0]+"/"+__AccountName+__SAVE_EXTENSION__)
+              return 1;
+            else i = sizeof(stack = ({ ob }));
+        }
         else if(tmp == file) return 1;
         else i = sizeof(stack = ({ ob }));
     }
@@ -268,27 +290,32 @@ object compile_object(string str) {
     object ob;
     if(sscanf(str, REALMS_DIRS+"/%s/%*s", nom)){
         tmp = sprintf("%svirtual/server", user_path(nom));
-    }
-    else if(sscanf(str, DOMAINS_DIRS+"/%s/%*s", nom)){
+    } else if(sscanf(str, DOMAINS_DIRS+"/%s/%*s", nom)){
         tmp = sprintf("%s/%s/virtual/server", DOMAINS_DIRS, nom);
-    }
-    else if(strsrch(str, ESTATES_DIRS) == 0){
+    } else if(strsrch(str, ESTATES_DIRS) == 0){
         tmp = sprintf("%s/adm/server", ESTATES_DIRS);
-    }
-    else if(sscanf(str, DIR_PLAYERS+"/%*s/%s", nom)) {
+    } else if(sscanf(str, DIR_PLAYERS+"/%*s/%s", nom)) {
         if(!__NewPlayer) return 0;
+        debug_print("diavolo", "master->compile_object PLAYER: 1."+nom+" 2."+__NewPlayer->query_name());
         if((string)__NewPlayer->query_name() != nom) return 0;
         __PlayerName = nom;
         ob = new(OB_USER);
         if(file_exists(str+__SAVE_EXTENSION__)) ob->restore_player(nom);
-        else if(file_size(DIR_PLAYERS) != -2) mkdir(DIR_PLAYERS);
-        else if(file_size(DIR_PLAYERS+"/"+nom[0..0]) != -2)
-            mkdir(DIR_PLAYERS+"/"+nom[0..0]);
+        debug_print("diavolo", "master->compile_object: "+identify(ob));
         ob->set_name(nom);
         __PlayerName = 0;
         return ob;
-    }
-    else {
+    } else if(sscanf(str, DIR_ACCOUNTS+"/%*s/%s", nom)) {
+        if(!__NewAccount) return 0;
+        debug_print("diavolo", "master->compile_object ACCOUNT: 1."+nom+" 2."+__NewAccount->query_name());
+        if((string)__NewAccount->query_name() != nom) return 0;
+        __AccountName = nom;
+        ob = new(OB_ACCOUNT);
+        if(file_exists(str+__SAVE_EXTENSION__)) ob->restore_account(nom);
+        ob->set_name(nom);
+        __AccountName = 0;
+        return ob;
+    // } else {
     }
     if(file_size(tmp+",c") < 0) {
         if(sscanf(str, "%s.%s", where, which) != 2) return 0;
@@ -467,12 +494,13 @@ string make_path_absolute(string file) {
     return absolute_path((string)this_player()->get_path(), file);
 }
 
-int player_exists(string str) { // TODO remove
+int account_exists(string str) {
     if(!str) return 0;
-    str = DIR_PLAYERS+"/"+str[0..0]+"/"+str+__SAVE_EXTENSION__;
-    return (file_size(str) > -1);
+    str = DIR_ACCOUNTS+"/"+str[0..0]+"/"+str+__SAVE_EXTENSION__;
+    return file_size(str) > -1;
 }
-int player_exists2(string str) { // TODO rename
+
+int player_exists(string str) { // TODO remove
     if(!str) return 0;
     str = DIR_PLAYERS+"/"+str[0..0]+"/"+str+__SAVE_EXTENSION__;
     return file_size(str) > -1;
@@ -544,29 +572,25 @@ string get_save_file_name(string file) {
 int is_locked() { return MUD_IS_LOCKED; }
 
 string *parse_command_id_list() { return ({ "one", "thing" }); }
-
 string *parse_command_plural_id_list() { return ({ "ones", "things","them"}); }
-
-string *parse_command_adjectiv_id_list() {
-    return ({ "the", "an", "a" });
-}
-
-string *parse_command_prepos_list() {
-    return ({ "in", "with", "without", "into", "for", "on", "under",
-      "from", "between", "at", "to", "over", "near" });
-}
-
+string *parse_command_adjectiv_id_list() { return ({ "the", "an", "a" }); }
+string *parse_command_prepos_list() { return ({ "in", "with", "without", "into", "for", "on", "under", "from", "between", "at", "to", "over", "near" }); }
 string parse_command_all_word() { return "all"; }
 
-void create_save() {
-    string str;
+object account_object(string nom) {
+    object ob;
+    string err;
 
-    if(!stringp(str = (string)previous_object()->query_name())) return;
-    if(file_size(DIR_PLAYERS+"/"+str[0..0]) == -2) return;
-    if(str[0] < 'a' || str[0] > 'z') return;
-    mkdir(DIR_PLAYERS+"/"+str[0..0]);
+    if(base_name(ob = previous_object(0)) != OB_LOGIN) return 0;
+    set_eval_limit(1000000000);
+    __NewAccount = ob;
+    err = catch(ob = load_object(DIR_ACCOUNTS+"/"+nom[0..0]+"/"+nom));
+    debug_print("diavolo", "master->account_object: "+identify(ob));
+    __NewAccount = 0;
+    set_eval_limit(-1);
+    if(err) error(err);
+    return ob;
 }
-
 object player_object(string nom) {
     object ob;
     string err;
@@ -575,6 +599,7 @@ object player_object(string nom) {
     set_eval_limit(1000000000);
     __NewPlayer = ob;
     err = catch(ob = load_object(DIR_PLAYERS+"/"+nom[0..0]+"/"+nom));
+    debug_print("diavolo", "master->player_object: "+identify(ob));
     __NewPlayer = 0;
     set_eval_limit(-1);
     if(err) error(err);

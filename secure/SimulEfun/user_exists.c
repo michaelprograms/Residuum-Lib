@@ -3,6 +3,6 @@
 //      returns true if the player exists
 //      created by Descartes of Borg 27 july 1993
 
-int user_exists(string str) { return (int)master()->player_exists(str); } // TODO remove
+int account_exists(string str) { return master()->account_exists(str); }
 
-int player_exists(string str) { return master()->player_exists2(str); } // TODO rename
+int player_exists(string str) { return master()->player_exists(str); }

@@ -8,8 +8,8 @@ void debug_print(string name, string msg);
 varargs string format_syntax(string text, int wrap);
 string format_uptime();
 
-// user_exists
-int user_exists(string str);
+// user_exists - rename
+int account_exists(string str);
 int player_exists(string str);
 
 // unsorted

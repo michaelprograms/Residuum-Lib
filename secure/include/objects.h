@@ -4,7 +4,16 @@
 #include <dirs.h>
 
 #define OB_SIMUL_EFUN 		"/secure/SimulEfun/SimulEfun"
+
 #define OB_LOGIN 		"/secure/std/login"
+// #define OB_LOGIN 		"/secure/std/login2"
+/*
+update /std/account.c
+update /daemon/banish
+update /secure/SimulEfun/SimulEfun.c
+update /secure/daemon/master
+*/
+#define OB_ACCOUNT      "/std/account"
 #define OB_USER 		"/std/user"
 #define OB_SHUT 		(DIR_STANDARD_DOMAIN "/obj/mon/armageddon")
 #define OB_BODY_PART 		"/std/obj/body_part"

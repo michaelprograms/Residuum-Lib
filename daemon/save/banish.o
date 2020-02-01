@@ -1,4 +1,5 @@
 #/daemon/banish.c
+__AccountNames ({})
 __Names ({})
 __Sites ({})
 __WatchNames ({})

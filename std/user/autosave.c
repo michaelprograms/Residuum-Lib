@@ -26,7 +26,6 @@ void setup() {
     object ob;
     int i;
 
-    master()->create_save();
     call_out("save_player", 2, query_name());
     convert_auto();
     if(!(i = sizeof(__AutoLoad))) return;
@@ -55,10 +54,6 @@ nomask void save_player(string nom) {
     if(!nom || nom != query_name()) return;
     pre_save();
     file = sprintf("%s/%s/%s", DIR_PLAYERS, nom[0..0], nom+__SAVE_EXTENSION__);
-    //debug_message("file: "+file);
-    if(file_size(dir = sprintf("%s/%s", DIR_PLAYERS, nom[0..0])) != -2){
-    //debug_message("directory "+dir+"  does not exist.");
-    }
     unguarded((: save_object, file, 1 :));
 }
 

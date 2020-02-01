@@ -12,7 +12,7 @@
 #include <save.h>
 
 inherit DAEMON;
-string *__Names, *__Sites, *__WatchNames, *__WatchSites;
+string *__AccountNames, *__Names, *__Sites, *__WatchNames, *__WatchSites;
 string *__Allowed, *__Guests, *__IllegalSubStrings;
 mapping __TmpBanish;
 
@@ -45,13 +45,15 @@ string *query_guests();
 static private void save_banish();
 static private void restore_banish();
 int is_guest(string str);
-int valid_name(string str);
+int valid_account_name(string str);
+int valid_name(string str); // rename valid_player_name
 int allow_logon(string nom, string ip);
 static private int match_ip(string ip, string *sites);
 
 void create() {
     daemon::create();
     set_no_clean(1);
+    __AccountNames = ({});
     __Names = ({});
     __Sites = ({});
     __WatchNames = ({});
@@ -245,13 +247,24 @@ int is_guest(string str) {
 }
 
 static private void save_banish() {
-    save_object(SAVE_BANISH);
+    save_object(SAVE_BANISH, 1);
 }
 static private void restore_banish() {
     restore_object(SAVE_BANISH);
 }
 
-int valid_name(string str) {
+int valid_account_name(string str) {
+    int i, x;
+    if(base_name(previous_object()) != OB_LOGIN) return 0;
+    if(member_array(str, __AccountNames) != -1) return 0;
+    if((x = strlen(str)) > MAX_ACCOUNT_NAME_LENGTH) return 0;
+    if(x < MIN_ACCOUNT_NAME_LENGTH) return 0;
+    for(i=0; i<x; i++)
+        if((str[i] < 'a' || str[i] > 'z') && str[i] < '0' && str[i] > '9') return 0;
+    return 1;
+}
+
+int valid_name(string str) { // rename valid_player_name
     int i, x;
 
     if(base_name(previous_object()) != OB_LOGIN) return 0;

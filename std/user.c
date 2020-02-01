@@ -52,7 +52,7 @@ static int __LastAged;
 mapping blocked, news;
 static mapping __LastError;
 static int snoop, earmuffs;
-string char_name, real_name, email, ip, last_on, password, race, original_site;
+string char_name, real_name, email, ip, last_on, race, original_site;
 private string position, primary_start, *__RestrictedChannels;
 private int __WhereBlock;
 private static string *channels;
@@ -95,6 +95,24 @@ void add_message(string str);
 void write_messages();
 string query_email();
 nomask string query_position();
+
+// --- TODO remove ---------------------------------------------------------
+string password;
+string query_password() { return password; }
+void set_password(string pass) {
+    if(!((int)master()->valid_apply(({ query_name()})))) return 0;
+    password = pass;
+    save_player( query_name() );
+}
+// -------------------------------------------------------------------------
+string account;
+string query_account() { return account; }
+void set_account(string nom) {
+    if(!((int)master()->valid_apply(({ query_name()})))) return 0;
+    account = nom;
+    save_player( query_name() );
+}
+// -------------------------------------------------------------------------
 
 void get_email(string e) {
     string who, where;
@@ -464,14 +482,6 @@ string query_ip() { return ip; }
 string query_email() { return email; }
 
 string query_rname() { return real_name ? real_name : "???"; }
-
-string query_password() { return password; }
-
-void set_password(string pass) {
-    if(!((int)master()->valid_apply(({ query_name()})))) return 0;
-    password = pass;
-    save_player( query_name() );
-}
 
 void set_email(string e) {
     if(!((int)master()->valid_apply(({ query_name()})))) return 0;

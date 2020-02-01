@@ -7,6 +7,7 @@
 #define DIR_SECURE_DAEMONS      DIR_SECURE+"/daemon"
 #define DIR_BANKACCOUNTS        DIR_DAEMONS_SAVE+"/accounts"
 #define DIR_BOARDS              DIR_DATA+"/boards"
+#define DIR_ACCOUNTS            DIR_DATA+"/accounts"
 #define DIR_PLAYERS             DIR_DATA+"/players"
 #define DIR_LETTERS             DIR_DATA+"/letters"
 #define DIR_POSTAL              DIR_DATA+"/postal"

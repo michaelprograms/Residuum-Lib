@@ -2,6 +2,7 @@
 #define __MASTER_H
 
 void create();
+void create_save_dirs();
 void new_read();
 void new_write();
 void new_groups();
@@ -33,6 +34,7 @@ int different(string fn, string pr);
 void master_log_file(string file, string msg);
 void destruct_env_of(object ob);
 string make_path_absolute(string file);
+int account_exists(string str);
 int player_exists(string str);
 string domain_file(string str);
 string author_file(string str);
@@ -46,7 +48,7 @@ string *parse_command_plural_id_list();
 string *parse_command_adjectiv_id_list();
 string *parse_command_prepos_list();
 string parse_command_all_word();
-void create_save();
+object account_object(string nom);
 object player_object(string nom);
 
 #endif /* __MASTER_H */

@@ -16,9 +16,14 @@
 
 #define LOGON_TIMEOUT              180
 #define MAX_PASSWORD_TRIES         3
+
+#define MIN_ACCOUNT_NAME_LENGTH    4
+#define MAX_ACCOUNT_NAME_LENGTH    64
+
 #define MIN_PLAYER_NAME_LENGTH     2
 #define MAX_PLAYER_NAME_LENGTH     15
 #define MAX_PLAYER_CAP_NAME_LENGTH 20
+
 #define LOCKED_ACCESS_ALLOWED      ({ "SUPERUSER", "ASSIST" })
 #define SUPPORTED_CLIENTS          ({ "amcp", "amcp/1.1" })
 
