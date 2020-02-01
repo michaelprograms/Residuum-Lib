@@ -1,18 +1,18 @@
 
 query_idle(3)         LPC Library Functions         query_idle(3)
 
-NNAAMMEE
+NAME
        query_idle()  -  determine how many seconds an interactive
        player has been idle
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int query_idle( object ob );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Query how many seconds  a  player  object  (ob)  has  been
        idling.
 
-SSEEEE AALLSSOO
+SEE ALSO
        in_edit(3), in_input(3)
 
 MudOS                       5 Sep 1994                          1

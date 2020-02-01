@@ -1,28 +1,28 @@
 
 regexp(3)             LPC Library Functions             regexp(3)
 
-NNAAMMEE
+NAME
        regexp() - regular expression handler
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        string *regexp( string *lines, string pattern );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        When  presented with an array of lines of test and a regu-
        lar expression,  regexp(3)  returns  an  array  containing
        those lines which match the pattern specified by the regu-
        lar expression.
 
-RREEGGUULLAARR EEXXPPRREESSSSIIOONN SSYYNNTTAAXX
-       A regular expression is zero or more  _b_r_a_n_c_h_e_s,  separated
+REGULAR EXPRESSION SYNTAX
+       A regular expression is zero or more  branches,  separated
        by  `|'.   It  matches  anything  that  matches one of the
        branches.
 
-       A branch is zero or more _p_i_e_c_e_s, concatenated.  It matches
+       A branch is zero or more pieces, concatenated.  It matches
        a match for the first, followed by a match for the second,
        etc.
 
-       A piece is an _a_t_o_m possibly followed by `*', `+', or  `?'.
+       A piece is an atom possibly followed by `*', `+', or  `?'.
        An  atom  followed  by `*' matches a sequence of 0 or more
        matches of the atom.  An atom followed by  `+'  matches  a
        sequence  of  1 or more matches of the atom.  An atom fol-
@@ -30,7 +30,7 @@ RREEGGUULLAARR EEXXPPRREESSSSIIOONN SSYYNNTTAAXX
        string.
 
        An atom is a regular expression in parentheses (matching a
-       match for the regular expression), a  _r_a_n_g_e  (see  below),
+       match for the regular expression), a  range  (see  below),
        `.'   (matching  any  single character), `^' (matching the
        null string at the beginning of  the  input  string),  `$'
        (matching the null string at the end of the input string),
@@ -38,10 +38,10 @@ RREEGGUULLAARR EEXXPPRREESSSSIIOONN SSYYNNTTAAXX
        acter),  or  a single character with no other significance
        (matching that character).
 
-       A _r_a_n_g_e is a sequence of characters enclosed in `[]'.   It
+       A range is a sequence of characters enclosed in `[]'.   It
        normally  matches  any single character from the sequence.
        If the sequence begins with `^',  it  matches  any  single
-       character _n_o_t from the rest of the sequence.  If two char-
+       character not from the rest of the sequence.  If two char-
        acters in the sequence  are  separated  by  `-',  this  is
        shorthand  for  the  full list of ASCII characters between
        them (e.g. `[0-9]' matches any decimal digit).  To include
@@ -49,7 +49,7 @@ RREEGGUULLAARR EEXXPPRREESSSSIIOONN SSYYNNTTAAXX
        (following a possible `^').  To  include  a  literal  `-',
        make it the first or last character.
 
-AAMMBBIIGGUUIITTYY
+AMBIGUITY
        If a regular expression could match two different parts of
 
 MudOS                       5 Sep 1994                          1
@@ -90,7 +90,7 @@ regexp(3)             LPC Library Functions             regexp(3)
        respect  it  even  if  this  leads  them to less-preferred
        alternatives.)
 
-SSEEEE AALLSSOO
+SEE ALSO
        sscanf(3), explode(3), strsrch(3), ed(3)
 
 MudOS                       5 Sep 1994                          2

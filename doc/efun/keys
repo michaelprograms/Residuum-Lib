@@ -1,14 +1,14 @@
 
 keys(3)               LPC Library Functions               keys(3)
 
-NNAAMMEE
+NAME
        keys() - return an array of the keys from the (key, value)
        pairs in a mapping
 
-SSYYNNOOPPSSYYSS
+SYNOPSYS
        mixed *keys( mapping m );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        keys() returns an array of keys (indices) corresponding to
        the  keys  in the (key, value) pairs stored in the mapping
        m.
@@ -26,7 +26,7 @@ DDEESSCCRRIIPPTTIIOONN
        However,  they  will  be returned in the same order as the
        corresponding values (returned by the values() efun).
 
-SSEEEE AALLSSOO
+SEE ALSO
        values(3), each(3)
 
 MudOS                       5 Sep 1994                          1

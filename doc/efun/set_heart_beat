@@ -1,13 +1,13 @@
 
 set_heart_beat(3)     LPC Library Functions     set_heart_beat(3)
 
-NNAAMMEE
+NAME
        set_heart_beat() - enable or disable an object's heartbeat
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int set_heart_beat( int flag );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Passing `flag' as 0  disables  the  object's  heart  beat.
        Passing a `flag' of 1 will cause heart_beat() to be called
        in the object once each  heart  beat  (a  variable  number
@@ -17,7 +17,7 @@ DDEESSCCRRIIPPTTIIOONN
        however your local administrator may have the system  con-
        figured to treat any `flag' above 1 as 1.
 
-SSEEEE AALLSSOO
+SEE ALSO
        heart_beat(4), query_heart_beat(3)
 
 MudOS                       5 Sep 1994                          1

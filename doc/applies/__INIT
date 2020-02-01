@@ -1,14 +1,14 @@
 
 __INIT(4)                 Driver Applies                __INIT(4)
 
-NNAAMMEE
+NAME
        __INIT  -  function added to objects to handle initializa-
        tion of variables.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        __INIT( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        When the driver compiles an object that contains  variable
        declarations  that  initialize  the  variables,  then  the
        driver inserts a function named __INIT() in  the  compiled

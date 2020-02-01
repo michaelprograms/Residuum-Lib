@@ -1,14 +1,14 @@
 
 resolve(3)            LPC Library Functions            resolve(3)
 
-NNAAMMEE
+NAME
        resolve() - resolve an internet address to domain name, or
        vice versa
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int resolve( string address, string callback_func );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        resolve() resolves `address', which should be an  internet
        address in the form "127.0.0.1" or a domain name, into its
        domain name, or internet address.   When  the  resolve  is
@@ -22,7 +22,7 @@ DDEESSCCRRIIPPTTIIOONN
        the host, and `resolved' the dotted  decimal  ip  address.
        The unknown value will be 0 if the lookup failed.
 
-SSEEEE AALLSSOO
+SEE ALSO
        query_host_name(3),  socket_address(3),  query_ip_name(3),
        query_ip_number(3)
 

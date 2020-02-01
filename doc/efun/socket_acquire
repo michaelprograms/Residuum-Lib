@@ -1,17 +1,17 @@
 
 socket_acquire(3)     LPC Library Functions     socket_acquire(3)
 
-NNAAMMEE
+NAME
        socket_acquire() - assume ownership of a socket
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        #include <socket_err.h>
 
        int socket_acquire( int socket, string read_callback,
                            string write_callback,
                            string close_callback );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        socket_acquire() is called to complete the handshake begun
        by socket_release() for transferring ownership  (and  con-
        trol) of a socket to a new object.  socket_release() calls
@@ -36,7 +36,7 @@ DDEESSCCRRIIPPTTIIOONN
        thr release callback function and  only  with  the  socket
        specified.
 
-SSEEEE AALLSSOO
+SEE ALSO
        socket_release(3)
 
 MudOS                       5 Sep 1994                          1

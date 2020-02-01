@@ -1,19 +1,19 @@
 
 query_snooping(3)     LPC Library Functions     query_snooping(3)
 
-NNAAMMEE
+NAME
        query_snooping()  -  return  the  object than an object is
        snooping
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        object query_snooping( object ob );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        If `ob' (an interactive object) is snooping another inter-
        active object, the snooped object is returned.  Otherwise,
        0 is returned.
 
-SSEEEE AALLSSOO
+SEE ALSO
        snoop(3), query_snoop(3)
 
 MudOS                       5 Sep 1994                          1

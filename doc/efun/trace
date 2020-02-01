@@ -1,13 +1,13 @@
 
 trace(3)              LPC Library Functions              trace(3)
 
-NNAAMMEE
+NAME
        trace() - sets trace flags and returns the old ones.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int trace( int traceflags );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Sets  the  trace  flags  and  returns the old trace flags.
        When tracing is on a lot of information is printed  during
        execution.
@@ -33,7 +33,7 @@ DDEESSCCRRIIPPTTIIOONN
        Show object name in
                                                                                                                                        tracing.
 
-SSEEEE AALLSSOO
+SEE ALSO
        traceprefix(3)
 
 MudOS                       5 Sep 1994                          1

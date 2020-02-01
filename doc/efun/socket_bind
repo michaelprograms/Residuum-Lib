@@ -1,29 +1,29 @@
 
 socket_bind(3)        LPC Library Functions        socket_bind(3)
 
-NNAAMMEE
+NAME
        socket_bind() - bind a name to a socket
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        #include <socket_err.h>
 
        int socket_bind( int s, int port );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        socket_bind()  assigns a name to an unnamed socket. When a
        socket is created with socket_create(3)  it  exists  in  a
        name  space  (address  family)  but  has no name assigned.
        socket_bind() requests that the port be  assigned  to  the
        socket s.
 
-RREETTUURRNN VVAALLUUEESS
+RETURN VALUES
        socket_bind() returns:
 
               EESUCCESS on success.
 
               a negative value indicated below on error.
 
-EERRRROORRSS
+ERRORS
        EEFDRANGE      Descriptor out of range.
 
        EEBADF         Descriptor is invalid.
@@ -38,7 +38,7 @@ EERRRROORRSS
 
        EEGETSOCKNAME  Problem with getsockname.
 
-SSEEEE AALLSSOO
+SEE ALSO
        socket_connect(3), socket_create(3), socket_listen(3)
 
 MudOS                       5 Sep 1994                          1

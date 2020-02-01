@@ -1,15 +1,15 @@
 
 unique_array(3)       LPC Library Functions       unique_array(3)
 
-NNAAMMEE
+NAME
        unique_array()  -  partitions  an  array  of  objects into
        groups
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mixed unique_array( object *obarr, string separator,  void
        | mixed skip );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Groups objects together for which the `separator' function
        returns the same value. `obarr'  should  be  an  array  of
        objects,  other  types are ignored.  The `separator' func-
@@ -17,7 +17,7 @@ DDEESSCCRRIIPPTTIIOONN
        optional `skip' parameter enables a pre-filter on `obarr',
        skipping elements which match `skip'.
 
-RREETTUURRNN VVAALLUUEE
+RETURN VALUE
        The return value is an array of arrays of objects  on  the
        form:
 

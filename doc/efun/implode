@@ -1,18 +1,18 @@
 
 implode(3)            LPC Library Functions            implode(3)
 
-NNAAMMEE
+NAME
        implode() - concatenate strings
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        string implode( mixed *arr, string del );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Concatenate  all  strings  found  in array `arr', with the
        string `del' between each element. Only strings  are  used
        from the array.
 
-SSEEEE AALLSSOO
+SEE ALSO
        explode(3), sprintf(3)
 
 MudOS                       5 Sep 1994                          1

@@ -1,13 +1,13 @@
 
 reclaim_objects(3)    LPC Library Functions    reclaim_objects(3)
 
-NNAAMMEE
+NAME
        reclaim_objects - reclaim any lingering objets
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int reclaim_objects( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Cycles  through all objects that are loaded, and frees any
        lingering objects that it can.  This  could  result  in  a
        sizable  amount of memory being freed up, depending on how
@@ -17,7 +17,7 @@ DDEESSCCRRIIPPTTIIOONN
        returns  the  number  of destructed objects encountered in
        variables.
 
-SSEEEE AALLSSOO
+SEE ALSO
        destruct(3)
 
 MudOS                       5 Sep 1994                          1

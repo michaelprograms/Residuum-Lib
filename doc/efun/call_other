@@ -1,14 +1,14 @@
 
 call_other(3)         LPC Library Functions         call_other(3)
 
-NNAAMMEE
+NAME
        call_other() - call a function in another object
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        unknown call_other( object ob | object *obs,
                            string func | mixed *args, ... );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Calls  a function in another object, with [optional] argu-
        ment(s).  The return value  is  returned  from  the  other
        object, so it cannot be known at compile time and may need

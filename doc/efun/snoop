@@ -1,13 +1,13 @@
 
 snoop(3)              LPC Library Functions              snoop(3)
 
-NNAAMMEE
+NAME
        snoop() - snoop an interactive user
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        varargs object snoop( object snooper, object snoopee );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        When both arguments are used, begins snooping of `snoopee'
        by `snooper'.  If the second argument  is  omitted,  turns
        off  all  snooping  by `snoopee'.  Security for snoop() is
@@ -16,7 +16,7 @@ DDEESSCCRRIIPPTTIIOONN
        `snooper' if it  was  successful  in  the  single-argument
        case.  A return of 0 indicates failure.
 
-SSEEEE AALLSSOO
+SEE ALSO
        query_snoop(3), query_snooping(3)
 
 MudOS                       5 Sep 1994                          1

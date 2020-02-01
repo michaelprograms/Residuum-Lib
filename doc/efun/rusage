@@ -1,14 +1,14 @@
 
 rusage(3)             LPC Library Functions             rusage(3)
 
-NNAAMMEE
+NAME
        rusage() - reports information gathered by the getrusage()
        system call
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mapping rusage( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This  efun   collects   information   gathered   via   the
        getrusage()  system  call.   Read the getrusage() man page
        for more information on  what  information  will  be  col-
@@ -35,7 +35,7 @@ DDEESSCCRRIIPPTTIIOONN
               majflt,  nswap,  inblock,  oublock, msgsnd, msgrcv,
               nsignals, nvcsw, nivcsw.
 
-SSEEEE AALLSSOO
+SEE ALSO
        time_expression(3),     function_profile(3),      time(3),
        uptime(3)
 

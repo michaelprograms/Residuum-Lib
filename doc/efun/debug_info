@@ -1,15 +1,15 @@
 
 debug_info(3)         LPC Library Functions         debug_info(3)
 
-NNAAMMEE
+NAME
        debug_info() - display debug information
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mixed debug_info( int operation, ... );
        mixed debug_info( 0, object ob );
        mixed debug_info( 1, object ob );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        debug_info()  is  a  general-purpose facility which may be
        used to debug the MudOS driver.  The debugging information
        requested is determined by the first argument.  Successive
@@ -65,7 +65,7 @@ debug_info(3)         LPC Library Functions         debug_info(3)
               num inherits 0 (0)
               total size 104
 
-SSEEEE AALLSSOO
+SEE ALSO
        dump_file_descriptors(3), dump_socket_status(3)
 
 MudOS                       5 Sep 1994                          2

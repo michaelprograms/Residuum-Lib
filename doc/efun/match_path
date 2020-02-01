@@ -1,13 +1,13 @@
 
 match_path(3)         LPC Library Functions         match_path(3)
 
-NNAAMMEE
+NAME
        match_path() - search a mapping for a path
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mixed match_path( mapping m, string str );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        match_path()  searches  a mapping for a path.  Each key is
        assumed to be a string.  The  value  is  completely  arbi-
        trary.   The  efun  finds the largest matching path in the
@@ -15,7 +15,7 @@ DDEESSCCRRIIPPTTIIOONN
        with  character  that follow the '/', i.e. / is a wildcard
        for anything below this directory.
 
-AAUUTTHHOORR
+AUTHOR
        Cygnus
 
 MudOS                       5 Sep 1994                          1

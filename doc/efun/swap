@@ -1,13 +1,13 @@
 
 swap(3)               LPC Library Functions               swap(3)
 
-NNAAMMEE
+NAME
        swap - swap out a file explicitly
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void swap( object );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This  efun  should  be  reserved  for  debugging only.  It
        allows  an  object  to  be  explicitly  swapped  out.   If
        enabled,  it  is  strongly  recommended  that a simul_efun

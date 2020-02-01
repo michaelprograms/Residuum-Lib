@@ -1,10 +1,10 @@
 
 notify_fail(3)        LPC Library Functions        notify_fail(3)
 
-NNAAMMEE
+NAME
        int notify_fail( string str );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Store `str' as the error message to be returned instead of
        the default message `What?'.  The  message  will  be  dis-
        played  if  a  0  is  returned  from  an  action setup via
@@ -23,7 +23,7 @@ DDEESSCCRRIIPPTTIIOONN
        The idea behind this function is  to  allow  better  error
        messages than `What?'.
 
-RREETTUURRNN VVAALLUUEE
+RETURN VALUE
        notify_fail() always returns 0.
 
 MudOS                       5 Sep 1994                          1

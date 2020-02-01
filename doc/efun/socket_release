@@ -1,17 +1,17 @@
 
 socket_release(3)     LPC Library Functions     socket_release(3)
 
-NNAAMMEE
+NAME
        socket_release()  -  release  ownership  of  a  socket  to
        another object
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        #include <socket_err.h>
 
        int socket_release( int socket, object ob,
                            string release_callback );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        socket_release() is used to change ownership (and control)
        of  a  socket  to  another object.  It is useful in daemon
        objects (like inetd) which handle  connection  set-up  and
@@ -41,7 +41,7 @@ DDEESSCCRRIIPPTTIIOONN
        Other errors can be returned based on security  violation,
        bad socket descriptor vbalues, etc.
 
-SSEEEE AALLSSOO
+SEE ALSO
        socket_acquire(3)
 
 MudOS                       5 Sep 1994                          1

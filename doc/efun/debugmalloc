@@ -1,14 +1,14 @@
 
 debugmalloc(3)        LPC Library Functions        debugmalloc(3)
 
-NNAAMMEE
+NAME
        debugmalloc()  - dumps information on malloc'd memory to a
        file.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void debugmalloc( string filename, int mask );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This efun is only available when DEBUGMALLOC and DEBUGMAL-
        LOC_EXTENSIONS  are  both  defined  in options.h at driver
        build time.  The debugmalloc() efun will dump  information
@@ -18,7 +18,7 @@ DDEESSCCRRIIPPTTIIOONN
        Read md.c and config.h  in  the  driver  source  for  more
        information.
 
-SSEEEE AALLSSOO
+SEE ALSO
        set_malloc_mask(3)
 
 MudOS                       5 Sep 1994                          1

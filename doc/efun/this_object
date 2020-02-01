@@ -1,20 +1,20 @@
 
 this_object(3)        LPC Library Functions        this_object(3)
 
-NNAAMMEE
+NAME
        this_object()  -  return the object pointer of the calling
        object
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        object this_object( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Return the object pointer of this object.   This  function
        is  useful when an object wants to call functions that are
        not in the same source file but are  in  the  same  object
        (via inheritance).
 
-SSEEEE AALLSSOO
+SEE ALSO
        this_player(3), previous_object(3), origin(3)
 
 MudOS                       5 Sep 1994                          1

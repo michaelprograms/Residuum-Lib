@@ -1,14 +1,14 @@
 
 compile_object(4)         Driver Applies        compile_object(4)
 
-NNAAMMEE
+NAME
        compile_object  -  serves  as the mudlib interface for the
        virtual object facility
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        object compile_object( string pathname );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The driver calls compile_object(3) in the event  that  the
        mudlib  instructs  the driver to load a file that does not
        exist.   For  example,   the   driver   will   call   com-

@@ -1,14 +1,14 @@
 
 functionp(3)          LPC Library Functions          functionp(3)
 
-NNAAMMEE
+NAME
        functionp() - determine whether or not a given variable is
        a function pointer.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int functionp( mixed arg );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Return 1 if `arg' is a function pointer and zero (0)  oth-
        erwise.   Function  pointers  are variables of type 'func-
        tion' and are constructed as follows:
@@ -24,7 +24,7 @@ DDEESSCCRRIIPPTTIIOONN
 
        (: obj, ({ str, arg0, arg1, arg3, ... }) :)
 
-SSEEEE AALLSSOO
+SEE ALSO
        mapp(3),  stringp(3),  pointerp(3),  objectp(3),  intp(3),
        bufferp(3), floatp(3), nullp(3), undefinedp(3), errorp(3),
        lpc/types/function

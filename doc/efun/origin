@@ -1,13 +1,13 @@
 
 origin(3)             LPC Library Functions             origin(3)
 
-NNAAMMEE
+NAME
        origin() - determine how the current function was called
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int origin( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Returns an integer specifying how the current function was
        called.  Current values are:
 
@@ -21,7 +21,7 @@ DDEESSCCRRIIPPTTIIOONN
 
        16    call_out()
 
-SSEEEE AALLSSOO
+SEE ALSO
        previous_object(3), /include/origin.h
 
 MudOS                       5 Sep 1994                          1

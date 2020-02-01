@@ -1,14 +1,14 @@
 
 net_nead(4)               Driver Applies              net_nead(4)
 
-NNAAMMEE
+NAME
        net_dead  - called by the MudOS driver when an interactive
        object drops its connection
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void net_dead( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        If an interactive object (i.e. the player object) suddenly
        loses  its  connection (i.e. it goes "net dead"), then the
        driver calls this function on  that  object  giving  it  a
@@ -16,7 +16,7 @@ DDEESSCCRRIIPPTTIIOONN
        that functions that depend on the object being interactive
        will not work as expected.
 
-AAUUTTHHOORR
+AUTHOR
        Wayfarer@Portals
 
 MudOS                       5 Sep 1994                          1

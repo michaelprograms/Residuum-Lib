@@ -1,13 +1,13 @@
 
 shutdown(3)           LPC Library Functions           shutdown(3)
 
-NNAAMMEE
+NAME
        shutdown() - shutdown the driver
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void shutdown( int how );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This  function shuts down the driver in a controlled fash-
        ion (as opposed to how a crash would shut it  down).   The
        'how'  argument  specifes  what  integer value that driver
@@ -23,7 +23,7 @@ DDEESSCCRRIIPPTTIIOONN
        checks.  Be sure to set valid_override(4) up (in master.c)
        to protect against efun::shutdown().
 
-SSEEEE AALLSSOO
+SEE ALSO
        crash(4), slow_shutdown(4)
 
 MudOS                       5 Sep 1994                          1

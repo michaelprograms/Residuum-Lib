@@ -1,11 +1,11 @@
 
 replace_string(3)     LPC Library Functions     replace_string(3)
 
-NNAAMMEE
+NAME
        replace_string()  -  replace  all  instances  of  a string
        within a string
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        string replace_string( str, pattern, replace );
        string replace_string( str, pattern, replace, max );
        string replace_string( str, pattern, replace, first, last );
@@ -13,7 +13,7 @@ SSYYNNOOPPSSIISS
        string str, pattern replace;
        int max, first, last;
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        replace_string() returns str with all instances of pattern
        replaced  with  replace.   If pattern has zero length then
        str is returned unmodified.  If the resultant string would
@@ -47,10 +47,10 @@ DDEESSCCRRIIPPTTIIOONN
               E.g.,  replace_string("xyxxy",  "x",  "z",  2,   3)
               returns "xyzzy".
 
-SSEEEE AALLSSOO
+SEE ALSO
        sscanf(3), explode(3), strsrch(3)
 
-AAUUTTHHOORR
+AUTHOR
        Zak@TMI-2 wrote the range constraint additions.
 
 MudOS                       5 Sep 1994                          1

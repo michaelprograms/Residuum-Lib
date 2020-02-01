@@ -1,14 +1,14 @@
 
 input_to(3)           LPC Library Functions           input_to(3)
 
-NNAAMMEE
+NAME
        input_to()  -  causes  next  line of input to be sent to a
        specified function
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        varargs void input_to( string fun, int flag, ... );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Enable next line of user input to be  sent  to  the  local
        function  `fun' as an argument. The input line will not be
        parsed by the driver.
@@ -31,7 +31,7 @@ DDEESSCCRRIIPPTTIIOONN
        supplied  to  input_to will be passed on to `fun' as argu-
        ments following the user input.
 
-SSEEEE AALLSSOO
+SEE ALSO
        call_other(3), call_out(3), get_char(3)
 
 MudOS                       5 Sep 1994                          1

@@ -1,15 +1,15 @@
 
 socket_listen(3)      LPC Library Functions      socket_listen(3)
 
-NNAAMMEE
+NAME
        socket_listen() - listen for connections on a socket
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        #include <socket_err.h>
 
        int socket_listen( int s, string listen_callback );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        To  accept  connections,  a  socket  is first created with
        socket_create(3), the socket is them  put  into  listening
        mode   with  socket_listen(3),  and  the  connections  are
@@ -25,14 +25,14 @@ DDEESSCCRRIIPPTTIIOONN
 
        Where fd is the listening socket.
 
-RREETTUURRNN VVAALLUUEESS
+RETURN VALUES
        socket_listen() returns:
 
               EESUCCESS on success.
 
               a negative value indicated below on error.
 
-EERRRROORRSS
+ERRORS
        EEFDRANGE      Descriptor out of range.
 
        EEBADF         Descriptor is invalid.
@@ -47,7 +47,7 @@ EERRRROORRSS
 
        EELISTEN       Problem with listen.
 
-SSEEEE AALLSSOO
+SEE ALSO
        socket_accept(3), socket_connect(3), socket_create(3)
 
 MudOS                       5 Sep 1994                          1

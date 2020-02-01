@@ -1,14 +1,14 @@
 
 valid_hide(4)             Driver Applies            valid_hide(4)
 
-NNAAMMEE
+NAME
        valid_hide  -  allows or disallows objects to hide and see
        hidden objects
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int valid_hide( object ob );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Add valid_hide to master.c in order to  allow  objects  to
        hide  themselves,  or  see  other objects that have hidden
        themselves.  When an object tries to  use  the  set_hide()
@@ -18,7 +18,7 @@ DDEESSCCRRIIPPTTIIOONN
        same call takes place when it needs to be determined if  a
        certain object should be able to see hidden objects.
 
-SSEEEE AALLSSOO
+SEE ALSO
        set_hide(3)
 
 MudOS                       5 Sep 1994                          1

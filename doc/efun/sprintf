@@ -1,14 +1,14 @@
 
 sprintf(3)            LPC Library Functions            sprintf(3)
 
-NNAAMMEE
+NAME
        printf, sprintf - formatted output conversion
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void printf( string format, ... );
        string sprintf( string format, ... );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        An implementation of (s)printf() for LPC, with quite a few
        extensions Implemented by Lynscar (Sean A Reith).
 
@@ -91,13 +91,13 @@ sprintf(3)            LPC Library Functions            sprintf(3)
 
        f       floating point number
 
-RREETTUURRNN VVAALLUUEESS
+RETURN VALUES
        sprintf() returns the formatted string.
 
-AAUUTTHHOORR
+AUTHOR
        Sean A. Reith (Lynscar)
 
-SSEEEE AALLSSOO
+SEE ALSO
        sscanf(3)
 
 MudOS                       5 Sep 1994                          2

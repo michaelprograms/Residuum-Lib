@@ -1,15 +1,15 @@
 
 domain_stats(3)       LPC Library Functions       domain_stats(3)
 
-NNAAMMEE
+NAME
        domain_stats() - returns statistics gathered on domains
        author_stats() - returns statistics gathered on authors
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mapping domain_stats( string domain | void );
        mapping author_stats( string domain | void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Both  domain_stats() and author_stats() return information
        stored in a mapping.  If no argument  is  specified,  then
        information is returned on all domains (or on all authors)
@@ -43,7 +43,7 @@ DDEESSCCRRIIPPTTIIOONN
        When  called  with  an argument, the returned mapping will
        have the form of info0.
 
-SSEEEE AALLSSOO
+SEE ALSO
        domain_file(4), author_file(4), set_author(3)
 
 MudOS                       5 Sep 1994                          1

@@ -1,14 +1,14 @@
 
 crc32(3)              LPC Library Functions              crc32(3)
 
-NNAAMMEE
+NAME
        crc32()  -  compute the cycle redundancy code for a buffer
        or string
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int crc32( buffer | string x );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Computes and returns the CRC-32 code for the given  buffer
        or string, `x'.
 

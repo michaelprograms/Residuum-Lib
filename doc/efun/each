@@ -1,13 +1,13 @@
 
 each(3)               LPC Library Functions               each(3)
 
-NNAAMMEE
+NAME
        each() - iterate over the (key, value) pairs in a mapping
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mixed *each( mapping m, int reset );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The  (key,  value) pairs in a mapping may be iterated over
        using the each() efun.  each() returns  the  (key,  value)
        pairs in the same order as keys() and values() do.  each()
@@ -32,7 +32,7 @@ DDEESSCCRRIIPPTTIIOONN
                 write("value = " + pair[1] + "\n");
               }
 
-SSEEEE AALLSSOO
+SEE ALSO
        keys(3), values(3)
 
 MudOS                       5 Sep 1994                          1

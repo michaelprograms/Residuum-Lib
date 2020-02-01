@@ -1,13 +1,13 @@
 
 replace_program(3)    LPC Library Functions    replace_program(3)
 
-NNAAMMEE
+NAME
        replace_program() - replaces the program in this_object()
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void replace_program( string str );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        replace_program()  replaces  the  program in this_object()
        with that of an object it inherits.  The  string  argument
        is the filename of the object whose program is to be used.
@@ -17,7 +17,7 @@ DDEESSCCRRIIPPTTIIOONN
        gram  is not actually replaced until the current execution
        is completed.
 
-SSEEEE AALLSSOO
+SEE ALSO
        clone_object(3), new(3)
 
 MudOS                       5 Sep 1994                          1

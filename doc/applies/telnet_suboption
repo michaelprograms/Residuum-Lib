@@ -1,13 +1,13 @@
 
 telnet_suboption(4)       Driver Applies      telnet_suboption(4)
 
-NNAAMMEE
+NAME
        telnet_suboption - process telnet suboptions
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void telnet_suboption( string buffer );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This  apply  is  called on the interactive object with the
        parameter given by the SE  telnet  suboption,  for  mudlib
        defined  processing.   For example, this allows for future

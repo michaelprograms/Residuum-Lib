@@ -1,15 +1,15 @@
 
 localtime(3)          LPC Library Functions          localtime(3)
 
-NNAAMMEE
+NAME
        localtime() - convert to local time
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        #include <localtime.h>
 
        mixed *localtime( int time );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        localtime()  converts a time value (as returned by time())
        into an array of values which represents the time locally.
        In  the past time() was used to get the time in GMT (UTC),
@@ -39,7 +39,7 @@ DDEESSCCRRIIPPTTIIOONN
             int  LT_GMTOFF Seconds after GMT (UTC)
             string    LT_ZONE        Timezone name
 
-SSEEEE AALLSSOO
+SEE ALSO
        ctime(3),    time(3),    time_expression(3),    uptime(3),
        /include/localtime.h
 

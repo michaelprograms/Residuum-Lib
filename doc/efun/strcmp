@@ -1,14 +1,14 @@
 
 strcmp(3)             LPC Library Functions             strcmp(3)
 
-NNAAMMEE
+NAME
        strcmp() - determines the lexical relationship between two
        strings.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int strcmp( string one, string two );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This implementatin of strcmp() is  identical  to  the  one
        found  in  C  libraries.  If string one lexically precedes
        string two, then strcmp() returns a number  less  than  0.
@@ -18,7 +18,7 @@ DDEESSCCRRIIPPTTIIOONN
        particularly useful in the  compare  functions  needed  by
        sort_array(3).
 
-SSEEEE AALLSSOO
+SEE ALSO
        sort_array(3)
 
 MudOS                       5 Sep 1994                          1

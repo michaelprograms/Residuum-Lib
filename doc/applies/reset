@@ -1,13 +1,13 @@
 
 reset(4)                  Driver Applies                 reset(4)
 
-NNAAMMEE
+NAME
        reset - allows an object to do self-maintenance
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void reset( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        After  every  reset interval (whose exact length is deter-
        mined on a mud by mud basis, but averages around  every  2
        hours),  reset()  is called in every object that currently
@@ -18,7 +18,7 @@ DDEESSCCRRIIPPTTIIOONN
        usually used to check if any treasures and/or monsters  in
        the room have been removed so they can be replaced.
 
-SSEEEE AALLSSOO
+SEE ALSO
        set_reset(3), create(4)
 
 MudOS                       5 Sep 1994                          1

@@ -1,14 +1,14 @@
 
 clonep(3)             LPC Library Functions             clonep(3)
 
-NNAAMMEE
+NAME
        clonep()  -  determine  whether  or  not  a given variable
        points to a cloned object
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int clonep( void | mixed arg );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Returns true (1) iff the argument  is  objectp()  and  the
        O_CLONE flag is set.  The driver sets the O_CLONE flag for
        those objects created via new(3)  (clone_object(3)).   The
@@ -18,7 +18,7 @@ DDEESSCCRRIIPPTTIIOONN
        file_name()  will  return  a  string  containing  a   '#'.
        clonep() defaults to this_object().
 
-SSEEEE AALLSSOO
+SEE ALSO
        virtualp(3),  userp(3),  wizardp(3),  objectp(3),  new(3),
        clone_object(3), call_other(3), file_name(3)
 

@@ -1,13 +1,13 @@
 
 file_name(3)          LPC Library Functions          file_name(3)
 
-NNAAMMEE
+NAME
        file_name() - get the file name of an object
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        string file_name( object ob );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        file_name()  returns  the name of the file from which <ob>
        was loaded.  If  the  object  is  a  cloned  object,  then
        file_name()  will  not be an actual file on disk, but will

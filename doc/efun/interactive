@@ -1,18 +1,18 @@
 
 interactive(3)        LPC Library Functions        interactive(3)
 
-NNAAMMEE
+NAME
        interactive()  -  detects whether or not a given object is
        an interactive
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int interactive( object ob );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Return non-zero if `ob' is an interactive player.  0  will
        be returned if he is link dead.
 
-SSEEEE AALLSSOO
+SEE ALSO
        query_ip_number(3), query_ip_name(3), enable_commands(3)
 
 MudOS                       5 Sep 1994                          1

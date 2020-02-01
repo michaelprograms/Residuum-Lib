@@ -1,13 +1,13 @@
 
 valid_override(4)         Driver Applies        valid_override(4)
 
-NNAAMMEE
+NAME
        valid_override - controls the use of efun::
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int valid_override( string file, string efun_name );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Add valid_override to master.c in order to control the use
        of the efun:: prefix.  The valid_override function in mas-
        ter.c will be called each time the driver attempts to com-
@@ -45,10 +45,10 @@ DDEESSCCRRIIPPTTIIOONN
              return 1;
           }
 
-AAUUTTHHOORR
+AUTHOR
        Truilkan@Basis
 
-SSEEEE AALLSSOO
+SEE ALSO
        valid_object(4), function_exists(3)
 
 MudOS                       5 Sep 1994                          1

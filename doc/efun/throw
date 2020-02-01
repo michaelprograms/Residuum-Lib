@@ -1,13 +1,13 @@
 
 throw(3)              LPC Library Functions              throw(3)
 
-NNAAMMEE
+NAME
        throw() - forces an error to occur in an object.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void throw(mixed);
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The throw() efun may be used to force an error to occur in
        an object.  When used in conjunction, throw() and  catch()
        allow  the programmer to choose what error message is dis-
@@ -24,7 +24,7 @@ DDEESSCCRRIIPPTTIIOONN
                return;
           }
 
-SSEEEE AALLSSOO
+SEE ALSO
        catch(3), error(3), error_handler(4)
 
 MudOS                       5 Sep 1994                          1

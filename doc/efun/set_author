@@ -1,13 +1,13 @@
 
 set_author(3)         LPC Library Functions         set_author(3)
 
-NNAAMMEE
+NAME
        set_author - set the author associated with an object.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void set_author( string author );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Every  object  has  both an author and a domain associated
        with it  for  the  purposes  of  tracking  statistics  for
        authors  and domains.  Domains may only be set in the mas-
@@ -29,7 +29,7 @@ DDEESSCCRRIIPPTTIIOONN
        set_author  within create(4), and use it before any arrays
        are allocated if at all possible.
 
-SSEEEE AALLSSOO
+SEE ALSO
        author_file(4),      domain_file(4),      author_stats(3),
        set_author(3), domain_stats(3)
 

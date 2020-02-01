@@ -1,14 +1,14 @@
 
 valid_socket(4)           Driver Applies          valid_socket(4)
 
-NNAAMMEE
+NAME
        valid_socket - protects the socket efunctions.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int valid_socket( object caller, string function,
                          mixed *info );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Each  of  the socket efunctions calls valid_socket() prior
        to executing.  If valid_socket returns 0, then the  socket
        efunction  fails.   If  valid_socket  returns  1, then the

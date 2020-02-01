@@ -1,14 +1,14 @@
 
 values(3)             LPC Library Functions             values(3)
 
-NNAAMMEE
+NAME
        values() - return an array of the values from the (key, value) pairs
                   in a mapping
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mixed *values( mapping m );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        values()  returns  an array of values corresponding to the
        value elements in the (key, value)  pairs  stored  in  the
        mapping m.
@@ -26,7 +26,7 @@ DDEESSCCRRIIPPTTIIOONN
        Note: the values will be returned in the same order as the
        corresponding keys.
 
-SSEEEE AALLSSOO
+SEE ALSO
        keys(3), each(3)
 
 MudOS                       5 Sep 1994                          1

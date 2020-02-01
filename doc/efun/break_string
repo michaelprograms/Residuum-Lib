@@ -1,14 +1,14 @@
 
 break_string(3)       LPC Library Functions       break_string(3)
 
-NNAAMMEE
+NAME
        break_string() - break a string at regular intervals
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        string break_string( string str | int foobar, int len,
                             void | int indent | string indent );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This  function  breaks a continous string without newlines
        into a a string with newlines inserted at  every  `len':th
        character.
@@ -21,7 +21,7 @@ DDEESSCCRRIIPPTTIIOONN
        If the first argument is an integer, the  function  simply
        returns 0.
 
-BBUUGGSS
+BUGS
        break_string()  is  *not*  context sensitive.  It does not
        take account of periods  '.'  and  new-lines  '\n'.   This
        means  that  the  result is not necessarily what you would
@@ -32,7 +32,7 @@ BBUUGGSS
        to be inadequate.  A future revision of break_string() may
        allow different line-breaking semantics.  (Cygnus)
 
-SSEEEE AALLSSOO
+SEE ALSO
        implode(3), explode(3), sprintf(3)
 
 MudOS                       5 Sep 1994                          1

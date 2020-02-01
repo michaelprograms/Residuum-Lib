@@ -1,14 +1,14 @@
 
 ed(3)                 LPC Library Functions                 ed(3)
 
-NNAAMMEE
+NAME
        ed() - edit a file
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void ed( string file, string exit_fn, int restricted );
        void ed( string file, string write_fn, string exit_fn, int restricted );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        This  is a funny function. It will start a local editor on
        an optional file.  This editor is almost UNIX ed  compati-
        ble.  When in the editor type 'h' for help.
@@ -35,7 +35,7 @@ DDEESSCCRRIIPPTTIIOONN
        bilities, such as inserting a file, and  saving  using  an
        alternate file name.
 
-SSEEEE AALLSSOO
+SEE ALSO
        regexp(3),          valid_read(4),         valid_write(4),
        get_save_file_name(4)
 

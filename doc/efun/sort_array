@@ -1,14 +1,14 @@
 
 sort_array(3)         LPC Library Functions         sort_array(3)
 
-NNAAMMEE
+NAME
        sort_array() - sort an array
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mixed *sort_array( mixed *arr, string fun, object ob );
        mixed *sort_array( mixed *arr, int direction );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The  first form returns an array with the same elements as
        `arr', but quicksorted in ascending order according to the
        rules  in  `ob->fun()'.   `ob->fun()'  will  be passed two
@@ -35,7 +35,7 @@ DDEESSCCRRIIPPTTIIOONN
        the array must be homogeneous, composed entirely of a sin-
        gle type, where that type is string, int, or float.
 
-SSEEEE AALLSSOO
+SEE ALSO
        filter_array(3), map_array(3), strcmp(3)
 
 MudOS                       5 Sep 1994                          1

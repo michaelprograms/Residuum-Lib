@@ -1,17 +1,17 @@
 
 strlen(3)             LPC Library Functions             strlen(3)
 
-NNAAMMEE
+NAME
        strlen() - returns the length of a string
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int strlen( string str );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        strlen()  returns  the  number of characters in the string
        `str'.
 
-SSEEEE AALLSSOO
+SEE ALSO
        sizeof(3)
 
 MudOS                       5 Sep 1994                          1

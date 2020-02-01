@@ -1,14 +1,14 @@
 
 strsrch(3)            LPC Library Functions            strsrch(3)
 
-NNAAMMEE
+NAME
        strsrch() - search for substrings in a string
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int strsrch( string str, string substr | int char,
                     int flag );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        strsrch()  searches  for the first occurance of the string
        `substr' in the string `str'.  The last occurance of `sub-
        str'  can  be  found  by  passing `-1' as the 3rd argument
@@ -17,12 +17,12 @@ DDEESSCCRRIIPPTTIIOONN
        strchr()/strrchr().)  The empty string or null value  can-
        not be searched for.
 
-RREETTUURRNN VVAALLUUEE
+RETURN VALUE
        The  integer offset of the first (last) match is returned.
        -1 is returned if there was no match, or an error occurred
        (bad args, etc).
 
-SSEEEE AALLSSOO
+SEE ALSO
        explode(3), sscanf(3), replace_string(3), regexp(3)
 
 MudOS                       5 Sep 1994                          1

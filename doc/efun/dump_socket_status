@@ -1,14 +1,14 @@
 
 dump_socket_status(3) LPC Library Functions dump_socket_status(3)
 
-NNAAMMEE
+NAME
        dump_socket_status()  -  display  the  status  of each LPC
        socket
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void dump_socket_status( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        dump_socket_status() is a diagnostic facility  which  dis-
        plays  the  current  status  of all LPC sockets configured
        into the MudOS driver.  It is  useful  for  debugging  LPC
@@ -45,7 +45,7 @@ MudOS                       5 Sep 1994                          1
 
 dump_socket_status(3) LPC Library Functions dump_socket_status(3)
 
-SSEEEE AALLSSOO
+SEE ALSO
        debug_info(3), dump_file_descriptors(3)
 
 MudOS                       5 Sep 1994                          2

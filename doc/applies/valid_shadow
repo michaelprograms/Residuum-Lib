@@ -1,13 +1,13 @@
 
 valid_shadow(4)           Driver Applies          valid_shadow(4)
 
-NNAAMMEE
+NAME
        valid_shadow - controls which objects can be shadowed
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int valid_shadow( object ob );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        When  an object attempts to shadow `ob' (with the shadow()
        efun), valid_shadow in the master object is  called.   One
        object  parameter is passed, which is the object that pre-
@@ -16,7 +16,7 @@ DDEESSCCRRIIPPTTIIOONN
        which case the shadow() call will return 0 and  fail.   If
        valid_shadow() returns 1, the shadow is allowed.
 
-SSEEEE AALLSSOO
+SEE ALSO
        shadow(3), query_shadowing(3)
 
 MudOS                       5 Sep 1994                          1

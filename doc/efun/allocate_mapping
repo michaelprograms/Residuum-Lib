@@ -1,13 +1,13 @@
 
 allocate_mapping(3)   LPC Library Functions   allocate_mapping(3)
 
-NNAAMMEE
+NAME
        allocate_mapping() - pre-allocate space for a mapping
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mapping allocate_mapping( int size );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Returns  a mapping with space for 'size' elements preallo-
        cated.
 
@@ -35,7 +35,7 @@ DDEESSCCRRIIPPTTIIOONN
        Note: at this point in time, `size' is  meaningless,  x  =
        allocate_mapping(200); is equivalent to x = ([ ]);
 
-SSEEEE AALLSSOO
+SEE ALSO
        map_delete(3)
 
 MudOS                       5 Sep 1994                          1

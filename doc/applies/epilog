@@ -1,15 +1,15 @@
 
 epilog(4)                 Driver Applies                epilog(4)
 
-NNAAMMEE
+NAME
        epilog  - returns an array of the filenames of the objects
        to be preloaded.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        string *epilog( int load_empty );
        void preload( string filename );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The driver calls  epilog()  in  master  after  the  master
        object  has  been loaded.  Mudlibs typically use epilog to
        initialize data structures in  master  (such  as  security
@@ -23,7 +23,7 @@ DDEESSCCRRIIPPTTIIOONN
        specified when starting up the driver.  It can be used  as
        a signal to the mudlib to not load castles, etc.
 
-SSEEEE AALLSSOO
+SEE ALSO
        preload(4)
 
 MudOS                       5 Sep 1994                          1

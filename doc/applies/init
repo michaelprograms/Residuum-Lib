@@ -1,14 +1,14 @@
 
 init(4)                   Driver Applies                  init(4)
 
-NNAAMMEE
+NAME
        init  -  function  in an object called by move_object() to
        initialize verb/actions
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void init( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        When the mudlib moves an object "A" inside another  object
        "B",  the  driver  (the  move_object() efunction) does the
        following:
@@ -30,7 +30,7 @@ DDEESSCCRRIIPPTTIIOONN
        call  add_action(3)  for  each  command  that  the  object
        offers.
 
-SSEEEE AALLSSOO
+SEE ALSO
        reset(4),  move_object(3),  enable_commands(3), living(3),
        add_action(3)
 

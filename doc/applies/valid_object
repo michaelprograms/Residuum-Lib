@@ -1,14 +1,14 @@
 
 valid_object(4)           Driver Applies          valid_object(4)
 
-NNAAMMEE
+NAME
        valid_object  -  allows  control over which objects can be
        loaded
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int valid_object( object obj );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        After  loading   an   object,   the   driver   will   call
        valid_object()  with the newly created object as its argu-
        ment, in the master object.  If the function  exists,  and
@@ -19,7 +19,7 @@ DDEESSCCRRIIPPTTIIOONN
        could   allow   safely   restricting   destruct()   via  a
        simul_efun.
 
-SSEEEE AALLSSOO
+SEE ALSO
        valid_override(4)
 
 MudOS                       5 Sep 1994                          1

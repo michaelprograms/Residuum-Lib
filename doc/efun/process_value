@@ -1,14 +1,14 @@
 
 process_value(3)      LPC Library Functions      process_value(3)
 
-NNAAMMEE
+NAME
        process_value()  -  give a value from a described function
        call
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mixed process_value( string calldescription );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Get the replacement of one syntactic pattern. The  pattern
        is on the form:
 
@@ -20,10 +20,10 @@ DDEESSCCRRIIPPTTIIOONN
        with the brackets and that the brackets are  not  included
        in the actual pattern.
 
-SSEEEE AALLSSOO
+SEE ALSO
        process_string(3)
 
-CCAAVVEEAATT
+CAVEAT
        This  is  usually used to support 'value by function call'
        in the mudlib.  It is wise to set  the  effuserid  of  the
        object  to 0 before using process_value as any function in

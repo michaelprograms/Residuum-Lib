@@ -1,13 +1,13 @@
 
 clean_up(4)               Driver Applies              clean_up(4)
 
-NNAAMMEE
+NAME
        clean_up - periodically called in inactive objects
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int clean_up( int inherited );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        The clean_up() function is called by the driver on a regu-
        lar basis in all objects that have been inactive  for  the
        time specified for clean_up() in the runtime configuration

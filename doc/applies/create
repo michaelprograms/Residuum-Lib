@@ -1,13 +1,13 @@
 
 create(4)                 Driver Applies                create(4)
 
-NNAAMMEE
+NAME
        create - object initialization
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void create( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Every  object should have a create function defined within
        it.  Within that function, all initial object  initializa-
        tion should be done.  create() is called on *all* objects.
@@ -23,10 +23,10 @@ DDEESSCCRRIIPPTTIIOONN
        ferent* objects: the parent, and the child that is calling
        parent::create() manually.
 
-SSEEEE AALLSSOO
+SEE ALSO
        reset(4), __INIT(4)
 
-AAUUTTHHOORR
+AUTHOR
        Wayfarer@Portals
 
 MudOS                       5 Sep 1994                          1

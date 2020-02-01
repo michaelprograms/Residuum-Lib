@@ -1,14 +1,14 @@
 
 sscanf(3)             LPC Library Functions             sscanf(3)
 
-NNAAMMEE
+NAME
        sscanf() - match substrings in a string.
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        int sscanf( string str, string fmt,
                    mixed var1, mixed var2 ... );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Parse  a  string  `str'  using the format `fmt'. `fmt' can
        contain strings separated by "%d" and "%s". Every "%d" and
        "%s"  corresponds  to  one of `var1', `var2'...  "%d" will
@@ -26,7 +26,7 @@ DDEESSCCRRIIPPTTIIOONN
 
        The number of matched "%d" and "%s" is returned.
 
-SSEEEE AALLSSOO
+SEE ALSO
        explode(3), replace_string(3), strsrch(3)
 
 MudOS                       5 Sep 1994                          1

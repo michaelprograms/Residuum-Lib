@@ -1,13 +1,13 @@
 
 catch_tell(4)             Driver Applies            catch_tell(4)
 
-NNAAMMEE
+NAME
        catch_tell - provides an interface to interact with users
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void catch_tell( string message );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        If  INTERACTIVE_CATCH_TELL  is defined in options.h, when-
        ever the driver has something to tell  an  object  due  to
        say(),  shout(),  tell_object(),  etc.   catch_tell in the
@@ -16,7 +16,7 @@ DDEESSCCRRIIPPTTIIOONN
        ified in any way desired.  This is a useful  way  to  have
        flexible earmuffs, or to support intelligent clients.
 
-SSEEEE AALLSSOO
+SEE ALSO
        message(3), receive(3), receive_message(4)
 
 MudOS                       5 Sep 1994                          1

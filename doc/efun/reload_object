@@ -1,13 +1,13 @@
 
 reload_object(3)      LPC Library Functions      reload_object(3)
 
-NNAAMMEE
+NAME
        reload_object - return an object to its just-loaded state
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void reload_object( object ob );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        When  reload_object()  is  called on `ob', all the driver-
        maintained  properties  are  re-initialized   (heart_beat,
        call_outs,  light,  shadows,  etc),  all variables are re-
@@ -15,7 +15,7 @@ DDEESSCCRRIIPPTTIIOONN
        effect  to  destructing/reloading  the object, however, no
        disk access or parsing is performed.
 
-SSEEEE AALLSSOO
+SEE ALSO
        export_uid(3), new(3), clone_object(3), destruct(3)
 
 MudOS                       5 Sep 1994                          1

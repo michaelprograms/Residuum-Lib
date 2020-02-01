@@ -1,16 +1,16 @@
 
 master(3)             LPC Library Functions             master(3)
 
-NNAAMMEE
+NAME
        master() - returns the master object
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        object master( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Returns a pointer to the master object.
 
-SSEEEE AALLSSOO
+SEE ALSO
        find_object(3)
 
 MudOS                       5 Sep 1994                          1

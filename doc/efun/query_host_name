@@ -1,23 +1,23 @@
 
 query_host_name(3)    LPC Library Functions    query_host_name(3)
 
-NNAAMMEE
+NAME
        query_host_name() - return the host name
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        string query_host_name( void );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        query_host_name() returns the name of the host.
 
-RREETTUURRNN VVAALLUUEESS
+RETURN VALUES
        query_host_name() returns:
 
               a string hostname on success.
 
               an empty string on failure.
 
-SSEEEE AALLSSOO
+SEE ALSO
        resolve(3),      socket_address(3),      query_ip_name(3),
        query_ip_number(3)
 

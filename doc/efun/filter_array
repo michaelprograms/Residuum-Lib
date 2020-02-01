@@ -1,14 +1,14 @@
 
 filter_array(3)       LPC Library Functions       filter_array(3)
 
-NNAAMMEE
+NAME
        filter_array() - return a selective sub-array
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        mixed *filter_array( mixed *arr, string fun, object ob,
                             mixed extra );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        filter_array() returns an array holding the items of <arr>
        which passed sucessfully through the function <fun>  found
        in  object  <ob>.   The  function <fun> is called for each
@@ -19,7 +19,7 @@ DDEESSCCRRIIPPTTIIOONN
        returns 1.  If <arr> is not  an  array,  then  0  will  be
        returned.
 
-SSEEEE AALLSSOO
+SEE ALSO
        sort_array(3), map_array(3)
 
 MudOS                       5 Sep 1994                          1

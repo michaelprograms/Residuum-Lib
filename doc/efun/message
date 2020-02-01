@@ -1,14 +1,14 @@
 
 message(3)            LPC Library Functions            message(3)
 
-NNAAMMEE
+NAME
        message() - deliver messages to "living" objects
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void message( string class, string message, mixed target,
                      mixed exclude );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        message()  calls receive_message(string class, string mes-
        sage) in all objects in the target list excluding those in
        the exclude list. This basically tells the object the mes-
@@ -28,7 +28,7 @@ DDEESSCCRRIIPPTTIIOONN
        message.  This  can  either  be  one object or an array of
        objects.
 
-SSEEEE AALLSSOO
+SEE ALSO
        say(3), write(3), shout(3), tell_object(3), tell_room(3)
 
 MudOS                       5 Sep 1994                          1

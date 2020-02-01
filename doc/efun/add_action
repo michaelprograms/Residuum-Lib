@@ -1,13 +1,13 @@
 
 add_action(3)         LPC Library Functions         add_action(3)
 
-NNAAMMEE
+NAME
        add_action() - bind a command verb to a local function
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        void add_action( string fun, string cmd, int flag );
 
-DDEESSCCRRIIPPTTIIOONN
+DESCRIPTION
        Set up a local function <fun> to be called when user input
        matches the command <cmd>. Functions called  by  a  player
        command  will  get the arguments as a string. It must then
@@ -34,7 +34,7 @@ DDEESSCCRRIIPPTTIIOONN
        query_verb() will only  return  the  characters  following
        <cmd>.
 
-SSEEEE AALLSSOO
+SEE ALSO
        query_verb(3), remove_action(3), init(4)
 
 MudOS                       5 Sep 1994                          1
