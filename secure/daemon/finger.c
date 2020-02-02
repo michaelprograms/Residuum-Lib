@@ -17,6 +17,22 @@ void create() {
     ::create();
 }
 
+string query_player_brief(string who) {
+    string nom, line = "";
+    string name;
+
+    if(!who) return "";
+    nom = lower_case(who);
+    if(!player_exists(nom)) return "Player does not exist.";
+
+    who = sprintf("%s/%s/%s", DIR_PLAYERS, nom[0..0], nom);
+    unguarded((: restore_object, who :));
+
+    line = query_cap_name() + " the level " + query_level()+" "+query_race();
+
+    return line;
+}
+
 string user_finger_display(string who) {
     object ob;
     mapping mail_stat;
@@ -26,7 +42,7 @@ string user_finger_display(string who) {
 
     if(!who) return "You must specify whom you wish to finger.";
     name = lower_case(who);
-    if(!player_exists(name)) return "No such member of the Nightmare Reality.";
+    if(!player_exists(name)) return "No such member of "+mud_name()+".";
     who = sprintf("%s/%s/%s", DIR_PLAYERS, name[0..0], name);
     unguarded((: restore_object, who :));
     mail_stat = (mapping)FOLDERS_D->mail_status(name);
@@ -62,11 +78,14 @@ string user_finger_display(string who) {
     tmp = sprintf("%sBirthday: %s %d, %d BN\n", drow, capitalize(month(birth)),
       date(birth), (-(year(birth)-18)));
     drow = tmp;
-    if(this_player() && archp(this_player()))
+    if(this_player() && archp(this_player())) {
+        tmp = sprintf("%sAccount : %s\n", drow, query_account());
+        drow = tmp;
         if(query_email())
             tmp = sprintf("%sEmail : %s\n", drow, query_email());
         else
             tmp = sprintf("%sNo email address.\n", drow);
+    }
     drow = tmp;
     if(!(ob = find_player(name)) || (int)ob->query_invis() ||
       hiddenp(ob)) {

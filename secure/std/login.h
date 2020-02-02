@@ -26,6 +26,7 @@ static void prompt_delete_character();
 
 static private int boot_copy();
 static void disconnect_copy(string str);
+static void prompt_cap_name();
 static void choose_cap_name(string str);
 static void prompt_email();
 static void enter_email(string str);

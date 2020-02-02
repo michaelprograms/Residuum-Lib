@@ -1,5 +1,6 @@
 #include <std.h>
 #include <dirs.h>
+#include <config.h>
 
 inherit CLEAN_UP;
 
@@ -10,7 +11,7 @@ void set_name(string str);
 string query_password();
 void set_password(string pass);
 mapping query_characters();
-void add_character(string name);
+int add_character(string name);
 nomask void save_account(string nom);
 nomask int restore_account(string nom);
 
@@ -27,7 +28,7 @@ void set_name(string str) {
     if(!stringp(str)) error("Bad argument 1 to set_name().\n");
     name = str;
     if(!created) created = time();
-    characters = ([]);
+    if(!characters || !mapp(characters)) characters = ([]);
 }
 
 // -------------------------------------------------------------------------
@@ -43,14 +44,22 @@ void set_password(string pass) {
 
 mapping query_characters() { return characters; }
 int query_characters_count() { return sizeof(keys(characters)); }
-void add_character(string name) {
+
+int add_character(string name) {
     if(!characters || !mapp(characters)) characters = ([]);
-    if(characters[name]) error("Character already exists.\n");
+    if(characters[name]) {
+        error("Character already exists.\n");
+        return -1;
+    }
+    if(query_characters_count() >= MAX_CHARACTERS_PER_ACCOUNT) {
+        return 0;
+    }
     characters[name] = ([
         "name": name,
         "deleted": 0,
     ]);
     save_account(query_name());
+    return 1;
 }
 
 // -------------------------------------------------------------------------

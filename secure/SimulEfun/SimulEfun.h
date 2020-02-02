@@ -13,6 +13,13 @@ int account_exists(string str);
 int player_exists(string str);
 string user_path(string name);
 
+// strings
+varargs string center(string str, int x);
+string arrange_string(string str, int x);
+varargs string wrap(string str, int width);
+string replace_strings(string *words, mapping info);
+varargs string pad(int length, string c);
+
 // unsorted
 int absolute_value(int x);
 void add_sky_event(function f);
@@ -21,10 +28,8 @@ string alignment_string(mixed val);
 int ambassadorp(object ob);
 string architecture();
 int archp(object ob);
-string arrange_string(string str, int x);
 string base_name(mixed val);
 string cardinal(int x);
-varargs string center(string str, int x);
 string consolidate(int x, string str);
 string convert_name(string str);
 mixed copy(mixed val);
@@ -106,10 +111,8 @@ object to_object(mixed target);
 int total_light(object ob);
 string translate(string str, int prof);
 mixed unguarded(function f);
-string user_path(string name);
 string version();
 varargs int visible(object detectee_obj, object detector_obj);
-varargs string wrap(string str, int width);
 void write(string str);
 int year(int x);
 

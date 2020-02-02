@@ -28,13 +28,22 @@ varargs string wrap(string str, int x) {
     if(strlen(str) > 8190) str=str[0..8190];
     return terminal_colour(str, TERMINAL_D->query_term_info(previous_object()->query_option("TERM")), (x?x:0));
 }
-varargs string wrap2(string str, int x) {
-    return sprintf(sprintf("%%-=%ds\n", (x ? x : 76)), str);
-}
+// varargs string wrap2(string str, int x) {
+//     return sprintf(sprintf("%%-=%ds\n", (x ? x : 76)), str);
+// }
 
 string replace_strings(string *words, mapping info)
 {
     int i=sizeof(words);
     if(mapp(info)) while(i--) if(info[words[i]]) words[i]=info[words[i]];
     return implode(words,"");
+}
+
+varargs string pad(int length, string c) {
+    string s = "";
+    if(!c || c == "") c = " ";
+    for(int i = 0; i < length; i ++) {
+        s += c;
+    }
+    return s;
 }

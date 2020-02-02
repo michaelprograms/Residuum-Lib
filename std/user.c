@@ -330,8 +330,11 @@ void setup() {
     set_id( ({}) );
     set_max_encumbrance(200*query_stats("strength"));
     nmsh::setup();
-    if(!query_race()) move(ROOM_SETTER);
-    else {
+    if(!query_race()) {
+        set_race("human");
+        new_body();
+        move(ROOM_SETTER);
+    } else {
         sight_bonus = (int)RACE_D->query_sight_bonus(query_race());
         if(!primary_start) primary_start = getenv("start");
         if(primary_start) {
