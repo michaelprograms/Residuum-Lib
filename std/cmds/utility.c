@@ -2,41 +2,6 @@
 
 inherit DAEMON;
 
-/* ---------------------------------------------------------------------- */
-
-varargs string format_header_bar(string title, string optional) {
-    string bar = "%^RESET%^CYAN%^==";
-    if(title){
-        bar += "%^RESET%^/ %^RESET%^BOLD%^" + title;
-        if(optional) bar += ":%^RESET%^ "+optional;
-        else bar += "%^RESET%^";
-        bar += " \\%^CYAN%^=";
-    }
-    for(int i = strlen(strip_colours(bar)); i < 76; i ++) bar += "=";
-    bar += "%^RESET%^";
-    return bar;
-}
-
-string format_divider_bar() {
-    return "%^RESET%^BLUE%^----------------------------------------------------------------------------%^RESET%^";
-}
-string format_footer_bar() {
-    return "%^RESET%^CYAN%^============================================================================%^RESET%^";
-}
-
-/* ---------------------------------------------------------------------- */
-
-string leftpad(string text, int n, string pad) {
-    if (n < 0 || n > 80) return text;
-    while(sizeof(text) < n) text = pad + text;
-    return text;
-}
-string rightpad(string text, int n, string pad) {
-    if (n < 0 || n > 80) return text;
-    while(sizeof(text) < n) text = text + pad;
-    return text;
-}
-
 varargs string left_label(string label, int len) {
     if(!len) len = 21;
     return "%^BOLD%^MAGENTA%^ "+rightpad(label, len, " ") + "%^RESET%^";

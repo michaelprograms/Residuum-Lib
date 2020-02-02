@@ -32,12 +32,13 @@ varargs string wrap(string str, int x) {
 //     return sprintf(sprintf("%%-=%ds\n", (x ? x : 76)), str);
 // }
 
-string replace_strings(string *words, mapping info)
-{
+string replace_strings(string *words, mapping info) {
     int i=sizeof(words);
     if(mapp(info)) while(i--) if(info[words[i]]) words[i]=info[words[i]];
     return implode(words,"");
 }
+
+// -------------------------------------------------------------------------
 
 varargs string pad(int length, string c) {
     string s = "";
@@ -46,4 +47,37 @@ varargs string pad(int length, string c) {
         s += c;
     }
     return s;
+}
+varargs string leftpad(string text, int n, string pad) {
+    if (n < 0 || n > 80) return text;
+    // if(!pad || pad == "") pad = " ";
+    while(sizeof(text) < n) text = pad + text;
+    return text;
+}
+varargs string rightpad(string text, int n, string pad) {
+    if (n < 0 || n > 80) return text;
+    // if(!pad || pad == "") pad = " ";
+    while(sizeof(text) < n) text = text + pad;
+    return text;
+}
+
+// -------------------------------------------------------------------------
+
+varargs string format_header_bar(string title, string optional) {
+    string bar = "%^RESET%^CYAN%^==";
+    if(title){
+        bar += "%^RESET%^/ %^RESET%^BOLD%^" + title;
+        if(optional) bar += ":%^RESET%^ "+optional;
+        else bar += "%^RESET%^";
+        bar += " \\%^CYAN%^=";
+    }
+    for(int i = strlen(strip_colours(bar)); i < 80; i ++) bar += "=";
+    bar += "%^RESET%^";
+    return bar;
+}
+string format_divider_bar() {
+    return "%^RESET%^BLUE%^--------------------------------------------------------------------------------%^RESET%^";
+}
+string format_footer_bar() {
+    return "%^RESET%^CYAN%^================================================================================%^RESET%^";
 }

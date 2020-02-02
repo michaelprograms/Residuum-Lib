@@ -19,6 +19,11 @@ string arrange_string(string str, int x);
 varargs string wrap(string str, int width);
 string replace_strings(string *words, mapping info);
 varargs string pad(int length, string c);
+varargs string leftpad(string text, int n, string pad);
+varargs string rightpad(string text, int n, string pad);
+varargs string format_header_bar(string title, string optional);
+string format_divider_bar();
+string format_footer_bar();
 
 // unsorted
 int absolute_value(int x);
