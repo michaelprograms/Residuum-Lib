@@ -13,22 +13,22 @@ int cmd_tell(string str) {
 
     if(!str) return notify_fail("Syntax: <tell [who] [message]>\n");
     mud = 0;
-    if((maxi=sizeof(words = explode(str, "@"))) > 1) {
-        who = convert_name(words[0]);
-        if(maxi > 2) words[1] = implode(words[1..maxi-1], "@");
-        maxi = sizeof(words = explode(words[1], " "));
-        for(i=0; i<maxi; i++) {
-            tmp = lower_case(implode(words[0..i], "."));
-            if((int)NETWORK_D->mud_exists(tmp)) {
-                mud = tmp;
-                if(i+1 < maxi) msg = implode(words[i+1..maxi-1], " ");
-                else msg = "";
-                break;
-            }
-        }
-        if(msg == "") return notify_fail("Syntax: <tell [who] [message]>\n");
-        if(!mud) mud = -1;
-    }
+    // if((maxi=sizeof(words = explode(str, "@"))) > 1) {
+    //     who = convert_name(words[0]);
+    //     if(maxi > 2) words[1] = implode(words[1..maxi-1], "@");
+    //     maxi = sizeof(words = explode(words[1], " "));
+    //     for(i=0; i<maxi; i++) {
+    //         tmp = lower_case(implode(words[0..i], "."));
+    //         if((int)NETWORK_D->mud_exists(tmp)) {
+    //             mud = tmp;
+    //             if(i+1 < maxi) msg = implode(words[i+1..maxi-1], " ");
+    //             else msg = "";
+    //             break;
+    //         }
+    //     }
+    //     if(msg == "") return notify_fail("Syntax: <tell [who] [message]>\n");
+    //     if(!mud) mud = -1;
+    // }
     if(!mud || mud == -1) {
         maxi = sizeof(words = explode(str, " "));
         who = 0;
@@ -64,7 +64,7 @@ int cmd_tell(string str) {
         else if(userp(ob) && (query_idle(ob) > 60))
           message("my_action", (string)ob->query_cap_name()+
             " is idle and may not have been paying attention.", this_player());
-        else if((int)ob->query_blocked("tell")) { 
+        else if((int)ob->query_blocked("tell")) {
             message("my_action", (string)ob->query_cap_name()+" is blocking "+
             "all tells.", this_player());
             return 1;
@@ -98,8 +98,8 @@ mapping __Morse;
     int x, i;
 __Morse = ([ "a" : ".-", "b" : "-...", "c" : "-.-.",
 "d" : "-..", "e" : ".", "f" : "..-.", "g" : "--.", "h" : "....", "i" : "..",
-"j" : ".---", "k" : "-.-", "l" : ".-..", "m" : "--", "n" : "-.", "o" : "---", 
-"p" : ".--.", "q" : "--.-", "r" : " .-.", "s" : "...", "t" : "-", "u" : "..-", 
+"j" : ".---", "k" : "-.-", "l" : ".-..", "m" : "--", "n" : "-.", "o" : "---",
+"p" : ".--.", "q" : "--.-", "r" : " .-.", "s" : "...", "t" : "-", "u" : "..-",
 "v" : "...-", "w" : ".--", "x" : "-..-", "y" : "-.--", "z" : "--..",
 "1" : ".----", "2" : "..---", "3" : "...--", "4" : "....-", "5" : ".....",
 "6" : " -....", "7" : "--...", "8" : "---..", "9" : "----.","0" : " -----" ]);
