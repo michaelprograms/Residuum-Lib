@@ -42,7 +42,7 @@ int get_exp(int lev) {
 
 int train_player(object tp, string which, int amount) {
     int exp, amt;
- 
+
     if(amount < 1) {
         notify_fail("You cannot train that amount.\n");
         return 0;
@@ -126,12 +126,12 @@ int advance() {
     }
     this_player()->set_level(lev+1);
     if(lev == 19) {
-	this_player()->set_position("high mortal");
-	this_player()->add_search_path("/bin/high_mortal");
+	// this_player()->set_position("high mortal");
+	// this_player()->add_search_path("/bin/high_mortal");
 	shout("All hail "+(string)this_player()->query_cap_name()+" the new high mortal!\n");
- 	write("You are now a high mortal.\nIf you wish for immortality, you must find an immortal mentor to make you immortal.\n");
-	log_file("high_mortal", this_player()->query_name()+" became a high mortal: "+ctime(time())+"\n");
-	CASTLE_D->enable_high_mortal(this_player());
+ 	// write("You are now a high mortal.\nIf you wish for immortality, you must find an immortal mentor to make you immortal.\n");
+	// log_file("high_mortal", this_player()->query_name()+" became a high mortal: "+ctime(time())+"\n");
+	// CASTLE_D->enable_high_mortal(this_player());
 	return 1;
     }
     this_player()->setenv("TITLE", get_new_title(this_player()));

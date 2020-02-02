@@ -30,6 +30,8 @@ string query_player_brief(string who) {
 
     line = query_cap_name() + " the level " + query_level()+" "+query_race();
 
+    if(query_position() != "player") line += " ("+query_position()+")";
+
     return line;
 }
 

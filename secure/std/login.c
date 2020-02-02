@@ -158,7 +158,7 @@ static void prompt_account_menu() {
     object ob;
 
     remove_call_out("idle");
-    call_out("idle", LOGON_ACCOUNT_TIMEOUT);
+    call_out("idle", LOGON_ACCOUNT_TIME);
     if(!sizeof(names)) {
         message("system", PROMPT_COLOR+"No existing characters."+PROMPT_RESET+"\n", this_object());
         prompt_create_character();
@@ -391,7 +391,6 @@ static void enter_gender(string str) {
 // -------------------------------------------------------------------------
 
 static private void internal_remove() {
-    // if(find_account(__AccountName)) __CopyExists = 1;
     if(find_player(__Name)) __CopyExists = 1;
     else __CopyExists = 0;
 
