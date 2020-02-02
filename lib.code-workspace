@@ -6,6 +6,7 @@
     ],
     "settings": {
         "editor.wordWrap": "on",
+        "editor.renderWhitespace": "all",
         "files.trimTrailingWhitespace": true,
         "editor.rulers": [76, 80, 100, 120],
     }
