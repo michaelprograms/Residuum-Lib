@@ -12,10 +12,10 @@ string query_password();
 void set_password(string pass);
 mapping query_characters();
 int add_character(string name);
+int query_last_on();
+void update_last_on();
 nomask void save_account(string nom);
 nomask int restore_account(string nom);
-
-// -------------------------------------------------------------------------
 
 string name, password;
 int created, last_on;
@@ -60,6 +60,14 @@ int add_character(string name) {
     ]);
     save_account(query_name());
     return 1;
+}
+
+// -------------------------------------------------------------------------
+
+int query_last_on() { return last_on; }
+void update_last_on() {
+    last_on = time();
+    save_account(query_name());
 }
 
 // -------------------------------------------------------------------------

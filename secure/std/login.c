@@ -9,7 +9,7 @@
 #include <objects.h>
 #include "login.h"
 
-static private int __CrackCount, __CopyExists;
+static private int __CrackCount, __CopyExists, __AccountLastOn;
 static private string __AccountName, __Name, __CapName, __Client, __IPAddress;
 static private object __Account, __Player;
 static mapping __ansiMap;
@@ -23,6 +23,7 @@ void create() {
     __CrackCount = 0;
     __Account = 0;
     __Player = 0;
+    __AccountLastOn = 0;
     __ansiMap = TERMINAL_D->query_term_info("ansi");
     __IPAddress = query_ip_number();
 }
@@ -159,27 +160,31 @@ static void prompt_account_menu() {
 
     remove_call_out("idle");
     call_out("idle", LOGON_ACCOUNT_TIME);
+
     if(!sizeof(names)) {
         message("system", PROMPT_COLOR+"No existing characters."+PROMPT_RESET+"\n", this_object());
         prompt_create_character();
         return;
     } else {
-        message("system", "\n\n%^BOLD%^Account Options:%^BOLD_OFF%^ %^ORANGE%^change%^RESET%^ "+format_syntax("<password>")+"%^ORANGE%^,%^RESET%^ "+format_syntax("<quit>"), this_object());
-
-        message("system", "\n%^BOLD%^Player Options:%^BOLD_OFF%^ %^ORANGE%^create%^RESET%^ "+format_syntax("<new>")+"%^ORANGE%^,%^RESET%^ "+format_syntax("<delete>")+" %^ORANGE%^existing%^RESET%^", this_object());
+        message("system", "\n"+format_header_bar("ACCOUNT MENU")+"\n%^ORANGE%^Welcome back, "+__AccountName+". Last seen "+time_ago_full(__AccountLastOn)+" ago.%^RESET%^", this_object());
+        message("system", "\n\n%^BOLD%^Account Options:%^BOLD_OFF%^ "+format_syntax("<password>")+"%^ORANGE%^,%^RESET%^ "+format_syntax("<quit>"), this_object());
 
         message("system", "\n\n%^BOLD%^Player Characters ("+sizeof(names)+"/"+MAX_CHARACTERS_PER_ACCOUNT+"):%^BOLD_OFF%^\n", this_object());
         for(int i = 0; i < sizeof(names); i ++) {
             line = sprintf("%2s", ""+(i+1))+". ";
             line += format_syntax("<"+names[i]+">");
             line += pad(MAX_PLAYER_NAME_LENGTH-sizeof(names[i]))+" ";
-            line += PROMPT_COLOR+FINGER_D->query_player_brief(names[i])+PROMPT_RESET;
+            line += FINGER_D->query_player_brief(names[i]);
             if(ob = find_player(names[i])) {
                 if(interactive(ob)) line += " [connected]";
                 else line += " [netdead]";
             }
             message("system", line+"\n", this_object());
         }
+        message("system", "    "+format_syntax("<new>")+"             %^ORANGE%^create a character%^RESET%^\n", this_object());
+        message("system", "    "+format_syntax("<delete>")+"          %^ORANGE%^delete a character%^RESET%^\n", this_object());
+
+        message("system", "\n"+format_footer_bar(), this_object());
         message("prompt", "\n"+PROMPT_COLOR+"Enter choice: "+PROMPT_RESET, this_object());
         input_to("get_menu_choice");
     }
@@ -303,7 +308,8 @@ static void get_password(string str) {
         log_file("watch/logon", sprintf("%s from %s\n", __Name, __IPAddress));
         return prompt_password();
     }
-
+    __AccountLastOn = __Account->query_last_on();
+    __Account->update_last_on();
     prompt_account_menu();
     // if(!__CopyExists) exec_user();
     // else boot_copy();
