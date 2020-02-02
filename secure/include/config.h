@@ -15,6 +15,7 @@
 #define MAX_NET_DEAD_TIME        1800
 
 #define LOGON_TIMEOUT              180
+#define LOGON_ACCOUNT_TIME         900
 #define MAX_PASSWORD_TRIES         3
 
 #define MIN_ACCOUNT_NAME_LENGTH    4

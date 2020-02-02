@@ -157,6 +157,8 @@ static void prompt_account_menu() {
     string *names = keys(characters), line;
     object ob;
 
+    remove_call_out("idle");
+    call_out("idle", LOGON_ACCOUNT_TIMEOUT);
     if(!sizeof(names)) {
         message("system", PROMPT_COLOR+"No existing characters."+PROMPT_RESET+"\n", this_object());
         prompt_create_character();
