@@ -86,6 +86,7 @@ void heart_beat() {
 static void init_living() {
     add_action("cmd_hook", "", 1);
     add_action("cmd_lock", "lock");
+    init_options();
     init_path();
     init_attack();
 }

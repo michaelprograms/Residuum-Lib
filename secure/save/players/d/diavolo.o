@@ -30,7 +30,7 @@ stats (["agility":5,"luck":5,"intelligence":7,"strength":23,"endurance":5,"perce
 wimpy 0
 wimpydir "out"
 env_var (["PROMPT":"%^GREEN%^$h/$H hp%^RED%^|%^GREEN%^$i/$I sp%^RED%^|%^GREEN%^$g/$G mp %^RED%^> $v%^CYAN%^$D %^RED%^> %^RESET%^ ","start":"/domains/Nowhere/setter","TITLE":"$N","NO_CLEAR":"off","LINES":"100","ANSI":0,"TERM":"ansi",])
-__Options (["TERM":"ansi","TZONE":"EST",])
+__Options (["WIDTH":"80","TERM":"ansi","TZONE":"EST",])
 money ([])
 invis 0
 ok_to_heal 5274362

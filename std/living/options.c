@@ -1,8 +1,11 @@
-private mapping __Options = ([
+private mapping __Options = ([]);
+
+void init_options() {
     // New Character defaults:
-    "TERM": "ansi",
-    "TZONE": "EST",
-]);
+    if(!__Options["TERM"]) __Options["TERM"] = "ansi";
+    if(!__Options["TZONE"]) __Options["TZONE"] = "EST";
+    if(!__Options["WIDTH"]) __Options["WIDTH"] = "80";
+}
 
 mapping query_options() {
     if(!__Options) __Options = ([]);
