@@ -28,7 +28,7 @@ string query_player_login_brief(string who) {
     who = sprintf("%s/%s/%s", DIR_PLAYERS, nom[0..0], nom);
     unguarded((: restore_object, who :));
 
-    line = query_cap_name() + " the level " + query_level()+" "+query_race();
+    line = query_cap_name() + ", level " + query_level()+" "+query_race();
 
     if(query_position() != "player") line += " ("+query_position()+")";
 

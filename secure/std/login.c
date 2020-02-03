@@ -155,7 +155,7 @@ static void confirm_password(string str2, string str1) {
 
 static void prompt_account_menu() {
     mapping characters = __Account->query_characters();
-    string *names = keys(characters), line;
+    string *names = keys(characters), line, msg;
     object ob;
 
     remove_call_out("idle");
@@ -166,10 +166,15 @@ static void prompt_account_menu() {
         prompt_create_character();
         return;
     } else {
-        message("system", "\n"+format_header_bar("ACCOUNT MENU")+"\n%^ORANGE%^Welcome back, "+__AccountName+". Last seen "+time_ago_full(__AccountLastOn)+" ago.%^RESET%^", this_object());
-        message("system", "\n\n%^BOLD%^Account Options:%^BOLD_OFF%^ "+format_syntax("<password>")+" "+format_syntax("<quit>"), this_object());
+        msg = "\n"+format_header_bar("ACCOUNT MENU")+"\n%^ORANGE%^Welcome back, "+__AccountName+". Last seen "+time_ago_full(__AccountLastOn)+" ago.%^RESET%^\n\n";
+        msg += "%^BOLD%^Account Options     :%^BOLD_OFF%^ "+format_syntax("<password>")+" "+format_syntax("<quit>")+"\n";
+        msg += "%^BOLD%^Player Options      :%^BOLD_OFF%^ "+format_syntax("<new>")+" "+format_syntax("<delete>")+"\n\n";
+        message("system", msg, this_object());
 
-        message("system", "\n\n%^BOLD%^Player Characters ("+sizeof(names)+"/"+MAX_CHARACTERS_PER_ACCOUNT+"):%^BOLD_OFF%^\n", this_object());
+        msg = "";
+        //sizeof(names)+"/"+MAX_CHARACTERS_PER_ACCOUNT
+
+        names = sort_array(names, 1);
         for(int i = 0; i < sizeof(names); i ++) {
             line = sprintf("%2s", ""+(i+1))+". ";
             line += format_syntax("<"+names[i]+">");
@@ -179,12 +184,11 @@ static void prompt_account_menu() {
                 if(interactive(ob)) line += " [connected]";
                 else line += " [netdead]";
             }
-            message("system", line+"\n", this_object());
+            msg += line + "\n";
         }
-        message("system", "    "+format_syntax("<new>")+"             %^ORANGE%^create a character%^RESET%^\n", this_object());
-        message("system", "    "+format_syntax("<delete>")+"          %^ORANGE%^delete a character%^RESET%^\n", this_object());
+        message("system", msg, this_object());
 
-        message("system", "\n"+format_footer_bar(), this_object());
+        message("system", "\n"+format_footer_bar()+"\n", this_object());
         message("prompt", "\n"+PROMPT_COLOR+"Enter choice: "+PROMPT_RESET, this_object());
         input_to("get_menu_choice");
     }
