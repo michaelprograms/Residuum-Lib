@@ -66,7 +66,7 @@ void init() {
     }
     __Options = (mapping)OPTIONS_D->query_options(__Owner =
       (string)this_player()->query_name());
-    if(!(__Lines = to_int((string)this_player()->getenv("LINES"))))
+    if(!(__Lines = to_int((string)this_player()->query_option("PAGE"))))
       __Lines = 24;
     if(!(__Screen = to_int((string)this_player()->query_option("WIDTH"))))
       __Screen = 80;

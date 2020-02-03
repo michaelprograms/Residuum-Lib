@@ -18,7 +18,7 @@ varargs int more(mixed what, string cl, function endmore, mixed args) {
       return notify_fail("Unknown file reference.\n");
     if(__More["lines"]) __More = ([]);
     if(!(__More["class"] = cl)) __More["class"] = "info";
-    if(!(__More["screen"]=to_int((string)this_object()->getenv("LINES"))))
+    if(!(__More["screen"]=to_int((string)this_object()->query_option("PAGE"))))
       __More["screen"] = 20;
     if(stringp(what)) {
         if(sizeof(tmp = (string *)this_object()->wild_card(what)) != 1)
@@ -127,7 +127,7 @@ static void do_more(string cmd) {
         message(__More["class"], __More["lines"][i], this_object());
     }
     if((__More["current"] = i) >= __More["total"]) {
-        if(functionp(__More["endfun"]) && 
+        if(functionp(__More["endfun"]) &&
           (int)master()->valid_function(__More["endfun"]))
             (*__More["endfun"])(__More["args"]);
         __More = ([]);

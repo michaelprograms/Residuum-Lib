@@ -30,8 +30,8 @@ int cmd_localcmds() {
       if((i++<(sizeof(cmds)-1)) && cmds[i-1][2] != cmds[i][2])
          result += "\n\n" + file_name(cmds[i][2]) + ":\n";
    }
-    write(wrap(result, (tmp=(string)this_player()->query_option("LINES") ?
-      to_int(tmp) : 75))+"\n");
+    write(wrap(result, (tmp=(string)this_player()->query_option("WIDTH") ?
+      to_int(tmp) : 80))+"\n");
    return 1;
 }
 

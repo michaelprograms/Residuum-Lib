@@ -4,7 +4,7 @@ __ItemsValue 0
 auto_load 0
 __CurrentWorkingDirectory "/secure/std"
 __Nicknames ([])
-__Aliases (["n":"go north","bio":"biography","nw":"go northwest","l":"look $*","ne":"go northeast","i":"inventory","w":"go west","exa":"look at $*","sw":"go southwest","u":"go up","e":"go east","d":"go down","se":"go southeast","s":"go south",])
+__Aliases (["bio":"biography","n":"go north","nw":"go northwest","l":"look $*","ne":"go northeast","i":"inventory","w":"go west","sw":"go southwest","exa":"look at $*","e":"go east","u":"go up","se":"go southeast","d":"go down","s":"go south",])
 __Xverbs (["'":"say $*",":":"emote $*",])
 __Invis 0
 __Mass 500
@@ -16,29 +16,29 @@ __PreventGet 0
 __PreventPut 0
 __Read 0
 deaths 0
-player_data (["general":(["sp":35,"max_hp":110,"hp":110,"max_sp":35,]),])
+player_data (["general":(["sp":35,"max_hp":110,"max_sp":35,"hp":110,]),])
 magic (["max points":130,"points":130,])
 severed ([])
 healing ([])
-body (["head":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":280,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"right leg":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"right foot","armour":({}),]),"right foot":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left arm":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"left hand","armour":({}),]),"left foot":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left leg":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"left foot","armour":({}),]),"torso":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":560,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"right hand":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"wieldable":1,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"right arm":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"right hand","armour":({}),]),"left hand":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"wieldable":1,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),])
+body (["right foot":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"right leg":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"right foot","armour":({}),]),"head":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":280,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"left foot":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":140,"weapons":0,"ac":0,"limb_ref":"","armour":({}),]),"left arm":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"left hand","armour":({}),]),"torso":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":560,"weapons":0,"ac":0,"limb_ref":"FATAL","armour":({}),]),"left leg":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"left foot","armour":({}),]),"right hand":(["damage":0,"armour_ob":({}),"weapon":0,"max_dam":140,"weapons":0,"wieldable":1,"ac":0,"limb_ref":"","armour":({}),]),"left hand":(["damage":0,"armour_ob":({}),"weapon":0,"max_dam":140,"weapons":0,"wieldable":1,"ac":0,"limb_ref":"","armour":({}),]),"right arm":(["damage":0,"weapon":0,"armour_ob":({}),"max_dam":186,"weapons":0,"ac":0,"limb_ref":"right hand","armour":({}),]),])
 limbs ({"left leg","torso","head","right leg","right foot","right hand","left arm","left foot","right arm","left hand",})
 all_my_fingers 6
 heal_rate 2
 str_class "child"
 skills ([])
-stats (["agility":5,"luck":5,"intelligence":7,"strength":23,"endurance":5,"perception":5,"charisma":11,])
+stats (["agility":5,"strength":23,"intelligence":7,"luck":5,"perception":5,"endurance":5,"charisma":11,])
 wimpy 0
 wimpydir "out"
-env_var (["PROMPT":"%^GREEN%^$h/$H hp%^RED%^|%^GREEN%^$i/$I sp%^RED%^|%^GREEN%^$g/$G mp %^RED%^> $v%^CYAN%^$D %^RED%^> %^RESET%^ ","start":"/domains/Nowhere/setter","TITLE":"$N","NO_CLEAR":"off","LINES":"100","ANSI":0,"TERM":"ansi",])
-__Options (["WIDTH":"80","TERM":"ansi","TZONE":"EST",])
+env_var (["TITLE":"$N","start":"/domains/Nowhere/setter","PROMPT":"%^GREEN%^$h/$H hp%^RED%^|%^GREEN%^$i/$I sp%^RED%^|%^GREEN%^$g/$G mp %^RED%^> $v%^CYAN%^$D %^RED%^> %^RESET%^ ","ANSI":0,"NO_CLEAR":"off","TERM":"ansi",])
+__Options (["WIDTH":"80","TZONE":"EST","TERM":"ansi",])
 money ([])
 invis 0
-ok_to_heal 5274362
+ok_to_heal 5321589
 description 0
 gender "neuter"
 languages (["loyavenku":10,])
 primary_language "loyavenku"
-__PlayerAge 5274357
+__PlayerAge 5321581
 __PlayerKiller 0
 language_exp 0
 platinum 0
@@ -53,9 +53,9 @@ ghost 0
 rolls 1
 verbose_moves 1
 birth 1568243761
-last_on 1580693784
+last_on 1580699614
 blocked (["error":0,"runtime":0,"newbie":0,])
-news (["general":69,"class":51,"immortal":49,])
+news (["class":51,"general":69,"immortal":49,])
 char_name "diavolo"
 real_name "Michael"
 email "none"

@@ -517,10 +517,11 @@ int query_snoop() { return snoop; }
 
 void display_options_at_login() {
     message("system", "\n", this_object());
-    message("system", "        >>> option TERM currently set to "+query_option("TERM")+" <<<", this_object());
-    message("system", "        >>> option LINES currently set to "+query_option("LINES")+" <<<", this_object());
-    message("system", "        >>> option WIDTH currently set to "+query_option("WIDTH")+" <<<", this_object());
-    message("system", "        >>> option PROMPT currently set to "+query_option("PROMPT")+" <<<", this_object());
+    // TODO display brief options on entry?
+    // message("system", "        >>> option TERM currently set to "+query_option("TERM")+" <<<", this_object());
+    // message("system", "        >>> option PAGE currently set to "+query_option("PAGE")+" <<<", this_object());
+    // message("system", "        >>> option WIDTH currently set to "+query_option("WIDTH")+" <<<", this_object());
+    // message("system", "        >>> option PROMPT currently set to "+query_option("PROMPT")+" <<<", this_object());
 }
 
 void write_messages() {
