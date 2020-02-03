@@ -68,7 +68,7 @@ void init() {
       (string)this_player()->query_name());
     if(!(__Lines = to_int((string)this_player()->getenv("LINES"))))
       __Lines = 24;
-    if(!(__Screen = to_int((string)this_player()->getenv("SCREEN"))))
+    if(!(__Screen = to_int((string)this_player()->query_option("WIDTH"))))
       __Screen = 80;
     if((__NumLetters = __Lines - 10) < 0) __NumLetters = 5;
 }

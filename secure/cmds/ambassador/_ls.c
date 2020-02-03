@@ -47,7 +47,7 @@ int cmd_ls(string str) {
     }
     for(i=0, maxi = sizeof(paths), files = ({}); i<maxi; i++)
       if(tmp = (string *)previous_object()->wild_card(paths[i])) files += tmp;
-    if(!sizeof(files)) { 
+    if(!sizeof(files)) {
         message("error", "No such file or directory.", this_player());
         return 1;
     }
@@ -62,7 +62,7 @@ int cmd_ls(string str) {
         return 1;
     }
     for(i=0; i<maxi; i++)
-      show += display_ls(dirs[i], all_files, long_details, time_sort, 
+      show += display_ls(dirs[i], all_files, long_details, time_sort,
         no_load_info, brief, size);
     if(moref) previous_object()->more(explode(show, "\n"), "system");
     else message("system", show, previous_object());
@@ -99,7 +99,7 @@ static private string display_ls(mixed targ, int aflag, int lflag, int tflag,
         if(!bflag) ret = cles[i]+":\n";
         if(!aflag) targ[cles[i]] = filter_array(targ[cles[i]], "filter_dots",
           this_object());
-        if(tflag) 
+        if(tflag)
           targ[cles[i]]=sort_array(targ[cles[i]],"time_sort",this_object());
         if(lflag) ret += long_list(cles[i], targ[cles[i]]);
         else ret += short_list(cles[i], targ[cles[i]], nflag, sflag);
@@ -132,7 +132,7 @@ static private string long_list(string dir, mixed *files) {
     for(i=0, maxi=sizeof(files); i<maxi; i++) {
         if(files[i][1] == -2) loaded = "";
         else loaded = (find_object(dir+files[i][0]) ? "*" : "");
-        ret += sprintf("%:-3s%:-5s%:-30s%:-10d%s", 
+        ret += sprintf("%:-3s%:-5s%:-30s%:-10d%s",
           loaded, acc, ctime(files[i][2]),
           files[i][1], files[i][0]);
         if(files[i][1] == -2) ret += "/\n";
@@ -148,7 +148,7 @@ static private string short_list(string dir, mixed *files, int n, int s) {
 
     i = sizeof(newfiles=map_array(files,"map_files",this_object(),({dir,n,s})));
     while(i--) if((x=strlen(newfiles[i])) > long) long = x;
-    tmp = (string)previous_object()->getenv("SCREEN");
+    tmp = previous_object()->query_option("WIDTH");
     if(!tmp || !sscanf(tmp, "%d", x) || !x) x = 80;
     x = x-2;
     if(long > x/3-3) long = x/3-3;
@@ -211,6 +211,6 @@ void help() {
       "    Access permissions, in the form of rwx\n"
       "    Time last modified\n"
       "    Size of the file\n"
-      "    File name\n\nSee also: cd, mkdir, mv, pwd, rm, rmdir", 
+      "    File name\n\nSee also: cd, mkdir, mv, pwd, rm, rmdir",
       this_player());
 }
