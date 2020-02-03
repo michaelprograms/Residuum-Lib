@@ -42,6 +42,10 @@ int cmd_update(string str) {
         return 1;
     }
     str = absolute_path((string)this_player()->get_path(), str);
+    if(file_size(str) == -1) {
+        message("system", "File "+str+" does not exist.", this_player());
+        return 1;
+    }
     /* Have to do special things for the master object */
     if((ob2 = find_object(str)) == master()) master_flag = 1;
     if(ob2) {
