@@ -87,19 +87,13 @@ string format_footer_bar() {
 string time_ago_full(int timestamp) {
     int w, d, h, m;
     int secs = time() - timestamp;
-    debug_print("diavolo", time()+" - "+timestamp+" == "+secs);
-    debug_print("diavolo", "time_ago_full secs = "+secs);
     w = secs / 604800;
     secs = secs - (w * 604800);
-    debug_print("diavolo", "time_ago_full secs = "+secs);
     d = secs / 86400;
     secs = secs - (d * 86400);
-    debug_print("diavolo", "time_ago_full secs = "+secs);
     h = secs / 3600;
     secs = secs - (h * 3600);
-    debug_print("diavolo", "time_ago_full secs = "+secs);
     m = secs / 60;
     secs = secs - (m * 60);
-    debug_print("diavolo", "time_ago_full secs = "+secs);
     return (w ? w + "w " : "") + (d ? d + "d " : "") + (h ? h + "h " : "")+(m ? m + "m " : "") + secs + "s";
 }
