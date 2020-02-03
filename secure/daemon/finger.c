@@ -28,11 +28,11 @@ string query_player_login_brief(string who) {
     who = sprintf("%s/%s/%s", DIR_PLAYERS, nom[0..0], nom);
     unguarded((: restore_object, who :));
 
-    line = query_cap_name() + ", level " + query_level()+" "+query_race();
+    line = arrange_string(query_cap_name(), MAX_PLAYER_CAP_NAME_LENGTH) + "  " + arrange_string("level "+query_level()+" "+query_race(), 16);
 
     if(query_position() != "player") line += " ("+query_position()+")";
 
-    line += ", last seen "+time_ago_full(query_last_on());
+    line += "last seen "+time_ago_full(query_last_on());
 
     return line;
 }

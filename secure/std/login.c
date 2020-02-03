@@ -176,7 +176,8 @@ static void prompt_account_menu() {
 
         names = sort_array(names, 1);
         for(int i = 0; i < sizeof(names); i ++) {
-            line = sprintf("%2s", ""+(i+1))+". ";
+            // line = sprintf("%2s", ""+(i+1))+". ";
+            line = "";
             line += format_syntax("<"+names[i]+">");
             line += pad(MAX_PLAYER_NAME_LENGTH-sizeof(names[i]))+" ";
             line += FINGER_D->query_player_login_brief(names[i]);
