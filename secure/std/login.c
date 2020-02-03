@@ -167,14 +167,14 @@ static void prompt_account_menu() {
         return;
     } else {
         message("system", "\n"+format_header_bar("ACCOUNT MENU")+"\n%^ORANGE%^Welcome back, "+__AccountName+". Last seen "+time_ago_full(__AccountLastOn)+" ago.%^RESET%^", this_object());
-        message("system", "\n\n%^BOLD%^Account Options:%^BOLD_OFF%^ "+format_syntax("<password>")+"%^ORANGE%^,%^RESET%^ "+format_syntax("<quit>"), this_object());
+        message("system", "\n\n%^BOLD%^Account Options:%^BOLD_OFF%^ "+format_syntax("<password>")+" "+format_syntax("<quit>"), this_object());
 
         message("system", "\n\n%^BOLD%^Player Characters ("+sizeof(names)+"/"+MAX_CHARACTERS_PER_ACCOUNT+"):%^BOLD_OFF%^\n", this_object());
         for(int i = 0; i < sizeof(names); i ++) {
             line = sprintf("%2s", ""+(i+1))+". ";
             line += format_syntax("<"+names[i]+">");
             line += pad(MAX_PLAYER_NAME_LENGTH-sizeof(names[i]))+" ";
-            line += FINGER_D->query_player_brief(names[i]);
+            line += FINGER_D->query_player_login_brief(names[i]);
             if(ob = find_player(names[i])) {
                 if(interactive(ob)) line += " [connected]";
                 else line += " [netdead]";

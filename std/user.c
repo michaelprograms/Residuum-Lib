@@ -43,7 +43,7 @@ int platinum, gold, electrum, silver, copper;
 int player_age;
 int __NoQuit;
 int level, ghost, rolls, verbose_moves;
-int birth;
+int birth, last_on;
 static int disable, time_of_login;
 static int __LogHarass;
 static mixed *__MessageCue;
@@ -52,7 +52,7 @@ static int __LastAged;
 mapping blocked, news;
 static mapping __LastError;
 static int snoop, earmuffs;
-string char_name, real_name, email, ip, last_on, race, original_site;
+string char_name, real_name, email, ip, race, original_site;
 private string position, primary_start, *__RestrictedChannels;
 private int __WhereBlock;
 private static string *channels;
@@ -96,6 +96,9 @@ void write_messages();
 string query_email();
 nomask string query_position();
 
+void update_last_on();
+int query_last_on();
+
 // --- TODO remove ---------------------------------------------------------
 string password;
 string query_password() { return password; }
@@ -113,6 +116,12 @@ void set_account(string nom) {
     save_player( query_name() );
 }
 // -------------------------------------------------------------------------
+
+void update_last_on() {
+    last_on = time();
+    save_player(query_name());
+}
+int query_last_on() { return last_on; }
 
 void get_email(string e) {
     string who, where;
@@ -321,7 +330,7 @@ void setup() {
     init_living();
     basic_commands();
     ip = query_ip_name(this_object());
-    last_on = ctime(time());
+    update_last_on();
     time_of_login = time();
     if(!body) new_body();
     if(!birth) birth = time();
@@ -917,12 +926,6 @@ void set_cap_name(string str) {
 }
 
 int query_undead() { return query_ghost(); }
-
-void set_last_on(int x) {
-    if(!archp(this_object())) return;
-    last_on = ctime(x);
-    save_player(query_name());
-}
 
 void empty_cue() {
     int i, maxi;

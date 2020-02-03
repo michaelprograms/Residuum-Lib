@@ -17,7 +17,7 @@ void create() {
     ::create();
 }
 
-string query_player_brief(string who) {
+string query_player_login_brief(string who) {
     string nom, line = "";
     string name;
 
@@ -31,6 +31,8 @@ string query_player_brief(string who) {
     line = query_cap_name() + " the level " + query_level()+" "+query_race();
 
     if(query_position() != "player") line += " ("+query_position()+")";
+
+    line += ", last seen "+time_ago_full(query_last_on());
 
     return line;
 }
@@ -107,7 +109,7 @@ string user_finger_display(string who) {
         where = "Anonymous";
     else
         where = query_ip();
-    tmp = sprintf("%s%s from %s.\n", drow, last_on, where);
+    tmp = sprintf("%s%s from %s.\n", drow, ctime(last_on), where);
     drow = tmp;
     if(!mail_stat["unread"])
         tmp = sprintf("%sNo unread mail.\n", drow);
@@ -166,7 +168,6 @@ string query_hah(object ob, int verbose) {
     return line;
 }
 
-string query_last_on() { return last_on; }
 
 string query_ttl(string name) {
     string pre, post;

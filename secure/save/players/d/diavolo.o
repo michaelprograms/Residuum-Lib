@@ -33,12 +33,12 @@ env_var (["PROMPT":"%^GREEN%^$h/$H hp%^RED%^|%^GREEN%^$i/$I sp%^RED%^|%^GREEN%^$
 __Options (["TERM":"ansi","TZONE":"EST",])
 money ([])
 invis 0
-ok_to_heal 5189510
+ok_to_heal 5274362
 description 0
 gender "neuter"
 languages (["loyavenku":10,])
 primary_language "loyavenku"
-__PlayerAge 5189500
+__PlayerAge 5274357
 __PlayerKiller 0
 language_exp 0
 platinum 0
@@ -48,18 +48,18 @@ silver 0
 copper 0
 player_age 0
 __NoQuit 0
-level 1
+level 5000
 ghost 0
 rolls 1
 verbose_moves 1
 birth 1568243761
+last_on 1580693784
 blocked (["error":0,"runtime":0,"newbie":0,])
 news (["general":69,"class":51,"immortal":49,])
 char_name "diavolo"
 real_name "Michael"
 email "none"
 ip "172.17.0.1"
-last_on "Sun Feb  2 01:47:28 2020"
 race "giant"
 original_site 0
 position "head arch"
