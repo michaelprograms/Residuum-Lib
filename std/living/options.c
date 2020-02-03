@@ -5,6 +5,7 @@ void init_options() {
     if(!__Options["TERM"]) __Options["TERM"] = "ansi";
     if(!__Options["TZONE"]) __Options["TZONE"] = "EST";
     if(!__Options["WIDTH"]) __Options["WIDTH"] = "80";
+    if(!__Options["PAGE"]) __Options["PAGE"] = "40";
 }
 
 mapping query_options() {
