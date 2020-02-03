@@ -96,7 +96,6 @@ void write_messages();
 string query_email();
 nomask string query_position();
 
-void update_last_on();
 int query_last_on();
 
 // --- TODO remove ---------------------------------------------------------
@@ -117,10 +116,6 @@ void set_account(string nom) {
 }
 // -------------------------------------------------------------------------
 
-void update_last_on() {
-    last_on = time();
-    save_player(query_name());
-}
 int query_last_on() { return last_on; }
 
 void get_email(string e) {
@@ -286,6 +281,7 @@ int quit(string str) {
     }
     if(query_followers()) clear_followers();
     message("environment", "Reality suspended.  See you another time!", this_object());
+    last_on = time();
     save_player( query_name() );
     say(query_cap_name() + " is gone from our reality.");
     log_file("enter", query_name()+" (quit): "+ctime(time())+"\n");
@@ -330,8 +326,6 @@ void setup() {
     init_living();
     basic_commands();
     ip = query_ip_name(this_object());
-    update_last_on();
-    time_of_login = time();
     if(!body) new_body();
     if(!birth) birth = time();
     fix_limbs();
@@ -358,12 +352,13 @@ void setup() {
                 }
             }
         }
-        if(!(primary_start && stringp(primary_start) && move(primary_start) == MOVE_OK))
-            move(ROOM_START);
+        if(!(primary_start && stringp(primary_start) && move(primary_start) == MOVE_OK)) move(ROOM_START);
         setenv("start", primary_start);
     }
     write_messages();
     autosave::setup();
+    last_on = time();
+    time_of_login = time();
     call_out("save_player", 2, query_name());
     PLAYER_D->add_player_info();
     log_file("enter", query_name()+" (enter): "+ctime(time())+" from "+query_ip_name()+"\n");
@@ -399,6 +394,7 @@ void heart_beat() {
 void net_dead() {
     CHAT_D->remove_user(channels - __RestrictedChannels);
     channels = ({});
+    last_on = time();
     save_player(query_name());
     net_died_here = file_name( environment(this_object()) );
     message("other_action", sprintf("%s suddenly disappears into a sea of irreality.", query_cap_name()), environment(this_object()), ({ this_object() }));
@@ -478,6 +474,7 @@ nomask void die() {
     this_object()->move("/domains/Praxis/death/death_room");
     cease_all_attacks();
     ghost = 1;
+    last_on = time();
     save_player( query_name() );
     PLAYER_D->add_player_info();
 }

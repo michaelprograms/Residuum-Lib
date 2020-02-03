@@ -45,7 +45,7 @@ void heart_beat() {
     if((x=time()) - __LastSave < AUTOSAVE_TIME) return;
     __LastSave = x;
     save_player(query_name());
-    if(!creatorp(this_object())) message("system", "Autosave.", this_object());
+    message("system", "Autosave.", this_object());
 }
 
 nomask void save_player(string nom) {
