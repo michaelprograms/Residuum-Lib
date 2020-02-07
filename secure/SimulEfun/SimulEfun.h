@@ -24,6 +24,7 @@ varargs string rightpad(string text, int n, string pad);
 varargs string format_header_bar(string title, string optional);
 string format_divider_bar();
 string format_footer_bar();
+string time_ago(int timestamp);
 string time_ago_full(int timestamp);
 
 // unsorted

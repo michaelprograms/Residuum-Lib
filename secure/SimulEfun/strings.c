@@ -97,3 +97,16 @@ string time_ago_full(int timestamp) {
     secs = secs - (m * 60);
     return (w ? w + "w " : "") + (d ? d + "d " : "") + (h ? h + "h " : "")+(m ? m + "m " : "") + secs + "s";
 }
+string time_ago(int timestamp) {
+    int w, d, h, m;
+    int secs = time() - timestamp;
+    w = secs / 604800;
+    secs = secs - (w * 604800);
+    d = secs / 86400;
+    secs = secs - (d * 86400);
+    h = secs / 3600;
+    secs = secs - (h * 3600);
+    m = secs / 60;
+    secs = secs - (m * 60);
+    return (w ? w + "w " : "") + (d ? d + "d " : "") + (h ? h + "h " : "")+(m ? m + "m " : "");
+}

@@ -19,7 +19,7 @@ void create() {
 
 string query_player_login_brief(string who) {
     string nom, line = "";
-    string name;
+    object ob;
 
     if(!who) return "";
     nom = lower_case(who);
@@ -28,11 +28,14 @@ string query_player_login_brief(string who) {
     who = sprintf("%s/%s/%s", DIR_PLAYERS, nom[0..0], nom);
     unguarded((: restore_object, who :));
 
-    line = arrange_string(query_cap_name(), MAX_PLAYER_CAP_NAME_LENGTH) + "  " + arrange_string("level "+query_level()+" "+query_race(), 16);
+    line = format_syntax(query_cap_name(), 1) + pad(MAX_PLAYER_CAP_NAME_LENGTH - sizeof(query_cap_name())) + " ";
+    line += leftpad(""+query_level(), 4, " ") + pad(20) + " ";
 
-    if(query_position() != "player") line += " ("+query_position()+")";
-
-    line += "last seen "+time_ago_full(query_last_on());
+    // if(query_position() != "player") line += " ("+query_position()+")";
+    if(ob = find_player(nom)) {
+        if(interactive(ob)) line += "connected";
+        else line += "linkdead";
+    } else line += time_ago(query_last_on());
 
     return line;
 }

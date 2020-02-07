@@ -155,7 +155,7 @@ static void confirm_password(string str2, string str1) {
 
 static void prompt_account_menu() {
     mapping characters = __Account->query_characters();
-    string *names = keys(characters), line, msg;
+    string *names = keys(characters), msg;
     object ob;
 
     remove_call_out("idle");
@@ -166,26 +166,20 @@ static void prompt_account_menu() {
         prompt_create_character();
         return;
     } else {
-        msg = "\n"+format_header_bar("ACCOUNT MENU")+"\n%^ORANGE%^Welcome back, "+__AccountName+". Last seen "+time_ago_full(__AccountLastOn)+" ago.%^RESET%^\n\n";
+        msg = "\n"+format_header_bar("ACCOUNT MENU")+"\n%^ORANGE%^Welcome back, "+__AccountName+". Last seen "+time_ago(__AccountLastOn)+" ago.%^RESET%^\n\n";
         msg += "%^BOLD%^Account Options     :%^BOLD_OFF%^ "+format_syntax("<password>")+" "+format_syntax("<quit>")+"\n";
         msg += "%^BOLD%^Player Options      :%^BOLD_OFF%^ "+format_syntax("<new>")+" "+format_syntax("<delete>")+"\n\n";
         message("system", msg, this_object());
 
-        msg = "";
+        msg = "%^BOLD%^Login As...        Level                    Last Seen%^BOLD_OFF%^\n";
+
         //sizeof(names)+"/"+MAX_CHARACTERS_PER_ACCOUNT
 
         names = sort_array(names, 1);
         for(int i = 0; i < sizeof(names); i ++) {
             // line = sprintf("%2s", ""+(i+1))+". ";
-            line = "";
-            line += format_syntax("<"+names[i]+">");
-            line += pad(MAX_PLAYER_NAME_LENGTH-sizeof(names[i]))+" ";
-            line += FINGER_D->query_player_login_brief(names[i]);
-            if(ob = find_player(names[i])) {
-                if(interactive(ob)) line += " [connected]";
-                else line += " [netdead]";
-            }
-            msg += line + "\n";
+            // line = format_syntax("<"+names[i]+">") + pad(MAX_PLAYER_NAME_LENGTH-sizeof(names[i])) + " ";
+            msg += FINGER_D->query_player_login_brief(names[i]) + "\n";
         }
         message("system", msg, this_object());
 
