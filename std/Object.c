@@ -17,7 +17,7 @@ inherit CLEAN_UP;
 private int __Invis, __Mass;
 static private int __Value, __Destroy;
 private string __CapName;
-private mixed __Short, __Long, __PreventDrop, __PreventGet, __PreventPut, __Read;
+static private mixed __Short, __Long, __PreventDrop, __PreventGet, __PreventPut, __Read;
 static private string __Material, __VendorType, *__Id, *__Adjectives;
 static string __TrueName, __Creator;
 static private object __LastLocation;

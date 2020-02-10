@@ -13,9 +13,9 @@
 
 #define TIME_TO_HEAL 10
 
-int invis, ok_to_heal;
-static int forced, sight_bonus, spiritual, physical;
 string description;
+
+static int ok_to_heal, forced, sight_bonus, spiritual, physical;
 static string party;
 static string *search_path;
 private string gender;
@@ -33,7 +33,6 @@ void set_alignment(int x);
 void add_alignment(int x);
 void adj_alignment(int x);
 void adjust_biorhythms();
-void set_invis();
 string query_client();
 int query_physical();
 int query_outlaw();
@@ -49,7 +48,6 @@ string query_subjective();
 int query_intox();
 int query_stuffed();
 int query_quenched();
-int query_invis();
 string query_party();
 string query_long(string unused);
 static void init_path();

@@ -554,7 +554,7 @@ string query_title() {
     string foo,fii;
 
     if(query_ghost()) return "A ghost";
-    if(invis) return 0;
+    if(query_invis()) return 0;
     str = getenv( "TITLE" );
     if( !str ) str = query_cap_name();
     else if( !sscanf(str, "%s$N%s", foo,fii) )
