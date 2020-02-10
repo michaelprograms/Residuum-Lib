@@ -18,7 +18,7 @@ static string target_limb;
 string *limbs;
 int all_my_fingers;
 static int num_wielded;
-private int heal_rate;
+static private int heal_rate;
 private static mapping magic_protection;
 
 void set_wielding_limbs(string *str);
