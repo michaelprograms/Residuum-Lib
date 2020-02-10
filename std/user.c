@@ -39,7 +39,7 @@ sprintf("The world about you darkens a moment at the death of %s.", query_cap_na
 })
 
 int player_age;
-int __NoQuit;
+static int __NoQuit;
 int level, ghost, rolls, verbose_moves;
 int birth, last_on;
 static int disable, time_of_login;

@@ -11,10 +11,8 @@
 #include "autosave.h"
 
 private mixed *__AutoLoad;
-private int __ItemsValue;
-static private int __LastSave;
-
-void convert_auto();
+static private int __ItemsValue;
+private int __LastSave;
 
 void create() {
     __AutoLoad = ({});
@@ -27,7 +25,6 @@ void setup() {
     int i;
 
     call_out("save_player", 2, query_name());
-    convert_auto();
     if(!(i = sizeof(__AutoLoad))) return;
     while(i--) {
         if(sizeof(__AutoLoad[i]) != 2) continue;
@@ -91,10 +88,3 @@ int remove() {
 }
 
 string query_name() { return 0; }
-
-private mixed *auto_load;
-static void convert_auto() {
-    if(!auto_load) return;
-    __AutoLoad = copy(auto_load);
-    auto_load = 0;
-}
