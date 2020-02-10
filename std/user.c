@@ -38,8 +38,6 @@ sprintf("The bells of %s toll for the death of %s.", mud_name(), query_cap_name(
 sprintf("The world about you darkens a moment at the death of %s.", query_cap_name()),\
 })
 
-int platinum, gold, electrum, silver, copper;
-
 int player_age;
 int __NoQuit;
 int level, ghost, rolls, verbose_moves;
