@@ -34,7 +34,7 @@ void remove() { internal_remove(); }
 
 static void logon() {
     receive(format_ansi(read_file("/news/welcome"))+"\n");
-    receive("            Driver: "+version()+"    "+"Mudlib: "+mudlib()+" "+mudlib_version()+"\n\n"); // AMCP 1.1 compliant
+    receive(center("Driver: "+version()+"    "+"Mudlib: "+mudlib()+" "+mudlib_version(), 80)+"\n\n"); // AMCP 1.1 compliant
 
     log_file("login_connect", time()+" "+__IPAddress+"\n");
     call_out("idle", LOGON_TIMEOUT);
