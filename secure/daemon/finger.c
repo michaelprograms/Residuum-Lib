@@ -28,8 +28,14 @@ string query_player_login_brief(string who) {
     who = sprintf("%s/%s/%s", DIR_PLAYERS, nom[0..0], nom);
     unguarded((: restore_object, who :));
 
+    // 3 + MAX_PLAYER_CAP_NAME_LENGTH
     line = format_syntax(query_cap_name(), 1) + pad(MAX_PLAYER_CAP_NAME_LENGTH - sizeof(query_cap_name())) + " ";
-    line += leftpad(""+query_level(), 4, " ") + pad(20) + " ";
+    // 4 + 1
+    line += leftpad(""+query_level(), 4, " ") + " ";
+    // 10 + 1
+    line += rightpad(capitalize(query_race()), 10, " ") + " ";
+    // 16 + 1
+    line += rightpad(capitalize(""+query_class()), 16, " ") + " ";
 
     // if(query_position() != "player") line += " ("+query_position()+")";
     if(ob = find_player(nom)) {

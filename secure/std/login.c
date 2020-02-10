@@ -171,7 +171,7 @@ static void prompt_account_menu() {
         msg += "%^BOLD%^Player Options      :%^BOLD_OFF%^ "+format_syntax("<new>")+" "+format_syntax("<delete>")+"\n\n";
         message("system", msg, this_object());
 
-        msg = "%^BOLD%^Login As...        Level                    Last Seen%^BOLD_OFF%^\n";
+        msg = "%^BOLD%^Login As...       Level Race       Class            Last Seen%^BOLD_OFF%^\n";
 
         //sizeof(names)+"/"+MAX_CHARACTERS_PER_ACCOUNT
 
