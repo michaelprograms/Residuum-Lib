@@ -331,6 +331,9 @@ void setup() {
     set_id( ({}) );
     set_max_encumbrance(200*query_stats("strength"));
     nmsh::setup();
+    if(!query_class()) {
+        set_class("child");
+    }
     if(!query_race()) {
         set_race("human");
         new_body();
