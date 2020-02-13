@@ -166,7 +166,7 @@ static void prompt_account_menu() {
         prompt_create_character();
         return;
     } else {
-        msg = "\n"+format_header_bar("ACCOUNT MENU")+"\n%^ORANGE%^Welcome back, "+__AccountName+". Last seen "+time_ago(__AccountLastOn)+" ago.%^RESET%^\n\n";
+        msg = "\n"+format_header_bar("ACCOUNT MENU")+"\n%^ORANGE%^Welcome back, "+__AccountName+". Last seen "+time_ago(__AccountLastOn)+".%^RESET%^\n\n";
         msg += "%^BOLD%^Account Options     :%^BOLD_OFF%^ "+format_syntax("<password>")+" "+format_syntax("<quit>")+"\n";
         msg += "%^BOLD%^Player Options      :%^BOLD_OFF%^ "+format_syntax("<new>")+" "+format_syntax("<delete>")+"\n\n";
         message("system", msg, this_object());

@@ -98,15 +98,33 @@ string time_ago_full(int timestamp) {
     return (w ? w + "w " : "") + (d ? d + "d " : "") + (h ? h + "h " : "")+(m ? m + "m " : "") + secs + "s";
 }
 string time_ago(int timestamp) {
-    int w, d, h, m;
-    int secs = time() - timestamp;
-    w = secs / 604800;
-    secs = secs - (w * 604800);
-    d = secs / 86400;
-    secs = secs - (d * 86400);
-    h = secs / 3600;
-    secs = secs - (h * 3600);
-    m = secs / 60;
-    secs = secs - (m * 60);
-    return (w ? w + "w " : "") + (d ? d + "d " : "") + (h ? h + "h " : "")+(m ? m + "m " : "");
+    int Years, Months, Weeks, Days, Hours, Minutes;
+    int diff = time() - timestamp;
+    string msg = "";
+
+    Years = diff / 31536000;
+    diff = diff - (Years * 31536000);
+    Months = diff / 2628000;
+    diff = diff - (Months * 2628000);
+    Weeks = diff / 604800;
+    diff = diff - (Weeks * 604800);
+    Days = diff / 86400;
+    diff = diff - (Days * 86400);
+
+    if(Years > 0) msg += Years + " year" + (Years > 1 ? "s" : "");
+    if(Months > 0) msg += (sizeof(msg)>0?" ":"") + Months + " month" + (Months > 1 ? "s" : "");
+    if(Weeks > 0) msg += (sizeof(msg)>0?" ":"") + Weeks + " week" + (Weeks > 1 ? "s" : "");
+    if(Days > 0) msg +=  (sizeof(msg)>0?" ":"") + Days + " day" + (Days > 1 ? "s" : "");
+
+    if(sizeof(msg) > 0) return msg + " ago";
+
+    Hours = diff / 3600;
+    diff = diff - (Hours * 3600);
+    if(Hours > 0) return Hours + " hour" + (Hours > 1 ? "s" : "") + " ago";
+
+    Minutes = diff / 60;
+    diff = diff - (Minutes * 60);
+    if(Minutes > 0) return Minutes + " minute" + (Minutes > 1 ? "s" : "") + " ago";
+
+    return "very recently";
 }
