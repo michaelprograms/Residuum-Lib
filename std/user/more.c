@@ -14,25 +14,22 @@ void create() { __More = ([]); }
 varargs int more(mixed what, string cl, function endmore, mixed args) {
     string *tmp;
 
-    if(!pointerp(what) && !stringp(what))
-      return notify_fail("Unknown file reference.\n");
+    if(!pointerp(what) && !stringp(what)) return notify_fail("Unknown file reference.\n");
     if(__More["lines"]) __More = ([]);
     if(!(__More["class"] = cl)) __More["class"] = "info";
     if(!(__More["screen"]=to_int((string)this_object()->query_option("PAGE"))))
-      __More["screen"] = 20;
+        __More["screen"] = 20;
     if(stringp(what)) {
         if(sizeof(tmp = (string *)this_object()->wild_card(what)) != 1)
-          return notify_fail("Ambiguous file reference.\n");
+            return notify_fail("Ambiguous file reference.\n");
         if(file_size(tmp[0]) < 1)
-          return notify_fail("Ambiguous file reference.\n");
-        __More["total"] = sizeof(__More["lines"] =
-          explode(read_file(tmp[0]), "\n"));
-    }
-    else if(pointerp(what))
-      __More["total"] = sizeof(__More["lines"] = what);
+            return notify_fail("Ambiguous file reference.\n");
+        __More["total"] = sizeof(__More["lines"] = explode(read_file(tmp[0]), "\n"));
+    } else if(pointerp(what))
+        __More["total"] = sizeof(__More["lines"] = what);
     else return notify_fail("Illegal file reference.\n");
     if(creatorp(this_object()) && tmp && tmp[0])
-      message(__More["class"], "--==** "+tmp[0]+" **==--", this_object());
+        message(__More["class"], "--==** "+tmp[0]+" **==--", this_object());
     if(!__More["total"]) {
         __More = ([]);
         if(functionp(endmore)) {
@@ -67,18 +64,15 @@ static void do_more(string cmd) {
         case "<": __More["current"] = 0; break;
         case ">": __More["current"] = __More["total"]-1; break;
         case "/":
-          if(getenv("MORE") == "off") regexp_fwd(args);
-          else input_to("regexp_fwd");
+          input_to("regexp_fwd");
           return;
         case "?":
-            if(getenv("MORE") == "off") regexp_bkwd(args);
-            else input_to("regexp_bkwd");
+            input_to("regexp_bkwd");
             return;
         case "n":
           if(!__More["regexp"] || __More["regexp"] == "") {
             message(__More["class"], "\nNo previous search.", this_object());
-            if(getenv("MORE") == "off") input_to("do_more");
-            else get_char("do_more");
+            get_char("do_more");
             return;
           }
           if(__More["regexp"][0] == '/')
@@ -88,19 +82,16 @@ static void do_more(string cmd) {
         case "=":
           message(__More["class"], "\nCurrent line: "+
             __More["current"], this_object());
-          if(getenv("MORE") == "off") input_to("do_more");
-          else get_char("do_more");
+          get_char("do_more");
           return;
         case "v": case "V":
           message(__More["class"], "\nNightmare Mudlib \"more\" "+
             "version 2.1 by Descartes of Borg 931204.", this_object());
-          if(getenv("MORE") == "off") input_to("do_more");
-          else get_char("do_more");
+          get_char("do_more");
           return;
         case "h": case "H":
             do_help();
-            if(getenv("MORE") == "off") input_to("do_more");
-            else get_char("do_more");
+            get_char("do_more");
             return;
         case "Q": case "q":
           message(__More["class"], "", this_object());
@@ -110,19 +101,16 @@ static void do_more(string cmd) {
           return;
         default:
           message(__More["class"], "\nUnrecognized command.", this_object());
-          if(getenv("MORE") == "off") input_to("do_more");
-          else get_char("do_more");
+          get_char("do_more");
           return;
     }
     message(__More["class"], "", this_object());
-    for(i=__More["current"];
-      i<__More["current"] + __More["screen"]; i++) {
+    for(i=__More["current"];i<__More["current"] + __More["screen"]; i++) {
         if(i>= __More["total"]) {
-          if(functionp(__More["endfun"]) &&
-            (int)master()->valid_function(__More["endfun"]))
-              (*__More["endfun"])(__More["args"]);
-          __More = ([]);
-          return;
+            if(functionp(__More["endfun"]) && (int)master()->valid_function(__More["endfun"]))
+                (*__More["endfun"])(__More["args"]);
+            __More = ([]);
+            return;
         }
         message(__More["class"], __More["lines"][i], this_object());
     }
@@ -134,10 +122,8 @@ static void do_more(string cmd) {
         return;
     }
     __More["current"] = i;
-    message("prompt", "%^B_WHITE%^BLACK%^--More-- ("+
-      to_int(percent(__More["current"], __More["total"]))+"%) ", this_object());
-    if(getenv("MORE") == "off") input_to("do_more");
-    else get_char("do_more");
+    message("prompt", "%^B_WHITE%^BLACK%^--More-- ("+to_int(percent(__More["current"], __More["total"]))+"%) ", this_object());
+    get_char("do_more");
     return;
 }
 
@@ -164,8 +150,7 @@ static void regexp_fwd(string str) {
     __More["regexp"] = "/"+str;
     if(!sizeof(matches = regexp(__More["lines"][__More["current"]..__More["total"]-1], str))) {
         message(__More["class"], "\nPattern not found.\n", this_object());
-        if(getenv("MORE") == "off") input_to("do_more");
-        else get_char("do_more");
+        get_char("do_more");
         return;
     }
     for(i=__More["current"]; i<__More["total"]; i++) {
@@ -185,8 +170,7 @@ static void regexp_bkwd(string str) {
     __More["regexp"] = "?"+str;
     if(!sizeof(matches=regexp(__More["lines"][0..__More["current"]], str))) {
         message(__More["class"], "\nPattern not found.", this_object());
-        if(getenv("MORE") == "off") input_to("do_more");
-        else get_char("do_more");
+        get_char("do_more");
         return;
     }
     __More["current"] = member_array(matches[0],__More["lines"][0..__More["current"]]);
