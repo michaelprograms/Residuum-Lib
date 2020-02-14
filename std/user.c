@@ -50,7 +50,7 @@ static int __LastAged;
 mapping blocked, news;
 static mapping __LastError;
 static int snoop, earmuffs;
-string char_name, real_name, email, ip, race, original_site;
+string char_name, real_name, email, ip, race;
 private string position, primary_start, *__RestrictedChannels;
 private int __WhereBlock;
 private static string *channels;
@@ -880,8 +880,7 @@ static private register_channels() {
     CHAT_D->add_user(channels - __RestrictedChannels);
 }
 
-string query_first_site() { return original_site; }
-
+// TODO: rework as option
 void set_primary_start(string str) {
     object ob;
 
@@ -889,7 +888,6 @@ void set_primary_start(string str) {
     if(clonep(ob) || virtualp(ob)) return;
     setenv("start", primary_start = str);
 }
-
 string query_primary_start() { return primary_start; }
 
 void clean_net_dead() {
