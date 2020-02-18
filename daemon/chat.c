@@ -12,6 +12,7 @@
 
 inherit DAEMON;
 
+#define STATUS_C "%^BOLD%^"
 #define MAGENTA "%^MAGENTA%^"
 #define RESET "%^RESET%^"
 
@@ -62,6 +63,17 @@ void remove_user(string *chans) {
     }
 }
 
+int do_status(string str) {
+    object *list;
+    string verb = "status", msg;
+
+    msg = sprintf("%s<%s>%s %s", STATUS_C, verb, RESET, str);
+    list = channels["status"] - ({ this_player() });
+    message(verb, msg, list);
+
+    return 1;
+}
+
 int do_chat(string verb, string str) {
     object *list;
     string msg;
@@ -81,8 +93,11 @@ int do_chat(string verb, string str) {
         message(verb, msg, list);
         return 1;
     }
-    if(member_array(this_player(), channels[verb]) == -1) return 0;
-    if(!str) {
+    if(verb == "status" || verb == "runtime") {
+        return notify_fail("Channel "+verb+" is read only.\n");
+    }
+    if(member_array(this_player(), channels[verb]) == -1 && verb != "status") return 0;
+    if(this_player() && !str) {
         this_player()->set_blocked(verb);
         return 1;
     }
@@ -95,17 +110,16 @@ int do_chat(string verb, string str) {
     }
     if(verb == "admin" || verb=="cre") {
         if(!(name = (string)this_player()->query_CapName()))
-          name = capitalize((string)this_player()->query_name());
-    }
-    else name=this_player()->query_cap_name();
-    if(emote) msg = sprintf("%s<%s>%s %s %s", MAGENTA, verb, RESET,
-      name, str);
+            name = capitalize((string)this_player()->query_name());
+    } else name=this_player()->query_cap_name();
+
+    if(emote) msg = sprintf("%s<%s>%s %s %s", MAGENTA, verb, RESET, name, str);
     else msg = sprintf("%s %s<%s>%s %s", name, MAGENTA, verb, RESET, str);
     message(verb, msg, channels[verb]);
-    if(member_array(verb, INTERMUD_CHANNELS) != -1){
-      //SERVICES_D->send_gwizmsg(str, emote);
-      SERVICES_D-> eventSendChannel(name, "imud_code", str, 0);
-    }
+    // if(member_array(verb, INTERMUD_CHANNELS) != -1){
+    //   //SERVICES_D->send_gwizmsg(str, emote);
+    //   SERVICES_D-> eventSendChannel(name, "imud_code", str, 0);
+    // }
     return 1;
 }
 

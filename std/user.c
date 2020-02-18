@@ -271,19 +271,32 @@ int remove() {
     return living::remove();
 }
 
+private void log_connection_event(string type) {
+    if(previous_object() && base_name(previous_object(0)) != OB_LOGIN) return 0;
+    log_file("enter", query_name()+" ("+query_account()+") ["+type+"]: "+ctime(time())+" from "+query_ip_name()+"\n");
+}
+
 int quit(string str) {
-    if(__NoQuit && !query_forced()) return notify_fail("Stinking cheater.\n");
-    if (str) {
-        notify_fail("Quit what ?\n");
-        return 0;
-    }
+    // Verify can quit
+    if(__NoQuit && !query_forced()) return notify_fail("You cannot quit at this time.\n");
     if(query_followers()) clear_followers();
-    message("environment", "Reality suspended.  See you another time!", this_object());
+
+    // Quit messages
+    if((!creatorp(this_object()) || !query_invis()) && interactive(this_object())) {
+        CHAT_D->do_status(query_CapName()+" has left "+mud_name()+".");
+    }
+    message("system", "You exit the reality of "+mud_name()+".", this_object());
+    message("system", query_CapName() + " exits the reality of "+mud_name()+".", environment(this_object()), this_object());
+    log_connection_event("exit");
+
+    // Updates to player
     last_on = time();
-    save_player( query_name() );
-    say(query_cap_name() + " is gone from our reality.");
-    log_file("enter", query_name()+" (quit): "+ctime(time())+"\n");
+    save_player(query_name());
+
+    // Updates about player
     PLAYER_D->add_player_info();
+
+    // Dispose of player
     move(ROOM_FREEZER);
     remove();
     return 1;
@@ -362,9 +375,16 @@ void setup() {
     time_of_login = time();
     call_out("save_player", 2, query_name());
     PLAYER_D->add_player_info();
-    log_file("enter", query_name()+" (enter): "+ctime(time())+" from "+query_ip_name()+"\n");
+
+    // Enter messages
+    if((!creatorp(this_object()) || !query_invis()) && interactive(this_object())) {
+        CHAT_D->do_status(query_CapName()+" has entered "+mud_name()+".");
+    }
+    message("system", "You enter the reality of "+mud_name()+".", this_object());
+    message("system", query_CapName() + " enters the reality of "+mud_name()+".", environment(this_object()), this_object());
+    log_connection_event("enter");
+
     NEWS_D->read_news();
-    set_max_sp(query_stats("agility")*7);
 }
 
 void heart_beat() {
@@ -399,10 +419,19 @@ void net_dead() {
     save_player(query_name());
     net_died_here = file_name( environment(this_object()) );
     message("other_action", sprintf("%s suddenly disappears into a sea of irreality.", query_cap_name()), environment(this_object()), ({ this_object() }));
+    if(!creatorp(this_object()) || !query_invis()) {
+        CHAT_D->do_status(query_CapName()+" has disconnected from "+mud_name()+".");
+    }
+    log_connection_event("disconnect");
     this_object()->move_player(ROOM_FREEZER);
     if(query_snoop(this_object()))
-        tell_object(query_snoop(this_object()), capitalize(query_name())+" has gone net-dead.");
+        tell_object(query_snoop(this_object()), capitalize(query_name())+" has gone link-dead.");
     set_heart_beat(0);
+}
+
+void override_setup() {
+    if(base_name(previous_object()) != OB_LOGIN) return;
+    log_connection_event("override");
 }
 
 void restart_heart() {
@@ -418,6 +447,10 @@ void restart_heart() {
     net_died_here = 0;
     say(query_cap_name()+" has rejoined our reality.");
     register_channels();
+    if(!creatorp(this_object()) || !query_invis()) {
+        CHAT_D->do_status(query_CapName()+" has reconnected to "+mud_name()+".");
+    }
+    log_connection_event("reconnect");
 }
 
 nomask void die() {
@@ -681,7 +714,6 @@ void set_guild(string str) {
     guild = str;
     if(!guild) guild = str;
 }
-
 string query_guild() { return guild; }
 
 void set_rolls(int x) { rolls = x; }
@@ -717,7 +749,6 @@ string *query_quests() {
     if(!quests) quests = ({});
     return quests;
 }
-
 int set_quest(string str) {
     if(!quests) quests = ({});
     if(member_array(str, quests) != -1) return 0;
@@ -731,7 +762,6 @@ void return_to_death_site() {
     if(!died_here) this_object()->move("/domains/Praxis/square");
     else this_object()->move(died_here);
 }
-
 void revive() {
     message("my_action", "You return from the dead!", this_object());
     message("other_action", query_cap_name()+ " returns from the dead.",
@@ -740,7 +770,6 @@ void revive() {
     new_body();
     ghost = 0;
 }
-
 int query_ghost() { return ghost; }
 
 int query_quest_points() {
@@ -752,28 +781,23 @@ void set_disable(int x) {
     if(x) disable = x;
     else disable = 1;
 }
-
 int query_disable() { return disable; }
 
 void set_married(string str) {
     if(current_marriage) return;
     current_marriage = ({ lower_case(str), time() });
 }
-
 void divorce_me() {
     if(!current_marriage) return;
     if(!divorced) divorced = ({ ({ current_marriage[0], current_marriage[1], time() }) });
     else divorced += ({ ({current_marriage[0], current_marriage[1], time() }) });
     current_marriage = 0;
 }
-
 string query_married() {
     return (current_marriage && sizeof(current_marriage) ?
       current_marriage[0] : 0);
 }
-
 mixed *query_current_marriage() { return current_marriage; }
-
 mixed *query_divorced() { return divorced; }
 
 
@@ -784,7 +808,6 @@ void set_news(string which, int size) {
     if(!news) news = ([]);
     news[which] = size;
 }
-
 int query_news(string which) {
     if(!news) news = ([]);
     return news[which];
@@ -850,15 +873,12 @@ void restrict_channel(string channel) {
     __RestrictedChannels += ({ channel });
     CHAT_D->remove_user( ({ channel }) );
 }
-
 void unrestrict_channel(string str) {
     if(base_name(previous_object()) != "/cmds/adm/_channel") return;
     __RestrictedChannels -= ({ str });
     CHAT_D->add_user( ({ str }) );
 }
-
 nomask string *query_channels() { return channels - __RestrictedChannels; }
-
 static private register_channels() {
     channels = ({});
     // if(creatorp(this_object()))
@@ -867,10 +887,10 @@ static private register_channels() {
     // if(query_guild()) channels += ({ query_guild() });
     // if(creatorp(this_object()) || high_mortalp(this_object())) channels += ({ "hm", "newbie" });
     // else if(query_level() < 6) channels += ({ "newbie" });
-    channels += ({ "newbie" });
+    channels += ({ "status", "newbie" });
     if(this_object()->query_level() > 19) channels += ({ "hm" });
 
-    if(creatorp(this_object())) channels += ({ "error", "cre"});
+    if(creatorp(this_object())) channels += ({ "error", "cre" });
 
     if(ambassadorp(this_object())) channels += ({ "gossip" });
     if(archp(this_object())) channels += ({ "admin" });
@@ -947,30 +967,24 @@ void set_log_harass(int x) {
     log_file(DIR_LOGS "/harass/" + query_name(), txt);
     __LogHarass = x;
 }
-
 int query_log_harass() { return __LogHarass; }
 
 void set_client(string str) {
     if(base_name(previous_object()) != OB_LOGIN) return;
     __Client = str;
 }
-
 string query_client() { return __Client; }
 
 int query_hp() { return living::query_hp(); }
-
 int query_max_hp() { return living::query_max_hp(); }
 
 int query_mp() { return living::query_mp(); }
-
 int query_max_mp() { return living::query_max_mp(); }
 
 int query_sp() { return living::query_sp(); }
-
 int query_max_sp() { return living::query_max_sp(); }
 
 string get_path() { return nmsh::query_cwd(); }
-
 string query_cwd() { return nmsh::query_cwd(); }
 
 string query_prompt() {

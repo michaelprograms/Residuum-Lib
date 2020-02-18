@@ -283,8 +283,6 @@ static void confirm_new_character(string str) {
     }
     __CapName = capitalize(__Name);
     prompt_cap_name();
-     // log_file("enter", sprintf("%s : %s : (new player)\n", ctime(time()), __Name));
-
 }
 
 static void prompt_password() {
@@ -321,7 +319,6 @@ static private int boot_copy() {
         input_to("disconnect_copy", I_NORMAL);
         return 1;
     }
-    log_file("enter", sprintf("%s (exec): %s\n", __Name, ctime(time())));
     if(exec(__Player, this_object())) __Player->restart_heart();
     else message("system", "Problem reconnecting.\n", this_object());
     return internal_remove();
@@ -338,6 +335,8 @@ static void disconnect_copy(string str) {
     exec(tmp = new(OB_USER), __Player);
     exec(__Player, this_object());
     __Player->set_client(__Client);
+    __Player->override_setup();
+
     destruct(tmp);
     message("system", "\nAllowing login.\n", __Player);
     return internal_remove();
