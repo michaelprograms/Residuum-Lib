@@ -3,15 +3,15 @@ varargs string format_syntax(string text, int wrap) {
     if(!s) return "";
     if (wrap && !regexp(s, "^<")) s = "<" + s;
     if (wrap && !regexp(s, ">$")) s = s + ">";
-    s = replace_string(s, "<", "%^CYAN%^<");
-    s = replace_string(s, "[", "%^CYAN%^BOLD%^[%^RESET%^CYAN%^");
-    s = replace_string(s, "|", "%^CYAN%^BOLD%^|%^RESET%^CYAN%^");
-    s = replace_string(s, "]", "%^CYAN%^BOLD%^]%^RESET%^CYAN%^");
-    s = replace_string(s, "(", "%^RESET%^BOLD%^(%^RESET%^CYAN%^");
-    s = replace_string(s, ")", "%^RESET%^BOLD%^)%^RESET%^CYAN%^");
-    s = replace_string(s, "{", "%^RESET%^{%^CYAN%^");
-    s = replace_string(s, "}", "%^RESET%^}%^CYAN%^");
-    s = replace_string(s, ">", ">%^RESET%^");
+    s = replace_string(s, "<", "%^CYAN%^<%^RESET%^");
+    s = replace_string(s, "[", "%^CYAN%^BOLD%^[%^RESET%^");
+    s = replace_string(s, "|", "%^CYAN%^BOLD%^|%^RESET%^");
+    s = replace_string(s, "]", "%^CYAN%^BOLD%^]%^RESET%^");
+    s = replace_string(s, "(", "%^RESET%^BOLD%^(%^RESET%^");
+    s = replace_string(s, ")", "%^RESET%^BOLD%^)%^RESET%^");
+    s = replace_string(s, "{", "%^RESET%^{");
+    s = replace_string(s, "}", "%^RESET%^}");
+    s = replace_string(s, ">", "%^CYAN%^>%^RESET%^");
     return s;
 }
 
