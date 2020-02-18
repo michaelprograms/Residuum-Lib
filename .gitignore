@@ -1,2 +1,7 @@
 daemon/save/**
 log/**
+notes/**
+realms/**
+# secure/save/**
+/secure/save/postal
+tmp/**
