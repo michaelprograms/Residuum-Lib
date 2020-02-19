@@ -29,14 +29,16 @@ inherit "/std/user/refs";
 inherit LIVING;
 
 
-static string *__IgnoreMsgClass;
 #define DEATH_MSGS ({\
-sprintf("A cold wind sweeps across %s, grieving the loss of %s.", mud_name(), query_cap_name()),\
-sprintf("You hear the faint howl of %s death from far away.", possessive_noun(query_cap_name())),\
-sprintf("%s mourns the tragic death of %s.", mud_name(), query_cap_name()),\
-sprintf("The bells of %s toll for the death of %s.", mud_name(), query_cap_name()),\
-sprintf("The world about you darkens a moment at the death of %s.", query_cap_name()),\
+    sprintf("A cold wind sweeps across %s, grieving the loss of %s.", mud_name(), query_cap_name()),\
+    sprintf("You hear the faint howl of %s death from far away.", possessive_noun(query_cap_name())),\
+    sprintf("%s mourns the tragic death of %s.", mud_name(), query_cap_name()),\
+    sprintf("The bells of %s toll for the death of %s.", mud_name(), query_cap_name()),\
+    sprintf("The world about you darkens a moment at the death of %s.", query_cap_name()),\
 })
+
+static string *__IgnoreMsgClass;
+static private object __Account;
 
 int player_age;
 static int __NoQuit;
@@ -65,6 +67,8 @@ mixed *current_marriage, *divorced;
 static string net_died_here;
 static mapping term_info;
 static object died_here;
+
+private void log_connection_event(string type);
 
 int query_where_block();
 int set_where_block();
@@ -273,7 +277,9 @@ int remove() {
 
 private void log_connection_event(string type) {
     if(previous_object() && base_name(previous_object(0)) != OB_LOGIN) return 0;
-    log_file("enter", query_name()+" ("+query_account()+") ["+type+"]: "+ctime(time())+" from "+query_ip_name()+"\n");
+    log_file("enter", query_account()+"/"+query_name()+" ["+type+"]: "+ctime(time())+" from "+query_ip_name()+"\n");
+    if(__Account) __Account->update_last_on();
+    last_on = time();
 }
 
 int quit(string str) {
@@ -289,11 +295,8 @@ int quit(string str) {
     message("system", query_CapName() + " exits the reality of "+mud_name()+".", environment(this_object()), this_object());
     log_connection_event("exit");
 
-    // Updates to player
-    last_on = time();
+    // Save player
     save_player(query_name());
-
-    // Updates about player
     PLAYER_D->add_player_info();
 
     // Dispose of player
@@ -326,8 +329,10 @@ void new_body() {
     set_max_encumbrance(stats["strength"] * 200);
 }
 
-void setup() {
+void setup(object account) {
     string tmp, *start_temp;
+
+    __Account = account;
 
     set_living_name(query_name());
     set_heart_beat(1);
@@ -371,9 +376,7 @@ void setup() {
     }
     write_messages();
     autosave::setup();
-    last_on = time();
     time_of_login = time();
-    call_out("save_player", 2, query_name());
     PLAYER_D->add_player_info();
 
     // Enter messages
@@ -383,6 +386,7 @@ void setup() {
     message("system", "You enter the reality of "+mud_name()+".", this_object());
     message("system", query_CapName() + " enters the reality of "+mud_name()+".", environment(this_object()), this_object());
     log_connection_event("enter");
+    call_out("save_player", 1, query_name());
 
     NEWS_D->read_news();
 }
@@ -404,25 +408,24 @@ void heart_beat() {
     magic_round = 0;
     if(query_age() > ok_to_heal) do_healing(calculate_healing());
     else calculate_healing();
-    if(query_idle(this_object()) >= 3600 && !creatorp(this_object()) ) {
-        this_object()->move_player(ROOM_FREEZER);
-        this_object()->force_me("sell all");
-        this_object()->force_me("quit");
-    }
+    // if(query_idle(this_object()) >= 3600 && !creatorp(this_object()) ) {
+    //     this_object()->move_player(ROOM_FREEZER);
+    //     this_object()->force_me("sell all");
+    //     this_object()->force_me("quit");
+    // }
     if(query_invis() && query_sp()<0 && !creatorp(this_player()) ) set_invis(0);
 }
 
 void net_dead() {
     CHAT_D->remove_user(channels - __RestrictedChannels);
     channels = ({});
-    last_on = time();
-    save_player(query_name());
     net_died_here = file_name( environment(this_object()) );
     message("other_action", sprintf("%s suddenly disappears into a sea of irreality.", query_cap_name()), environment(this_object()), ({ this_object() }));
     if(!creatorp(this_object()) || !query_invis()) {
         CHAT_D->do_status(query_CapName()+" has disconnected from "+mud_name()+".");
     }
     log_connection_event("disconnect");
+    save_player(query_name());
     this_object()->move_player(ROOM_FREEZER);
     if(query_snoop(this_object()))
         tell_object(query_snoop(this_object()), capitalize(query_name())+" has gone link-dead.");
@@ -432,6 +435,7 @@ void net_dead() {
 void override_setup() {
     if(base_name(previous_object()) != OB_LOGIN) return;
     log_connection_event("override");
+    call_out("save_player", 1, query_name());
 }
 
 void restart_heart() {
@@ -451,6 +455,7 @@ void restart_heart() {
         CHAT_D->do_status(query_CapName()+" has reconnected to "+mud_name()+".");
     }
     log_connection_event("reconnect");
+    call_out("save_player", 1, query_name());
 }
 
 nomask void die() {

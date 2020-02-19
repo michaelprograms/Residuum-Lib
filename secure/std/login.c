@@ -455,7 +455,7 @@ static private void exec_user() {
         return;
     }
     __Player->set_client(__Client);
-    catch(__Player->setup());
+    catch(__Player->setup(__Account));
     destruct(this_object());
 }
 
