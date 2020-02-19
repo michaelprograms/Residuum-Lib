@@ -40,32 +40,21 @@ inherit LIVING;
 static private object __Account;
 private mapping __Attributes;
 // -------------------------------------------------------------------------
-static string *__IgnoreMsgClass;
-int player_age;
-static int __NoQuit;
-int level, ghost, verbose_moves;
-int birth;
-static int disable, time_of_login;
-static int __LogHarass;
-static mixed *__MessageCue;
-static string __Client;
-static int __LastAged;
-mapping blocked, news;
-static mapping __LastError;
-static int snoop, earmuffs;
-string char_name, real_name, email, ip, race;
-private string position, primary_start, *__RestrictedChannels;
+int player_age, level, ghost, verbose_moves, birth;
+static int __NoQuit, disable, time_of_login, __LogHarass, __LastAged, snoop, earmuffs;
 private int __WhereBlock;
+
+string char_name, real_name, email, ip, race, *quests, *mysites, guild, married;
+static string *__IgnoreMsgClass, __Client, *__UserId, net_died_here;
+private string position, primary_start, *__RestrictedChannels;
 private static string *channels;
-mapping mini_quests;
-string *quests;
-string *mysites;
-string guild;
-static string *__UserId;
-string married;
+
+mapping blocked, news, mini_quests;
+static mapping __LastError, term_info;
+
 mixed *current_marriage, *divorced;
-static string net_died_here;
-static mapping term_info;
+static mixed *__MessageCue;
+
 static object died_here;
 // -------------------------------------------------------------------------
 private void log_connection_event(string type);
