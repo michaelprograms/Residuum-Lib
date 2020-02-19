@@ -26,8 +26,8 @@ inherit "/std/user/files";
 inherit "/std/user/more";
 inherit "/std/user/nmsh";
 inherit "/std/user/refs";
-inherit LIVING;
 
+inherit LIVING;
 
 #define DEATH_MSGS ({\
     sprintf("A cold wind sweeps across %s, grieving the loss of %s.", mud_name(), query_cap_name()),\
@@ -36,14 +36,15 @@ inherit LIVING;
     sprintf("The bells of %s toll for the death of %s.", mud_name(), query_cap_name()),\
     sprintf("The world about you darkens a moment at the death of %s.", query_cap_name()),\
 })
-
-static string *__IgnoreMsgClass;
+// -------------------------------------------------------------------------
 static private object __Account;
-
+private mapping __Attributes;
+// -------------------------------------------------------------------------
+static string *__IgnoreMsgClass;
 int player_age;
 static int __NoQuit;
-int level, ghost, rolls, verbose_moves;
-int birth, last_on;
+int level, ghost, verbose_moves;
+int birth;
 static int disable, time_of_login;
 static int __LogHarass;
 static mixed *__MessageCue;
@@ -60,16 +61,20 @@ mapping mini_quests;
 string *quests;
 string *mysites;
 string guild;
-string *message;
 static string *__UserId;
 string married;
 mixed *current_marriage, *divorced;
 static string net_died_here;
 static mapping term_info;
 static object died_here;
-
+// -------------------------------------------------------------------------
 private void log_connection_event(string type);
-
+nomask string query_account_name();
+void set_account_name(string nom);
+void set_position(string pos);
+int query_last_on();
+// -------------------------------------------------------------------------
+nomask string query_position();
 int query_where_block();
 int set_where_block();
 int query_blocked(string str);
@@ -84,7 +89,6 @@ private static register_channels();
 string *query_mysites();
 void set_mysites(string *str);
 void set_guild(string str);
-void set_position(string pos);
 void set_id(string *bogus);
 void set_level(int x);
 void set_race(string res);
@@ -96,29 +100,37 @@ int query_ghost();
 void add_message(string str);
 void write_messages();
 string query_email();
-nomask string query_position();
 
-int query_last_on();
-
-// --- TODO remove ---------------------------------------------------------
-string password;
-string query_password() { return password; }
-void set_password(string pass) {
-    if(!((int)master()->valid_apply(({ query_name()})))) return 0;
-    password = pass;
-    save_player( query_name() );
-}
 // -------------------------------------------------------------------------
-string account;
-string query_account() { return account; }
-void set_account(string nom) {
-    if(!((int)master()->valid_apply(({ query_name()})))) return 0;
-    account = nom;
-    save_player( query_name() );
-}
+// string password;
+// string query_password() { return password; }
+// void set_password(string pass) {
+//     if(!((int)master()->valid_apply(({ query_name()})))) return 0;
+//     password = pass;
+//     save_player(query_name());
+// }
 // -------------------------------------------------------------------------
 
-int query_last_on() { return last_on; }
+
+private void log_connection_event(string type) {
+    if(previous_object() && base_name(previous_object(0)) != OB_LOGIN) return 0;
+    log_file("enter", query_account_name()+"/"+query_name()+" ["+type+"]: "+ctime(time())+" from "+query_ip_name()+"\n");
+    if(__Account) __Account->update_last_on();
+    __Attributes["last_on"] = time();
+}
+
+nomask string query_account_name() { return __Attributes["account_name"]; }
+void set_account_name(string nom) {
+    if(!((int)master()->valid_apply(({ query_name()})))) return 0;
+    __Attributes["account_name"] = nom;
+    save_player( query_name() );
+}
+
+int query_last_on() {
+    if(!__Attributes) __Attributes = ( ["last_on": time() ]);
+    else if(!__Attributes["last_on"]) __Attributes["last_on"] = time();
+    return __Attributes["last_on"];
+}
 
 void get_email(string e) {
     string who, where;
@@ -136,7 +148,6 @@ void get_email(string e) {
 int query_where_block() {
     return __WhereBlock;
 }
-
 int set_where_block() {
     __WhereBlock = __WhereBlock ? 0 : 1;
     return __WhereBlock;
@@ -259,6 +270,7 @@ void create() {
     living::create();
     __IgnoreMsgClass = ({ "broadcast", "info", "more", "room_description", "room_exits","smell","sound","write","say", "system", "prompt", "inanimate_item", "living_item"});
     position = "player";
+    __Attributes = ([]);
     wielded = ([]);
     level = 1;
     set_mass(500);
@@ -273,13 +285,6 @@ int remove() {
     CHAT_D->remove_user(channels - __RestrictedChannels);
     MULTI_D->quit(query_name());
     return living::remove();
-}
-
-private void log_connection_event(string type) {
-    if(previous_object() && base_name(previous_object(0)) != OB_LOGIN) return 0;
-    log_file("enter", query_account()+"/"+query_name()+" ["+type+"]: "+ctime(time())+" from "+query_ip_name()+"\n");
-    if(__Account) __Account->update_last_on();
-    last_on = time();
 }
 
 int quit(string str) {
@@ -513,8 +518,8 @@ nomask void die() {
     this_object()->move("/domains/Praxis/death/death_room");
     cease_all_attacks();
     ghost = 1;
-    last_on = time();
-    save_player( query_name() );
+    __Attributes["last_on"] = time();
+    save_player(query_name());
     PLAYER_D->add_player_info();
 }
 
@@ -535,7 +540,7 @@ void set_email(string e) {
     if(!((int)master()->valid_apply(({ query_name()})))) return 0;
     if (this_player(1) != this_player()) return 0;
     email = e;
-    save_player( query_name() );
+    save_player(query_name());
 }
 
 int set_snoop() {
@@ -565,6 +570,7 @@ void display_options_at_login() {
 
 void write_messages() {
     mapping mail_stat;
+    string *message;
     int i;
 
     display_options_at_login();
@@ -720,10 +726,6 @@ void set_guild(string str) {
     if(!guild) guild = str;
 }
 string query_guild() { return guild; }
-
-void set_rolls(int x) { rolls = x; }
-
-int query_rolls() { return rolls; }
 
 void set_blocked(string str) {
     if(!blocked) blocked = ([]);

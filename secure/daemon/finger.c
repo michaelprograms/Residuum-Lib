@@ -92,7 +92,7 @@ string user_finger_display(string who) {
       date(birth), (-(year(birth)-18)));
     drow = tmp;
     if(this_player() && archp(this_player())) {
-        tmp = sprintf("%sAccount : %s\n", drow, query_account());
+        tmp = sprintf("%sAccount : %s\n", drow, query_account_name());
         drow = tmp;
         if(query_email())
             tmp = sprintf("%sEmail : %s\n", drow, query_email());
@@ -118,7 +118,7 @@ string user_finger_display(string who) {
         where = "Anonymous";
     else
         where = query_ip();
-    tmp = sprintf("%s%s from %s.\n", drow, ctime(last_on), where);
+    tmp = sprintf("%s%s from %s.\n", drow, ctime(query_last_on()), where);
     drow = tmp;
     if(!mail_stat["unread"])
         tmp = sprintf("%sNo unread mail.\n", drow);

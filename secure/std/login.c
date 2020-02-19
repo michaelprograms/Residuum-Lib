@@ -264,7 +264,7 @@ static void get_create_character(string str) {
         prompt_banished();
         message("system", "%^BOLD%^New character.%^BOLD_OFF%^ "+PROMPT_COLOR+"Confirm %^BOLD%^"+capitalize(__Name)+"%^BOLD_OFF%^ as name? (y/%^BOLD%^n%^BOLD_OFF%^) "+PROMPT_RESET, this_object());
         __Player = master()->player_object(__Name);
-        __Player->set_account(__AccountName);
+        __Player->set_account_name(__AccountName);
         input_to("confirm_new_character");
         return;
     }
