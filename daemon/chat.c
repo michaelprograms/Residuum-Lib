@@ -89,7 +89,7 @@ int do_chat(string verb, string str) {
     if(str && str!="" && verb == "error" ) {
         if(this_player(1) && creatorp(this_player(1))) return 1;
         if(!(list = channels["error"])) return 1;
-        msg = "<error> "+str;
+        msg = "<%^RED%^error%^RESET%^> "+str;
         message(verb, msg, list);
         return 1;
     }
