@@ -57,14 +57,12 @@ int move(mixed dest) {
     }
     else ob = dest;
     if(!ob || ob == this_object()) return MOVE_NOT_ALLOWED;
-    if(living(this_object()) && living(ob) && !((int)ob->query_property("mountable")))
-      return MOVE_NOT_ALLOWED;
+    if(living(this_object()) && living(ob) && !(ob->query_property("mountable"))) return MOVE_NOT_ALLOWED;
     if(!((int)ob->receive_objects(this_object()))) return MOVE_NOT_ALLOWED;
-    if(environment(this_object()))
-      environment(this_object())->add_encumbrance(-query_mass());
+    if(environment(this_object())) environment(this_object())->add_encumbrance(-query_mass());
     set_last_location(environment(this_object()));
     move_object(ob);
-if(!this_object()) return 0;
+    if(!this_object()) return 0;
     environment(this_object())->add_encumbrance(query_mass());
     return MOVE_OK;
 }

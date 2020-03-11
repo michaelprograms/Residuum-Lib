@@ -30,6 +30,7 @@ static void create() {
 void init() {
     add_action("cmd_go", "go");
     add_action("cmd_enter", "enter");
+    foreach(string dir in keys(__Exits)) add_action("cmd_use_exit", dir);
 }
 
 int skip_obvious=0;
@@ -45,6 +46,12 @@ int cmd_go(string str) {
     this_player()->move_player(__Exits[str]["room"], str);
     if(__Exits[str]["post"]) (*__Exits[str]["post"])(str);
     return 1;
+}
+
+int cmd_use_exit() {
+    string verb = query_verb();
+    if(!verb) return 0;
+    return cmd_go(verb);
 }
 
 int cmd_enter(string str) {
