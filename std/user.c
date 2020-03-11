@@ -153,7 +153,7 @@ void describe_current_room(int verbose) {
         move_object(ROOM_START);
         env = environment(this_object());
     }
-    if(creatorp(this_object())) borg = file_name(env)+"\n";
+    if(creatorp(this_object())) borg = "%^BOLD%^UNDERLINE%^"+file_name(env)+"%^RESET%^\n";
     else borg = "";
     if((light=effective_light(this_object())) > 6 || light < 1) {
         if(light > 6) borg += "It is too bright to see.";
