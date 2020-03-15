@@ -67,8 +67,9 @@ int do_status(string str) {
     object *list;
     string verb = "status", msg;
 
+    list = channels["status"] || ({});
+    list = list - ({ this_player() });
     msg = sprintf("%s<%s>%s %s", STATUS_C, verb, RESET, str);
-    list = channels["status"] - ({ this_player() });
     message(verb, msg, list);
 
     return 1;
