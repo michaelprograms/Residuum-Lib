@@ -3,6 +3,7 @@
 
 #define OBJECT      "/std/Object"
 #define ROOM        "/std/room"
+#define ROOM_INSTANCE "/std/room_instance"
 #define DAEMON      "/secure/std/daemon"
 
 #endif /* GLOBAL_H */

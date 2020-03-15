@@ -37,7 +37,7 @@ void init() { add_action("ReadObject", "read"); }
 void reset() { /* Nothing goes here... just for design purposes */ }
 
 int move(mixed dest) {
-    object ob;
+    object ob, instance_ob;
     string str;
     int x;
 
@@ -59,6 +59,18 @@ int move(mixed dest) {
     if(!ob || ob == this_object()) return MOVE_NOT_ALLOWED;
     if(living(this_object()) && living(ob) && !(ob->query_property("mountable"))) return MOVE_NOT_ALLOWED;
     if(!((int)ob->receive_objects(this_object()))) return MOVE_NOT_ALLOWED;
+    if(this_object()->is_player() && ob->is_instance_room() && instance_ob = ob->query_instance_room(this_object())) {
+        if(file_name(environment(this_object())) == file_name(ob)) {
+            return MOVE_OK;
+        }
+        if(environment(this_object())) environment(this_object())->add_encumbrance(-query_mass());
+        set_last_location(environment(this_object()));
+
+        move_object(instance_ob);
+        if(!this_object()) return 0;
+        environment(this_object())->add_encumbrance(query_mass());
+        return MOVE_OK;
+    }
     if(environment(this_object())) environment(this_object())->add_encumbrance(-query_mass());
     set_last_location(environment(this_object()));
     move_object(ob);

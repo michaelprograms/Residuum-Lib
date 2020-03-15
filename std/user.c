@@ -413,7 +413,7 @@ void heart_beat() {
 void net_dead() {
     CHAT_D->remove_user(channels - __RestrictedChannels);
     channels = ({});
-    net_died_here = file_name( environment(this_object()) );
+    net_died_here = base_name( environment(this_object()) );
     message("other_action", sprintf("%s suddenly disappears into a sea of irreality.", query_cap_name()), environment(this_object()), ({ this_object() }));
     if(!creatorp(this_object()) || !query_invis()) {
         CHAT_D->do_status(query_CapName()+" has disconnected from "+mud_name()+".");

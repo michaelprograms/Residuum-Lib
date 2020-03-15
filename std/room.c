@@ -24,7 +24,7 @@ void create() {
     senses::create();
     __ResetNumber = 0;
     reset();
-    call_out("reinitiate", 0);
+    // call_out("reinitiate", 0); // prevent init twice when create upon move
 }
 
 static void reset() {

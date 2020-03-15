@@ -18,7 +18,7 @@ int cmd_update(string str) {
     int n, master_flag;
 
     if(ambassadorp(previous_object())) return 0;
-    if(!str || str == "here" || (str == file_name(environment(previous_object()))) ) {
+    if(!str || str == "here" || (str == file_name(environment(this_player()))) ) {
         if(!environment(this_player())) {
             write("No environment!");
             return 1;
@@ -31,7 +31,7 @@ int cmd_update(string str) {
             if (ob[n]->is_player()) ob[n]->move(ROOM_VOID);
         }
         destruct(obb);
-        if(this_player()->move(file) != MOVE_OK)
+        if(this_player()->move(base_name(file)) != MOVE_OK)
             message("system", "Error in loading file.", this_player());
         for (n = 0; n < sizeof(ob); n++) {
         if( ob[n] ) /* something may have happened during the update */

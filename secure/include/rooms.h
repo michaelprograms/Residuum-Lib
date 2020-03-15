@@ -3,7 +3,7 @@
 
 #include <dirs.h>
 
-#define ROOM_START      "/domains/Nowhere/setter"
+#define ROOM_START      "/domains/Nowhere/rooms/start"
 #define ROOM_ADMIN      "/domains/Nowhere/hall"
 
 // Used when no environment

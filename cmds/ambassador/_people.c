@@ -179,15 +179,15 @@ static string map_info(object ob) {
     nom = (string)ob->query_CapName();
     if((int)ob->query_invis()) nom = "("+nom+")";
     if(in_edit(ob) || in_input(ob)) nom = "["+nom+"]";
-    if(creatorp(ob)) {
-        if((int)ob->query_blocked("all")) blk = "ACG";
-        else {
-            if((int)ob->query_blocked("cre")) blk = " C";
-            else blk = "  ";
-            if((int)ob->query_blocked("gossip")) blk += "G";
-            else blk += " ";
-        }
-    }
+    // if(creatorp(ob)) {
+    //     if((int)ob->query_blocked("all")) blk = "ACG";
+    //     else {
+    //         if((int)ob->query_blocked("cre")) blk = " C";
+    //         else blk = "  ";
+    //         if((int)ob->query_blocked("gossip")) blk += "G";
+    //         else blk += " ";
+    //     }
+    // }
     else blk = "   ";
     if(!(x = (int)ob->query_level())) lev = "-";
     else lev = x+"";
@@ -201,8 +201,8 @@ static string map_info(object ob) {
       env = "~"+env[strlen(REALMS_DIRS)+1..strlen(env)-1];
     else if(!strsrch(env, DOMAINS_DIRS))
       env = "^"+env[strlen(DOMAINS_DIRS)+1..strlen(env)-1];
-    return sprintf("%:-5s %:-2s %:-17s %:-15s %:-5s %:-3s %:-22s",
-      age, lev, nom, ip, idle, blk, env);
+    return sprintf("%:-5s %:-2s %:-17s %:-15s %:-5s %:-26s",
+      age, lev, nom, ip, idle, env);
 }
 
 static private string query_time() {
