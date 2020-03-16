@@ -1,6 +1,5 @@
 #define CLEAN_UP    "/std/clean_up"
 #define LIVING      "/std/living"
-#define MONSTER     "/std/monster"
 #define CONTAINER   "/std/container"
 #define VIRTUAL     "/std/virtual"
 #define BODY        "/std/living/body"
