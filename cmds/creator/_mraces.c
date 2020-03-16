@@ -10,7 +10,7 @@ int cmd_mraces()
 	{
 	string *files;
 
-	files = path_file((string *)this_player()->wild_card("/adm/db/mon_races/*"));
+	files = path_file((string *)this_player()->wild_card("/daemon/cfg/mon_races/*"));
 	message("system", "The following monster body types are available :\n", this_player());
 	message("system", format_page(files[1], 4), this_player());
 	return 1;
