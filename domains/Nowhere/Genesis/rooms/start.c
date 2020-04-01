@@ -26,7 +26,7 @@ void create() {
     set_short("nowhere");
     set_long((: get_long :));
     skip_obvious();
-    add_exit("out", "/domains/Nowhere/rooms/start_chamber.c"); // debug
+    add_exit("out", "/domains/Nowhere/Genesis/rooms/start_chamber.c"); // debug
 }
 
 void init() {
