@@ -4,6 +4,10 @@
 // debug_print
 void debug_print(string name, string msg);
 
+// files
+int file_exists(string str);
+int create_dir(string str);
+
 // format
 varargs string format_syntax(string text, int wrap);
 string format_uptime();
@@ -59,7 +63,6 @@ int event_pending(object ob);
 varargs mixed *exclude_array(mixed *array, int from, int to);
 int exec(object target, object src);
 int export_uid(object ob);
-int file_exists(string str);
 string file_privs(string file);
 string format_page(string *items, int columns);
 int geteuid(object ob);
