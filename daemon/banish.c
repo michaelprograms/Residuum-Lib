@@ -73,7 +73,7 @@ static private int valid_access(object ob) {
 }
 
 int valid_cap_name(string cap, string nom) {
-    int i;
+    int i, j;
 
     if(convert_name(cap) != nom) return 0;
     if((i = strlen(cap)) > MAX_PLAYER_CAP_NAME_LENGTH) return 0;
@@ -86,8 +86,8 @@ int valid_cap_name(string cap, string nom) {
     if(strsrch(cap, " '") != -1) return 0;
     if(strsrch(cap, " -") != -1) return 0;
     if(strsrch(cap, "  ") != -1) return 0;
-    if(lower_case(cap[i-1..i-1]) != nom[strlen(nom)-1..strlen(nom)-1])
-      return 0;
+    j = strlen(nom)-1;
+    if(lower_case(cap[i-1..i-1]) != nom[j..j]) return 0;
     return 1;
 }
 
