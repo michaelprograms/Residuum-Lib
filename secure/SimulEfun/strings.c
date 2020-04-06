@@ -50,13 +50,13 @@ varargs string pad(int length, string c) {
 }
 varargs string leftpad(string text, int n, string pad) {
     if (n < 0 || n > 80) return text;
-    // if(!pad || pad == "") pad = " ";
+    if(undefinedp(pad)) pad = " ";
     while(sizeof(text) < n) text = pad + text;
     return text;
 }
 varargs string rightpad(string text, int n, string pad) {
     if (n < 0 || n > 80) return text;
-    // if(!pad || pad == "") pad = " ";
+    if(undefinedp(pad)) pad = " ";
     while(sizeof(text) < n) text = text + pad;
     return text;
 }
