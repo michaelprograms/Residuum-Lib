@@ -4,7 +4,9 @@ inherit DAEMON;
 
 // --- Prototypes --------------------------------------------------------------
 
+void forge_goto(string areaName, object tp);
 void forge_list(string areaDirName, object tp);
+void forge_map(string areaName, object tp);
 void forge_new(string forgeName, object tp);
 void forge_help(object tp);
 
@@ -26,9 +28,9 @@ int cmd_forge(string input) {
 
     message("system", format_header_bar("FORGE", cmd) + LR, tp);
     switch(cmd) {
-        case "goto": /*forge_goto(arg, tp);*/ break;
+        case "goto": forge_goto(arg, tp); break;
         case "list": forge_list(arg, tp); break;
-        case "map": /*forge_map(arg, tp);*/ break;
+        case "map": forge_map(arg, tp); break;
         case "new": forge_new(arg, tp); break;
         case "push": /*forge_push(arg, tp);*/ break;
         case "tag": /*forge_tag(arg, tp);*/ break;
@@ -39,6 +41,22 @@ int cmd_forge(string input) {
 }
 
 // -----------------------------------------------------------------------------
+
+void forge_goto(string areaName, object tp) {
+    string dirPath = format_forge_path(tp->query_name(), areaName), roomPath;
+
+    if(file_size(dirPath) != -2) {
+        message("system", "Forge directory not found: " + dirPath, tp);
+        return;
+    }
+
+    // @TODO: check primary tagged room
+    // else try 0_0_0
+
+    roomPath = dirPath + "room/0_0_0.c";
+
+    tp->move_player(roomPath);
+}
 
 void forge_list(string forgeName, object tp) {
     mixed *dirContents;
@@ -64,6 +82,10 @@ void forge_list(string forgeName, object tp) {
     foreach(mixed *area in dirContents) {
         message("system", "    Area: "+area[0], tp);
     }
+}
+
+void forge_map(string areaName, object tp) {
+
 }
 
 void forge_new(string areaName, object tp) {
@@ -100,8 +122,8 @@ void forge_new(string areaName, object tp) {
 
         roomPath = dirPath + "room/0_0_0.c";
         write_room_file(roomPath);
-        tp->move(roomPath);
-        tp->force_me("look");
+
+        tp->move_player(roomPath);
     }
 }
 
@@ -155,7 +177,7 @@ string convert_to_filepath(string arenaName) {
 }
 
 varargs string format_forge_path(string playerName, string areaName) {
-    return "/realms/" + playerName + "/forge/" + (areaName ? areaName + "/" : "");
+    return "/realms/" + playerName + "/forge/" + (areaName && areaName != "" ? areaName + "/" : "");
 }
 
 void write_header_file(string dirPath, string areaDirName, string areaName) {
