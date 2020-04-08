@@ -59,8 +59,7 @@ void forge_goto(string areaName, object tp) {
 }
 
 void forge_list(string forgeName, object tp) {
-    mixed *dirContents;
-    string dirPath;
+    string *dirContents, dirPath;
 
     if(!forgeName || forgeName == "" || forgeName == tp->query_name()) {
         dirPath = format_forge_path(tp->query_name());
@@ -77,15 +76,67 @@ void forge_list(string forgeName, object tp) {
         }
     }
     message("system", "Forge directory contents:", tp);
-    dirContents = filter_array(get_dir(dirPath, -1), (:$1[1] == -2:));
+    dirContents = map_array(filter_array(get_dir(dirPath, -1), (:$1[1] == -2:)), (:$1[0]:));
     if(sizeof(dirContents) == 0) message("system", "    No areas.", tp);
-    foreach(mixed *area in dirContents) {
-        message("system", "    Area: "+area[0], tp);
+    foreach(string area in dirContents) {
+        message("system", "    Area: "+area, tp);
     }
 }
 
 void forge_map(string areaName, object tp) {
+    mapping Rooms = ([]);
+    string dirPath, line;
+    int xMin = 0, yMin = 0, zMin = 0, xMax = 0, yMax = 0, zMax = 0;
+    int x, y, z;
 
+    dirPath = format_forge_path(tp->query_name(), areaName);
+    if(file_size(dirPath) != -2) {
+        message("system", "Forge area does not exist: " + dirPath, tp);
+        return;
+    }
+
+    foreach(string room in get_dir(dirPath + "room/*_*_*.c")) {
+        if(sscanf(room, "%d_%d_%d.c", x, y, z) != 3) {
+            write("Invalid room encountered: "+room);
+            return;
+        }
+        if(!mapp(Rooms[z])) Rooms[z] = ([]);
+        if(!mapp(Rooms[z][x])) Rooms[z][x] = ([]);
+        Rooms[z][x][y] = ([ "x": x, "y": y, "z": z, "exits": ([]) ]);
+        if(x < xMin) xMin = x;
+        if(x > xMax) xMax = x;
+        if(y < yMin) yMin = y;
+        if(y > yMax) yMax = y;
+        if(z < zMin) zMin = z;
+        if(z > zMax) zMax = z;
+    }
+    // write("x: "+xMin+" to "+xMax+" y: "+yMin+" to "+yMax+" z: "+zMin+" to "+zMax);
+    // write("rooms: "+identify(Rooms));
+
+    message("system", "Printing level 0", tp);
+    for(int i = -6; i <= 6; i ++) {
+        line = "";
+        for(int j = -6; j <= 6; j ++) {
+            if(mapp(Rooms[0][i]) && mapp(Rooms[0][i][j])) {
+                line += "[ ]";
+                if(j < 6) {
+                    if(Rooms[0][i][j]["exits"]["east"]) {
+                        line += " - ";
+                    } else line += "   ";
+                }
+            } else {
+                line += "      ";
+            }
+        }
+        message("system", line, tp);
+        if(i < 6) message("system", "", tp);
+    }
+
+    // for(int i = xMin; i < xMax; i ++) {
+    //     for(int j = yMin; i < yMax; i ++) {
+
+    //     }
+    // }
 }
 
 void forge_new(string areaName, object tp) {
