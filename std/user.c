@@ -143,18 +143,18 @@ int set_where_block() {
 }
 
 void describe_current_room(int verbose) {
-    object env;
-    string borg;
+    object env = environment(this_object());
+    string borg = "";
     mixed tmp;
     int light;
 
-    env = environment(this_object());
     if(!env){
         move_object(ROOM_START);
         env = environment(this_object());
     }
-    if(creatorp(this_object())) borg = "%^BOLD%^UNDERLINE%^"+file_name(env)+"%^RESET%^\n";
-    else borg = "";
+    if(creatorp(this_object())) {
+        message("room_path", file_name(env), this_object());
+    }
     if((light=effective_light(this_object())) > 6 || light < 1) {
         if(light > 6) borg += "It is too bright to see.";
         else if(light > -2) borg += "It is dark.";
@@ -162,29 +162,31 @@ void describe_current_room(int verbose) {
         else if(light > -6) borg += "It is very dark.";
         else borg += "It is completely dark.";
         message("room_description", borg, this_object());
-        if(stringp(tmp=(string)env->query_smell("default")))
+        if(stringp(tmp=env->query_smell("default")))
             message("smell", tmp, this_object());
         else if(functionp(tmp))
-            message("smell",(string)((*tmp)("default")), this_object());
+            message("smell",((*tmp)("default")), this_object());
         if(stringp(tmp=(mixed)env->query_listen("default")))
             message("sound", tmp, this_object());
-        else if(functionp(tmp)) message("sound", (string)((*tmp)("default")), this_object());
+        else if(functionp(tmp))
+            message("sound", ((*tmp)("default")), this_object());
         return;
-    }
-    else if(light > 3) borg += "It is really bright.\n";
-    borg += (verbose ? (string)env->query_long(0)+" " :
-      (string)env->query_short());
+    } else if(light > 3) borg += "It is really bright.\n";
+
+    message("room_map_details", env->format_room_map_details(), this_object());
+    borg += (verbose ? env->query_long(0)+" " : env->query_short());
     message("room_description", borg, this_object());
+
     if(verbose && stringp(tmp=(mixed)env->query_smell("default")))
         message("smell", tmp, this_object());
     else if(verbose && functionp(tmp))
-        message("smell",(string)((*tmp)("default")), this_object());
+        message("smell",((*tmp)("default")), this_object());
     if(verbose && stringp(tmp=(mixed)env->query_listen("default")))
         message("sound", tmp, this_object());
     else if(verbose && functionp(tmp))
-        message("sound", (string)((*tmp)("default")), this_object());
-    if((tmp=(string)env->query_long_exits()) && tmp != "")
-        message("room_exits",tmp+"\n",this_object());
+        message("sound", ((*tmp)("default")), this_object());
+    // if((tmp=(string)env->query_long_exits()) && tmp != "")
+    //     message("room_exits",tmp+"\n",this_object());
     if((tmp=(string)env->describe_living_contents(({this_object()})))!="")
         message("living_item", tmp, this_object());
     if((tmp=(string)env->describe_item_contents(({})))!="")
@@ -682,7 +684,8 @@ void receive_message(string msg_class, string msg) {
     }
     if(query_blocked(msg_class) && member_array(msg_class, __IgnoreMsgClass) == -1) return;
     switch(msg_class) {
-    case "room_exits": msg = "%^GREEN%^"+msg; break;
+    case "room_path": msg = "%^BOLD%^UNDERLINE%^"+msg+"%^RESET%^"; break;
+    case "room_exits": msg = "%^GREEN%^"+msg+"%^RESET%^"; break;
     case "snoop": msg = "%^CYAN%^"+msg; break;
     case "smell": msg = "%^ORANGE%^"+msg; break;
     case "sound": msg = "%^CYAN%^"+msg; break;

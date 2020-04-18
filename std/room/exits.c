@@ -248,14 +248,14 @@ string query_short_exits() {
             sx[x]=TMPSHORT[i];
         else sx[x]=lx[x];
     }
-    if(!sizeof(sx)) return "[no exits]";
-    if(max==1) return "[1: "+sx[0]+"]";
-    s=("["+max+": ");
+    if(!sizeof(sx)) return "no exits";
+    if(max==1) return "[%^GREEN%^1%^RESET%^: %^GREEN%^"+sx[0]+"%^RESET%^]";
+    s=("%^GREEN%^"+max+"%^RESET%^: ");
     for(x=0;x<max;x++) {
         if(x) s+=", ";
-        s+=sx[x];
+        s+="%^GREEN%^"+sx[x]+"%^RESET%^";
     }
-    return s+"]";
+    return s;
 }
 string query_long_exits() {
     int i,max;
@@ -275,4 +275,66 @@ string query_long_exits() {
         else str+=" ";
     }
     return str;
+}
+
+// -----------------------------------------------------------------------------
+
+int is_visible_exit(string dir) { return __Exits[dir] && !__Exits[dir]["invis"]; }
+int is_blocked_exit(string dir) {
+    return (__Exits[dir] && __Exits[dir]["no peer"]) || (this_object()->query_door(dir) && !this_object()->query_open(this_object()->query_door(dir))) || (__Exits[dir] && !to_object(replace_string(__Exits[dir]["room"], ".c", "")));
+}
+string format_square(string dir) {
+    return is_blocked_exit(dir) ? "%^BLACK%^BOLD%^[ ]%^RESET%^" : "[ ]";
+}
+string format_vertical(string text, string dir) {
+    return is_blocked_exit(dir) ? "%^BLACK%^BOLD%^"+(dir == "up" ? "+" : (dir == "down" ? "-" : " "))+"%^RESET%^" : text;
+}
+string *get_exit_map() {
+    return ({
+        (is_visible_exit("northwest")?format_square("northwest")+" ":"    ")+
+        (is_visible_exit("north")?format_square("north"):"   ")+
+        (is_visible_exit("northeast")?" "+format_square("northeast"):"    "),
+
+        (is_visible_exit("west")?format_square("west")+" ":"    ")+
+        (is_visible_exit("down")?format_vertical("-","down"):" ")+
+        ("%^CYAN%^BOLD%^o%^RESET%^")+
+        (is_visible_exit("up")?format_vertical("+","up"):" ")+
+        (is_visible_exit("east")?" "+format_square("east"):"    "),
+
+        (is_visible_exit("southwest")?format_square("southwest")+" ":"    ")+
+        (is_visible_exit("south")?format_square("south"):"   ")+
+        (is_visible_exit("southeast")?" "+format_square("southeast"):"    "),
+    });
+}
+
+string format_room_properties() {
+    mapping props = this_object()->query_properties();
+    string *names = keys(props), *display = ({});
+
+    if(member_array("indoors", names) != -1 && props["indoors"]) display += ({"indoors"});
+    else display += ({"outdoors"});
+
+    if(member_array("light", names) != -1) {
+        if(props["light"] >= 9) display += ({ "blinding" });
+        else if(props["light"] >= 6) display += ({ "bright" });
+        else if(props["light"] >= 4) display += ({ "lit" });
+        else if(props["light"] >= 1) display += ({ "dim" });
+        else if(props["light"] == 0) display += ({ "unlit" });
+        else if(props["light"] >= -4) display += ({ "shaded" });
+        else if(props["light"] >= -6) display += ({ "dark" });
+        else if(props["light"] >= -9) display += ({ "unseen" });
+    }
+
+    return implode(display, ", ");
+}
+string format_room_map_details() {
+    string *exits = get_exit_map();
+    string properties;
+    string ret = "";
+
+    ret += "  " + exits[0] + "  %^ORANGE%^|%^RESET%^  " + this_object()->query_short() + "\n";
+    ret += "  " + exits[1] + "  %^ORANGE%^|%^RESET%^  " + format_room_properties() + "\n";
+    ret += "  " + exits[2] + "  %^ORANGE%^|%^RESET%^  " + this_object()->query_short_exits();
+
+    return ret;
 }
