@@ -33,3 +33,7 @@ string format_uptime() {
 
     return uptime;
 }
+
+string format_command_help(string syntax, string description) {
+    return " Syntax  : " + format_syntax(syntax, 1) + "\n\n" + description + "\n";
+}

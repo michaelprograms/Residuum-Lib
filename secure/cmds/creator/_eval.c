@@ -1,68 +1,112 @@
-//      /bin/dev/_eval.c
-//      Part of the TMI distribution mudlib and now part of Nightmare's
-//      allows wizards to execute LPC code without writing new objects.
-//      Created by Douglas Reay (Pallando @ TMI-2, Nightmare, etc) 92-12-07
+#define TMP_FILE "/tmp/"+this_player()->query_name()+".eval"
+#define ED_BASIC_COMMANDS "\"%^CYAN%^BOLD%^i%^RESET%^\"nsert code, \"%^CYAN%^BOLD%^.%^RESET%^\" to save, e\"%^CYAN%^BOLD%^x%^RESET%^\"ecute, \"%^CYAN%^BOLD%^q%^RESET%^\"uit to abort"
 
-#include <privs.h>
-#include <std.h>
 inherit DAEMON;
 
-#define SYNTAX "Syntax: \"eval <lpc commands>\".\n"
+// -----------------------------------------------------------------------------
 
-int cmd_eval( string a )
-{
-  string file, filename;
-  mixed err, ret;
-string x,y;
+void execute_file(string file, string input);
+void clear_file(string file);
+void create_tmp_file(string file, string input);
+void end_edit(mixed *args);
+void abort();
 
-    if(!member_group(previous_object(), PRIV_SECURE)) {
-        log_file("adm/eval", query_privs(previous_object())+": "+a+"\n");
+// -----------------------------------------------------------------------------
+
+int cmd_eval(string input) {
+    string file = user_path(this_player()->query_name());
+    string editor, tmp;
+
+    if(file_size(file) != -2) return notify_fail("You must have a valid home directory.\n");
+    file += "CMD_EVAL_TMP_FILE.c";
+    if(!write_file(file, "")) return notify_fail("You must have write access.\n");
+
+    if(input) {
+        if(!regexp(input, ";$")) input = input + ";";
+        if(regexp(input, ";")) input = replace_string(input, "; ", ";\n");
+        clear_file(file);
+        execute_file(file, input);
     }
-  if( !a ) { notify_fail( SYNTAX ); return 0; }
-// The includes in the file arn't necessary (and can be removed if the
-// include files on your mud are called something different).  They
-// just to make things like   "eval return children( USER )"    possible.
-  file = ""+
-"#include <std.h>\n"+
-"#include <daemons.h>\n"+
-"#include <objects.h>\n"+
-"#include <commands.h>\n"+
-"inherit OBJECT;\n"+
-"mixed eval() { " + a + "; }\n"+
-  "";
-    if(archp(this_player())) filename = "/secure/tmp/";
-    else filename = user_path((string)previous_object()->query_name());
-  if( file_size( filename ) != -2 ) 
-    { notify_fail( "You must have a valid home directory!\n" ); return 0; }
-  filename += "CMD_EVAL_TMP_FILE.c";
-// long name so won't coincide with file already in your directory by accident
-  rm( filename );
-  if( ret = find_object( filename ) ) destruct( ret );
-  write_file( filename, file );
-// if( err = catch( ret = (mixed)call_other( filename, "eval" ) ) )
-//   write( "Error = " + err );
-//  else 
-ret = (mixed)call_other(filename, "eval");
-    write( wrap( "Result = " + identify( ret ) ) );
-  rm( filename );
-  if( ret = find_object( filename ) ) destruct( ret );
-// Some muds prefer to change these lines so filename isn't deleted if
-// an error occurs.  Also, if you don't have the identify() simul_efun
-// the less through dump_variable() simul_efun can be used instead.
-  return 1;
+    else {
+        editor = this_player()->getenv("EDITOR");
+        if(editor != "ed") this_player()->setenv("EDITOR", "ed");
+        if(this_player()->getenv("EDITOR") == "ed") {
+            message("system", "Entering eval ed mode, standard ed commands apply:", this_player());
+            message("system", ED_BASIC_COMMANDS, this_player());
+            message("system", "__________________________________________________________________________", this_player());
+            if(tmp = read_file(TMP_FILE)) this_player()->catch_tell(tmp);
+        }
+        this_player()->edit(TMP_FILE, (:end_edit:), (:abort:), ({file}));
+        this_player()->setenv("EDITOR", editor);
+    }
+    return 1;
 }
 
-int help()
-{
-  write( SYNTAX + @EndText
-Effect: calls a function containing <lpc commands>
-Example: If you type:
-  eval return 1 + cos( 0.0 )
-the command creates a temporary file in your home dir containing the line:
-  eval() { return 1 + cos( 0.0 ); }
-then does call_other on the files's eval() function, giving:
-  Result = 2.000000
-EndText
-  );
-  return 1;
+void help() {
+  write(format_command_help(
+      "eval ([LPC commands])",
+      "Creates a temporary file containing "+format_syntax("[LPC commands]")+"%^RESET%^ which is executed with call_other and the results are returned. If "+format_syntax("[LPC commands]")+"%^RESET%^ are not input, places the user in edit mode.\n\n"
+      "Examples:\n"
+      "> eval return 1 + cos( 0.0 )\n"
+      "Result = 2.000000\n"
+      "> eval return explode(\"banana\", \"a\")\n"
+      "Result = ({ \"b\", \"n\", \"n\" })\n\n"
+      "> %^YELLOW%^eval%^RESET%^\n"
+      "Entering eval ed mode, standard ed commands apply:\n"
+      ED_BASIC_COMMANDS+"\n"
+      "__________________________________________________________________________\n"
+      ": %^YELLOW%^i%^RESET%^\n"
+      "%^YELLOW%^object ob = environment(this_player());%^RESET%^\n"
+      "%^YELLOW%^return ob->query_long();%^RESET%^\n"
+      "%^YELLOW%^%^.%^RESET%^\n"
+      ": %^YELLOW%^x%^RESET%^\n"
+      "\"tmp/CREATOR_NAME.eval\" 2 lines 65 bytes\n"
+      "Result = \"A room's description.\"\n"
+      "Exit from ed.",
+      1
+  ));
 }
+
+// -----------------------------------------------------------------------------
+
+void execute_file(string file, string input) {
+    mixed ret;
+
+    log_file("adm/eval", time()+" "+this_player()->query_name()+" <"+replace_string(input, "\n", " ")+">\n");
+    create_tmp_file(file, input);
+    ret = (mixed)call_other(file, "eval");
+    if(regexp(input, "return")) message("system", "Result = " + identify(ret), this_player());
+}
+
+void clear_file(string file) {
+    mixed ret;
+    rm(file);
+    if(ret = find_object(file)) destruct(ret);
+}
+
+void create_tmp_file(string file, string input) {
+    string lines = @EndCode
+#include <std.h>
+#include <daemons.h>
+
+#define TP this_player()
+#define TO this_object()
+#define ENVTP environment(this_player())
+#define ENVTO environment(this_object())
+
+inherit OBJECT;
+
+EndCode;
+    lines += "mixed eval() {\n" + input + "\n}";
+
+    write_file(file, lines);
+}
+
+void end_edit(mixed *args) {
+  string file = args[0];
+  string tmpFile = TMP_FILE;
+  string input = read_file(tmpFile);
+  clear_file(file);
+  execute_file(file, input);
+}
+void abort() { }

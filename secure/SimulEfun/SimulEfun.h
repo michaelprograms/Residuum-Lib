@@ -11,6 +11,7 @@ int create_dir(string str);
 // format
 varargs string format_syntax(string text, int wrap);
 string format_uptime();
+string format_command_help(string syntax, string description);
 
 // user_functions
 int account_exists(string str);
