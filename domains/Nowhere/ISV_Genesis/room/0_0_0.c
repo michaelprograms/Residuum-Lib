@@ -6,7 +6,7 @@ void create() {
     ::create();
     set_property("indoors", 1);
     set_property("light", 1);
-    set_short("ISV Genesis - Deck 8");
+    set_short("Deck 8, Genesis, Nowhere");
     set_long("A vaulted central corridor located at the spine of the vessel marked 'DECK 8'. The metallic walls are covered in electronic displays monitoring engine output. A staircase located in the center of the corridor allows passage between decks. The floor's non-slip plastic tiles span the available walkways which move around the four large engines, located to the north, east, south, and west. The ceiling is partially obscured by wires and piping that equally branch off into various inputs and outputs of the engines.");
     set_items(([
         "corridor": "The corridor is part of the central backbone of the vessel.",
