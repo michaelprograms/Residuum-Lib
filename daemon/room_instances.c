@@ -15,6 +15,12 @@ static private mapping __Instances = ([
 
 mapping query_instances() { return __Instances; }
 
+int query_room_last_modified(string path) {
+    mixed *files = get_dir(path + (!regexp(path, "\.c$") ? ".c" : ""), -1);
+    if(files[0] && files[0][2]) return files[0][2];
+    else return 0;
+}
+
 object query_player_instance(string name, string path) {
     object ob;
 
@@ -24,8 +30,9 @@ object query_player_instance(string name, string path) {
 
     // Check cache for existing instance
     if(__Instances[name][path]) {
-        if(!__Instances[name][path]["ob"]) map_delete(__Instances[name], path);
-        else return __Instances[name][path]["ob"];
+        if(query_room_last_modified(path) > __Instances[name][path]["created"] || !__Instances[name][path]["ob"]) {
+            map_delete(__Instances[name], path);
+        } else return __Instances[name][path]["ob"];
     }
 
     // Setup new room
