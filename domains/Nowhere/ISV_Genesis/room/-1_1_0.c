@@ -15,5 +15,7 @@ void create() {
     set_listen("default", "Loud white noise from the active engines drowns out distant sounds.");
     set_exits(([
         "northeast": ISV_GENESIS_ROOM+"0_0_0.c",
+        "southeast": ISV_GENESIS_ROOM+"0_2_0.c",
+        "northwest": ISV_GENESIS_ROOM+"-2_0_0.c",
     ]));
 }

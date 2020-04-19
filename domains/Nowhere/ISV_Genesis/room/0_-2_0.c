@@ -14,8 +14,7 @@ void create() {
     set_smell("default", "A faint hint of burning coolant wafts through the air.");
     set_listen("default", "Loud white noise from the active engines drowns out distant sounds.");
     set_exits(([
-        "southeast": ISV_GENESIS_ROOM+"2_0_0.c",
-        "southwest": ISV_GENESIS_ROOM+"0_0_0.c",
-        "northwest": ISV_GENESIS_ROOM+"0_-2_0.c",
+        "southeast": ISV_GENESIS_ROOM+"1_-1_0.c",
+        "southwest": ISV_GENESIS_ROOM+"-1_-1_0.c",
     ]));
 }
